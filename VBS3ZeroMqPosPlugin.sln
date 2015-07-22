@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf", ".\protobuf-2.6.1\vsprojects\libprotobuf.vcproj", "{3E283F37-A4ED-41B7-A3E6-A2D89D131A30}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VBS3TuioPosPlugin", ".\VBS3TuioPosPlugin\VBS3TuioPosPlugin.vcproj", "{99011A0E-5493-4DD9-BC73-05F9206E5409}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VBS3ZeroMqPosPlugin", ".\VBS3ZeroMqPosPlugin\VBS3ZeroMqPosPlugin.vcproj", "{99011A0E-5493-4DD9-BC73-05F9206E5409}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

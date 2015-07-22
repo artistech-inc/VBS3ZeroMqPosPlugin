@@ -1,4 +1,4 @@
-LIBRARY     "VBS3TuioPosPlugin"
+LIBRARY     "VBS3ZeroMqPosPlugin"
 DESCRIPTION "Pluging for broadcasting player position."
 
 EXPORTS
