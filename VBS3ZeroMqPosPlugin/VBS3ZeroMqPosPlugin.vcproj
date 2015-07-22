@@ -333,15 +333,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\hwclient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\hwserver.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\TUIO.pb.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\TUIO_Test.cpp"
 				>
 			</File>
 			<File
