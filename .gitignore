@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# Windows Ignore
+*.pdb
+*.ncb
+*.exp
+*.dep
+*.htm
+*.idb
+*.dll.*.manifest
+*.exe.*.manifest
