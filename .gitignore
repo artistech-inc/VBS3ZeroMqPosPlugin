@@ -38,3 +38,4 @@
 *.exe.*.manifest
 *.manifest.res
 *.ilk
+*.user
