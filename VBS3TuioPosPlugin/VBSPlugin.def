@@ -1,0 +1,7 @@
+LIBRARY     "VBSPlugin"
+DESCRIPTION "This is an example of a VBS plugin DLL"
+
+EXPORTS
+   RegisterCommandFnc @1
+   OnSimulationStep   @2
+   PluginFunction     @3
