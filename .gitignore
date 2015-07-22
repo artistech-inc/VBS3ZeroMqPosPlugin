@@ -36,3 +36,5 @@
 *.idb
 *.dll.*.manifest
 *.exe.*.manifest
+*.manifest.res
+*.ilk
