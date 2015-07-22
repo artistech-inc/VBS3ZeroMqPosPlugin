@@ -1,5 +1,5 @@
-LIBRARY     "VBSPlugin"
-DESCRIPTION "This is an example of a VBS plugin DLL"
+LIBRARY     "VBS3TuioPosPlugin"
+DESCRIPTION "Pluging for broadcasting player position."
 
 EXPORTS
    RegisterCommandFnc @1

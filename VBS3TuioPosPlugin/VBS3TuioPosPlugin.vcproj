@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\ZeroMQ\lib-x64\libzmq-v90-mt-4_0_4.lib&quot;"
+				AdditionalDependencies="..\ZeroMQ\lib-x86\libzmq-v90-mt-4_0_4.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\ZeroMQ\lib-x64\libzmq-v90-mt-4_0_4.lib&quot;"
+				AdditionalDependencies="..\ZeroMQ\lib-x64\libzmq-v90-mt-4_0_4.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -212,7 +212,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\ZeroMQ\lib-x64\libzmq-v90-mt-4_0_4.lib&quot;"
+				AdditionalDependencies="..\ZeroMQ\lib-x86\libzmq-v90-mt-4_0_4.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
