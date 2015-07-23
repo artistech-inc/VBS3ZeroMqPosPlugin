@@ -1,26 +1,14 @@
 #include <windows.h>
 #include "VBSPlugin.h"
 
-#include "zmq.h"
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <stdlib.h>
 
-int hwclient() {
-    printf ("Connecting to hello world server…\n");
-    void *context = zmq_ctx_new ();
-    void *requester = zmq_socket (context, ZMQ_REQ);
-    zmq_connect (requester, "tcp://localhost:5555");
+#include "Vbs3GetPos.pb.h"
 
-    int request_nbr;
-    for (request_nbr = 0; request_nbr != 10; request_nbr++) {
-        char buffer [10];
-        printf ("Sending Hello %d...\n", request_nbr);
-        zmq_send (requester, "Hello", 5, 0);
-        zmq_recv (requester, buffer, 10, 0);
-        printf ("Received World %d\n", request_nbr);
-    }
-    zmq_close (requester);
-    zmq_ctx_destroy (context);
-    return 0;
-}
+using namespace std;
 
 // Command function declaration
 typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int resultLength);
@@ -31,7 +19,7 @@ ExecuteCommandType ExecuteCommand = NULL;
 // Function that will register the ExecuteCommand function of the engine
 VBSPLUGIN_EXPORT void WINAPI RegisterCommandFnc(void *executeCommandFnc)
 {
-  ExecuteCommand = (ExecuteCommandType)executeCommandFnc;
+    ExecuteCommand = (ExecuteCommandType)executeCommandFnc;
 }
 
 // This function will be executed every simulation step (every frame) and took a part in the simulation procedure.
@@ -39,9 +27,31 @@ VBSPLUGIN_EXPORT void WINAPI RegisterCommandFnc(void *executeCommandFnc)
 // deltaT is time in seconds since the last simulation step
 VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 {
-  //{ Sample code:
-  ExecuteCommand("0 setOvercast 1", NULL, 0);
-  //!}
+	//ExecuteCommand("0 setOvercast 1", NULL, 0);
+	char *pos = new char[255];
+    ExecuteCommand("getPos player", pos, 255);
+
+	VBS3::Position posBuffer;
+	posBuffer.set_x(atof(strtok(pos, "[],")));
+	posBuffer.set_y(atof(strtok(NULL, "[],")));
+	posBuffer.set_z(atof(strtok(NULL, "[],")));
+	posBuffer.set_deltat(deltaT);
+
+	if (posBuffer.x() > 0.0 ||
+		posBuffer.y() > 0.0 ||
+		posBuffer.z() > 0.0)
+		{
+		string str = posBuffer.DebugString();
+
+		delete [] pos;
+
+		ofstream file;
+		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+
+		file << "Protocol Buffer: " << endl << str;
+
+		file.close();
+	}
 }
 
 // This function will be executed every time the script in the engine calls the script function "pluginFunction"
@@ -49,29 +59,35 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 // Note that the plugin takes responsibility for allocating and deleting the returned string
 VBSPLUGIN_EXPORT const char* WINAPI PluginFunction(const char *input)
 {
-  //{ Sample code:
-  static const char result[]="[1.0, 3.75]";
-  return result;
-  //!}
+	static const char result[]="";
+	return result;
 }
 
 // DllMain
 BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 {
-   switch(fdwReason)
-   {
-      case DLL_PROCESS_ATTACH:
-         //OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
-         break;
-      case DLL_PROCESS_DETACH:
-         //OutputDebugString("Called DllMain with DLL_PROCESS_DETACH\n");
-         break;
-      case DLL_THREAD_ATTACH:
-         //OutputDebugString("Called DllMain with DLL_THREAD_ATTACH\n");
-         break;
-      case DLL_THREAD_DETACH:
-         //OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
-         break;
-   }
-   return TRUE;
+	ofstream file;
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	switch(fdwReason)
+	{
+		case DLL_PROCESS_ATTACH:
+			file << "Called DllMain with DLL_PROCESS_ATTACH";
+			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
+		break;
+		case DLL_PROCESS_DETACH:
+			file << "Called DllMain with DLL_PROCESS_DETACH";
+			//OutputDebugString("Called DllMain with DLL_PROCESS_DETACH\n");
+		break;
+		case DLL_THREAD_ATTACH:
+			//file << "Called DllMain with DLL_THREAD_ATTACH";
+			//OutputDebugString("Called DllMain with DLL_THREAD_ATTACH\n");
+		break;
+		case DLL_THREAD_DETACH:
+			//file << "Called DllMain with DLL_THREAD_DETACH";
+			//OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
+		break;
+	}
+	file << endl;
+	file.close();
+	return TRUE;
 }

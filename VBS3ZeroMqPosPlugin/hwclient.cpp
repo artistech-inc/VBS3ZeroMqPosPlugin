@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 
-int _tmain(int argc, _TCHAR* argv[])
+int hwclient(int argc, _TCHAR* argv[])
 {
     printf ("Connecting to hello world server...\n");
     void *context = zmq_ctx_new ();
