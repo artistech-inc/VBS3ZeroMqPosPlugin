@@ -2,8 +2,10 @@
 #include "VBSPlugin.h"
 #include "zmq.hpp"
 
+#if DEBUG
 #include <iostream>
 #include <fstream>
+#endif
 #include <cstring>
 #include <stdlib.h>
 
@@ -52,10 +54,12 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 		publisher->send(data, size);
 		free(data);
 
+#if DEBUG
 		ofstream file;
 		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 		file << "Protocol Buffer: " << endl << posBuffer.DebugString();
 		file.close();
+#endif
 	}
 }
 
@@ -71,21 +75,27 @@ VBSPLUGIN_EXPORT const char* WINAPI PluginFunction(const char *input)
 // DllMain
 BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 {
+#if DEBUG
 	ofstream file;
 	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+#endif
 	switch(fdwReason)
 	{
 		case DLL_PROCESS_ATTACH:
+#if DEBUG
 			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
 			file.flush();
+#endif
 			context = new zmq::context_t(1);
 			publisher = new zmq::socket_t(*context, ZMQ_PUB);
 			publisher->bind("tcp://*:5551");
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
+#if DEBUG
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
+#endif
 			publisher->close();
 			//context->close();	// <-- causes hang if implemented
 			delete publisher;
@@ -101,6 +111,8 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			//OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
 		break;
 	}
+#if DEBUG
 	file.close();
+#endif
 	return TRUE;
 }
