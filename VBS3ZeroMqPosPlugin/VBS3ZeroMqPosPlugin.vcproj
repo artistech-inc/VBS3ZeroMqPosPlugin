@@ -333,14 +333,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\hwclient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\hwserver.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 			</File>
@@ -372,6 +364,10 @@
 			</File>
 			<File
 				RelativePath=".\VBSPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\zmq.hpp"
 				>
 			</File>
 		</Filter>

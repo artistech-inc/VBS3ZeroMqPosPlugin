@@ -1,5 +1,6 @@
 #include <windows.h>
 #include "VBSPlugin.h"
+#include "zmq.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -15,6 +16,8 @@ typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int
 
 // Command function definition
 ExecuteCommandType ExecuteCommand = NULL;
+zmq::socket_t *publisher;
+zmq::context_t *context;
 
 // Function that will register the ExecuteCommand function of the engine
 VBSPLUGIN_EXPORT void WINAPI RegisterCommandFnc(void *executeCommandFnc)
@@ -37,19 +40,21 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 	posBuffer.set_z(atof(strtok(NULL, "[],")));
 	posBuffer.set_deltat(deltaT);
 
+	delete [] pos;
+
 	if (posBuffer.x() > 0.0 ||
 		posBuffer.y() > 0.0 ||
 		posBuffer.z() > 0.0)
-		{
-		string str = posBuffer.DebugString();
-
-		delete [] pos;
+	{
+		int size = posBuffer.ByteSize();
+		void *data = malloc(size);
+		posBuffer.SerializeToArray(data, size);
+		publisher->send(data, size);
+		free(data);
 
 		ofstream file;
 		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
-
-		file << "Protocol Buffer: " << endl << str;
-
+		file << "Protocol Buffer: " << endl << posBuffer.DebugString();
 		file.close();
 	}
 }
@@ -71,11 +76,20 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 	switch(fdwReason)
 	{
 		case DLL_PROCESS_ATTACH:
-			file << "Called DllMain with DLL_PROCESS_ATTACH";
+			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
+			file.flush();
+			context = new zmq::context_t(1);
+			publisher = new zmq::socket_t(*context, ZMQ_PUB);
+			publisher->bind("tcp://*:5551");
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
-			file << "Called DllMain with DLL_PROCESS_DETACH";
+			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
+			file.flush();
+			publisher->close();
+			//context->close();	// <-- causes hang if implemented
+			delete publisher;
+			//delete context;	// <-- causes hang if implemented
 			//OutputDebugString("Called DllMain with DLL_PROCESS_DETACH\n");
 		break;
 		case DLL_THREAD_ATTACH:
@@ -87,7 +101,6 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			//OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
 		break;
 	}
-	file << endl;
 	file.close();
 	return TRUE;
 }
