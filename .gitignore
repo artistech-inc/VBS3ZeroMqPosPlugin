@@ -40,3 +40,4 @@
 *.ilk
 *.user
 *.suo
+/Vbs3PosSubscriber/target/

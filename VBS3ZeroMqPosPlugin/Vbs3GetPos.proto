@@ -1,5 +1,6 @@
 package VBS3;
 
+option optimize_for = SPEED;
 option java_package = "com.artistech.vbs3";
 option java_outer_classname = "Vbs3Protos";
 

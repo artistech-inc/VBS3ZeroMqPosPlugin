@@ -836,8 +836,8 @@ public final class Vbs3Protos {
     java.lang.String[] descriptorData = {
       "\n\020Vbs3GetPos.proto\022\004VBS3\"G\n\010Position\022\t\n\001" +
       "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030" +
-      "\004 \001(\002\022\n\n\002id\030\005 \001(\tB \n\022com.artistech.vbs3B" +
-      "\nVbs3Protos"
+      "\004 \001(\002\022\n\n\002id\030\005 \001(\tB\"\n\022com.artistech.vbs3B" +
+      "\nVbs3ProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
