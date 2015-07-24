@@ -111,24 +111,17 @@ class Position : public ::google::protobuf::Message {
   inline float z() const;
   inline void set_z(float value);
 
-  // required float dir = 4;
-  inline bool has_dir() const;
-  inline void clear_dir();
-  static const int kDirFieldNumber = 4;
-  inline float dir() const;
-  inline void set_dir(float value);
-
-  // optional float deltaT = 5;
+  // optional float deltaT = 4;
   inline bool has_deltat() const;
   inline void clear_deltat();
-  static const int kDeltaTFieldNumber = 5;
+  static const int kDeltaTFieldNumber = 4;
   inline float deltat() const;
   inline void set_deltat(float value);
 
-  // optional string id = 6;
+  // optional string id = 5;
   inline bool has_id() const;
   inline void clear_id();
-  static const int kIdFieldNumber = 6;
+  static const int kIdFieldNumber = 5;
   inline const ::std::string& id() const;
   inline void set_id(const ::std::string& value);
   inline void set_id(const char* value);
@@ -145,8 +138,6 @@ class Position : public ::google::protobuf::Message {
   inline void clear_has_y();
   inline void set_has_z();
   inline void clear_has_z();
-  inline void set_has_dir();
-  inline void clear_has_dir();
   inline void set_has_deltat();
   inline void clear_has_deltat();
   inline void set_has_id();
@@ -159,9 +150,8 @@ class Position : public ::google::protobuf::Message {
   float x_;
   float y_;
   float z_;
-  float dir_;
-  ::std::string* id_;
   float deltat_;
+  ::std::string* id_;
   friend void  protobuf_AddDesc_Vbs3GetPos_2eproto();
   friend void protobuf_AssignDesc_Vbs3GetPos_2eproto();
   friend void protobuf_ShutdownFile_Vbs3GetPos_2eproto();
@@ -248,39 +238,15 @@ inline void Position::set_z(float value) {
   // @@protoc_insertion_point(field_set:VBS3.Position.z)
 }
 
-// required float dir = 4;
-inline bool Position::has_dir() const {
+// optional float deltaT = 4;
+inline bool Position::has_deltat() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Position::set_has_dir() {
+inline void Position::set_has_deltat() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Position::clear_has_dir() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void Position::clear_dir() {
-  dir_ = 0;
-  clear_has_dir();
-}
-inline float Position::dir() const {
-  // @@protoc_insertion_point(field_get:VBS3.Position.dir)
-  return dir_;
-}
-inline void Position::set_dir(float value) {
-  set_has_dir();
-  dir_ = value;
-  // @@protoc_insertion_point(field_set:VBS3.Position.dir)
-}
-
-// optional float deltaT = 5;
-inline bool Position::has_deltat() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void Position::set_has_deltat() {
-  _has_bits_[0] |= 0x00000010u;
-}
 inline void Position::clear_has_deltat() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Position::clear_deltat() {
   deltat_ = 0;
@@ -296,15 +262,15 @@ inline void Position::set_deltat(float value) {
   // @@protoc_insertion_point(field_set:VBS3.Position.deltaT)
 }
 
-// optional string id = 6;
+// optional string id = 5;
 inline bool Position::has_id() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void Position::set_has_id() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void Position::clear_has_id() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Position::clear_id() {
   if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {

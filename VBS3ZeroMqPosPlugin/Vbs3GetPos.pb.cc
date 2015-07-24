@@ -34,11 +34,10 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
       "Vbs3GetPos.proto");
   GOOGLE_CHECK(file != NULL);
   Position_descriptor_ = file->message_type(0);
-  static const int Position_offsets_[6] = {
+  static const int Position_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, z_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, dir_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, deltat_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, id_),
   };
@@ -83,10 +82,10 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001"
-    "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\013\n\003dir\030\004 \002"
-    "(\002\022\016\n\006deltaT\030\005 \001(\002\022\n\n\002id\030\006 \001(\tB\"\n\022com.ar"
-    "tistech.vbs3B\nVbs3ProtosH\001", 146);
+    "\n\020Vbs3GetPos.proto\022\004VBS3\"G\n\010Position\022\t\n\001"
+    "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030"
+    "\004 \001(\002\022\n\n\002id\030\005 \001(\tB \n\022com.artistech.vbs3B"
+    "\nVbs3Protos", 131);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
   Position::default_instance_ = new Position();
@@ -107,7 +106,6 @@ struct StaticDescriptorInitializer_Vbs3GetPos_2eproto {
 const int Position::kXFieldNumber;
 const int Position::kYFieldNumber;
 const int Position::kZFieldNumber;
-const int Position::kDirFieldNumber;
 const int Position::kDeltaTFieldNumber;
 const int Position::kIdFieldNumber;
 #endif  // !_MSC_VER
@@ -134,7 +132,6 @@ void Position::SharedCtor() {
   x_ = 0;
   y_ = 0;
   z_ = 0;
-  dir_ = 0;
   deltat_ = 0;
   id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -185,9 +182,8 @@ void Position::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 63) {
-    ZR_(x_, dir_);
-    deltat_ = 0;
+  if (_has_bits_[0 / 32] & 31) {
+    ZR_(x_, deltat_);
     if (has_id()) {
       if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         id_->clear();
@@ -252,28 +248,13 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(37)) goto parse_dir;
+        if (input->ExpectTag(37)) goto parse_deltaT;
         break;
       }
 
-      // required float dir = 4;
+      // optional float deltaT = 4;
       case 4: {
         if (tag == 37) {
-         parse_dir:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, &dir_)));
-          set_has_dir();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(45)) goto parse_deltaT;
-        break;
-      }
-
-      // optional float deltaT = 5;
-      case 5: {
-        if (tag == 45) {
          parse_deltaT:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -282,13 +263,13 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_id;
+        if (input->ExpectTag(42)) goto parse_id;
         break;
       }
 
-      // optional string id = 6;
-      case 6: {
-        if (tag == 50) {
+      // optional string id = 5;
+      case 5: {
+        if (tag == 42) {
          parse_id:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_id()));
@@ -343,24 +324,19 @@ void Position::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->z(), output);
   }
 
-  // required float dir = 4;
-  if (has_dir()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->dir(), output);
-  }
-
-  // optional float deltaT = 5;
+  // optional float deltaT = 4;
   if (has_deltat()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->deltat(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->deltat(), output);
   }
 
-  // optional string id = 6;
+  // optional string id = 5;
   if (has_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->id().data(), this->id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
       "id");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      6, this->id(), output);
+      5, this->id(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -388,17 +364,12 @@ void Position::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->z(), target);
   }
 
-  // required float dir = 4;
-  if (has_dir()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->dir(), target);
-  }
-
-  // optional float deltaT = 5;
+  // optional float deltaT = 4;
   if (has_deltat()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->deltat(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->deltat(), target);
   }
 
-  // optional string id = 6;
+  // optional string id = 5;
   if (has_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->id().data(), this->id().length(),
@@ -406,7 +377,7 @@ void Position::SerializeWithCachedSizes(
       "id");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->id(), target);
+        5, this->id(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -436,17 +407,12 @@ int Position::ByteSize() const {
       total_size += 1 + 4;
     }
 
-    // required float dir = 4;
-    if (has_dir()) {
-      total_size += 1 + 4;
-    }
-
-    // optional float deltaT = 5;
+    // optional float deltaT = 4;
     if (has_deltat()) {
       total_size += 1 + 4;
     }
 
-    // optional string id = 6;
+    // optional string id = 5;
     if (has_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -489,9 +455,6 @@ void Position::MergeFrom(const Position& from) {
     if (from.has_z()) {
       set_z(from.z());
     }
-    if (from.has_dir()) {
-      set_dir(from.dir());
-    }
     if (from.has_deltat()) {
       set_deltat(from.deltat());
     }
@@ -515,7 +478,7 @@ void Position::CopyFrom(const Position& from) {
 }
 
 bool Position::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
@@ -525,7 +488,6 @@ void Position::Swap(Position* other) {
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
     std::swap(z_, other->z_);
-    std::swap(dir_, other->dir_);
     std::swap(deltat_, other->deltat_);
     std::swap(id_, other->id_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);

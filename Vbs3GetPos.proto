@@ -1,6 +1,5 @@
 package VBS3;
 
-option optimize_for = SPEED;
 option java_package = "com.artistech.vbs3";
 option java_outer_classname = "Vbs3Protos";
 
@@ -8,7 +7,6 @@ message Position {
     required float x = 1;
     required float y = 2;
     required float z = 3;
-    required float dir = 4;
-    optional float deltaT = 5;
-    optional string id = 6;
+    optional float deltaT = 4;
+    optional string id = 5;
 }
