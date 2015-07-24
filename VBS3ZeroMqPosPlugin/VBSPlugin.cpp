@@ -13,6 +13,7 @@
 
 using namespace std;
 
+//https://resources.bisimulations.com/wiki/Category:VBS:_Scripting_Commands
 // Command function declaration
 typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int resultLength);
 
@@ -34,19 +35,35 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 {
 	//ExecuteCommand("0 setOvercast 1", NULL, 0);
 	char *pos = new char[255];
-    ExecuteCommand("getPos player", pos, 255);
 
 	VBS3::Position posBuffer;
+    ExecuteCommand("getPos player", pos, 255);
 	posBuffer.set_x(atof(strtok(pos, "[],")));
 	posBuffer.set_y(atof(strtok(NULL, "[],")));
 	posBuffer.set_z(atof(strtok(NULL, "[],")));
 	posBuffer.set_deltat(deltaT);
 
+    //ExecuteCommand("getWorldCenter", pos, 255);
+	//posBuffer.set_eyex(atof(strtok(pos, "[],")));
+	//posBuffer.set_eyey(atof(strtok(NULL, "[],")));
+
+    //ExecuteCommand("eyePos player", pos, 255);
+	//posBuffer.set_eyex(atof(strtok(pos, "[],")));
+	//posBuffer.set_eyey(atof(strtok(NULL, "[],")));
+	//posBuffer.set_eyez(atof(strtok(NULL, "[],")));
+
+	ExecuteCommand("getDir player", pos, 255);
+	posBuffer.set_dir(atof(pos));
+
+	ExecuteCommand("getPlayerUID player", pos, 255);
+	posBuffer.set_id(pos);
+
 	delete [] pos;
 
 	if (posBuffer.x() > 0.0 ||
 		posBuffer.y() > 0.0 ||
-		posBuffer.z() > 0.0)
+		posBuffer.z() > 0.0 ||
+		posBuffer.dir() > 0.0)
 	{
 		int size = posBuffer.ByteSize();
 		void *data = malloc(size);
