@@ -49,15 +49,6 @@ public final class Vbs3Protos {
     float getDir();
 
     /**
-     * <code>required float dirVisual = 5;</code>
-     */
-    boolean hasDirVisual();
-    /**
-     * <code>required float dirVisual = 5;</code>
-     */
-    float getDirVisual();
-
-    /**
      * <code>optional float deltaT = 6;</code>
      */
     boolean hasDeltaT();
@@ -152,19 +143,14 @@ public final class Vbs3Protos {
               dir_ = input.readFloat();
               break;
             }
-            case 45: {
-              bitField0_ |= 0x00000010;
-              dirVisual_ = input.readFloat();
-              break;
-            }
             case 53: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000010;
               deltaT_ = input.readFloat();
               break;
             }
             case 58: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000020;
               id_ = bs;
               break;
             }
@@ -268,28 +254,13 @@ public final class Vbs3Protos {
       return dir_;
     }
 
-    public static final int DIRVISUAL_FIELD_NUMBER = 5;
-    private float dirVisual_;
-    /**
-     * <code>required float dirVisual = 5;</code>
-     */
-    public boolean hasDirVisual() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>required float dirVisual = 5;</code>
-     */
-    public float getDirVisual() {
-      return dirVisual_;
-    }
-
     public static final int DELTAT_FIELD_NUMBER = 6;
     private float deltaT_;
     /**
      * <code>optional float deltaT = 6;</code>
      */
     public boolean hasDeltaT() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional float deltaT = 6;</code>
@@ -304,7 +275,7 @@ public final class Vbs3Protos {
      * <code>optional string id = 7;</code>
      */
     public boolean hasId() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional string id = 7;</code>
@@ -345,7 +316,6 @@ public final class Vbs3Protos {
       y_ = 0F;
       z_ = 0F;
       dir_ = 0F;
-      dirVisual_ = 0F;
       deltaT_ = 0F;
       id_ = "";
     }
@@ -371,10 +341,6 @@ public final class Vbs3Protos {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasDirVisual()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -395,12 +361,9 @@ public final class Vbs3Protos {
         output.writeFloat(4, dir_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeFloat(5, dirVisual_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeFloat(6, deltaT_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBytes(7, getIdBytes());
       }
       getUnknownFields().writeTo(output);
@@ -430,13 +393,9 @@ public final class Vbs3Protos {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(5, dirVisual_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(6, deltaT_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(7, getIdBytes());
       }
@@ -565,12 +524,10 @@ public final class Vbs3Protos {
         bitField0_ = (bitField0_ & ~0x00000004);
         dir_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000008);
-        dirVisual_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000010);
         deltaT_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         id_ = "";
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -618,13 +575,9 @@ public final class Vbs3Protos {
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.dirVisual_ = dirVisual_;
+        result.deltaT_ = deltaT_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
-        }
-        result.deltaT_ = deltaT_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
         }
         result.id_ = id_;
         result.bitField0_ = to_bitField0_;
@@ -655,14 +608,11 @@ public final class Vbs3Protos {
         if (other.hasDir()) {
           setDir(other.getDir());
         }
-        if (other.hasDirVisual()) {
-          setDirVisual(other.getDirVisual());
-        }
         if (other.hasDeltaT()) {
           setDeltaT(other.getDeltaT());
         }
         if (other.hasId()) {
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000020;
           id_ = other.id_;
           onChanged();
         }
@@ -684,10 +634,6 @@ public final class Vbs3Protos {
           return false;
         }
         if (!hasDir()) {
-          
-          return false;
-        }
-        if (!hasDirVisual()) {
           
           return false;
         }
@@ -841,44 +787,12 @@ public final class Vbs3Protos {
         return this;
       }
 
-      private float dirVisual_ ;
-      /**
-       * <code>required float dirVisual = 5;</code>
-       */
-      public boolean hasDirVisual() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>required float dirVisual = 5;</code>
-       */
-      public float getDirVisual() {
-        return dirVisual_;
-      }
-      /**
-       * <code>required float dirVisual = 5;</code>
-       */
-      public Builder setDirVisual(float value) {
-        bitField0_ |= 0x00000010;
-        dirVisual_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required float dirVisual = 5;</code>
-       */
-      public Builder clearDirVisual() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        dirVisual_ = 0F;
-        onChanged();
-        return this;
-      }
-
       private float deltaT_ ;
       /**
        * <code>optional float deltaT = 6;</code>
        */
       public boolean hasDeltaT() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional float deltaT = 6;</code>
@@ -890,7 +804,7 @@ public final class Vbs3Protos {
        * <code>optional float deltaT = 6;</code>
        */
       public Builder setDeltaT(float value) {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000010;
         deltaT_ = value;
         onChanged();
         return this;
@@ -899,7 +813,7 @@ public final class Vbs3Protos {
        * <code>optional float deltaT = 6;</code>
        */
       public Builder clearDeltaT() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         deltaT_ = 0F;
         onChanged();
         return this;
@@ -910,7 +824,7 @@ public final class Vbs3Protos {
        * <code>optional string id = 7;</code>
        */
       public boolean hasId() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional string id = 7;</code>
@@ -953,7 +867,7 @@ public final class Vbs3Protos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000020;
         id_ = value;
         onChanged();
         return this;
@@ -962,7 +876,7 @@ public final class Vbs3Protos {
        * <code>optional string id = 7;</code>
        */
       public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         id_ = getDefaultInstance().getId();
         onChanged();
         return this;
@@ -975,7 +889,7 @@ public final class Vbs3Protos {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000020;
         id_ = value;
         onChanged();
         return this;
@@ -1006,11 +920,10 @@ public final class Vbs3Protos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020Vbs3GetPos.proto\022\004VBS3\"g\n\010Position\022\t\n\001" +
+      "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001" +
       "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\013\n\003dir\030\004 \002" +
-      "(\002\022\021\n\tdirVisual\030\005 \002(\002\022\016\n\006deltaT\030\006 \001(\002\022\n\n" +
-      "\002id\030\007 \001(\tB\"\n\022com.artistech.vbs3B\nVbs3Pro" +
-      "tosH\001"
+      "(\002\022\016\n\006deltaT\030\006 \001(\002\022\n\n\002id\030\007 \001(\tB\"\n\022com.ar" +
+      "tistech.vbs3B\nVbs3ProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1029,7 +942,7 @@ public final class Vbs3Protos {
     internal_static_VBS3_Position_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_VBS3_Position_descriptor,
-        new java.lang.String[] { "X", "Y", "Z", "Dir", "DirVisual", "DeltaT", "Id", });
+        new java.lang.String[] { "X", "Y", "Z", "Dir", "DeltaT", "Id", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
