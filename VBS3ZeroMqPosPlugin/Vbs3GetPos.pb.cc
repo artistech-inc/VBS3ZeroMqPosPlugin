@@ -34,13 +34,18 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
       "Vbs3GetPos.proto");
   GOOGLE_CHECK(file != NULL);
   Position_descriptor_ = file->message_type(0);
-  static const int Position_offsets_[6] = {
+  static const int Position_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, z_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, deltat_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, dir_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, worldcenterx_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, worldcentery_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, eyex_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, eyey_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, eyez_),
   };
   Position_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -83,10 +88,12 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001"
-    "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030"
-    "\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002B \n\022com.ar"
-    "tistech.vbs3B\nVbs3Protos", 144);
+    "\n\020Vbs3GetPos.proto\022\004VBS3\"\252\001\n\010Position\022\t\n"
+    "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT"
+    "\030\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014world"
+    "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002\022\014\n\004e"
+    "yeX\030\t \002(\002\022\014\n\004eyeY\030\n \002(\002\022\014\n\004eyeZ\030\013 \002(\002B \n"
+    "\022com.artistech.vbs3B\nVbs3Protos", 231);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
   Position::default_instance_ = new Position();
@@ -110,6 +117,11 @@ const int Position::kZFieldNumber;
 const int Position::kDeltaTFieldNumber;
 const int Position::kIdFieldNumber;
 const int Position::kDirFieldNumber;
+const int Position::kWorldCenterXFieldNumber;
+const int Position::kWorldCenterYFieldNumber;
+const int Position::kEyeXFieldNumber;
+const int Position::kEyeYFieldNumber;
+const int Position::kEyeZFieldNumber;
 #endif  // !_MSC_VER
 
 Position::Position()
@@ -137,6 +149,11 @@ void Position::SharedCtor() {
   deltat_ = 0;
   id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   dir_ = 0;
+  worldcenterx_ = 0;
+  worldcentery_ = 0;
+  eyex_ = 0;
+  eyey_ = 0;
+  eyez_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -185,15 +202,16 @@ void Position::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 63) {
+  if (_has_bits_[0 / 32] & 255) {
     ZR_(x_, deltat_);
+    ZR_(dir_, worldcentery_);
     if (has_id()) {
       if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         id_->clear();
       }
     }
-    dir_ = 0;
   }
+  ZR_(eyex_, eyez_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -299,6 +317,81 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(61)) goto parse_worldCenterX;
+        break;
+      }
+
+      // required float worldCenterX = 7;
+      case 7: {
+        if (tag == 61) {
+         parse_worldCenterX:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &worldcenterx_)));
+          set_has_worldcenterx();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(69)) goto parse_worldCenterY;
+        break;
+      }
+
+      // required float worldCenterY = 8;
+      case 8: {
+        if (tag == 69) {
+         parse_worldCenterY:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &worldcentery_)));
+          set_has_worldcentery();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(77)) goto parse_eyeX;
+        break;
+      }
+
+      // required float eyeX = 9;
+      case 9: {
+        if (tag == 77) {
+         parse_eyeX:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &eyex_)));
+          set_has_eyex();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(85)) goto parse_eyeY;
+        break;
+      }
+
+      // required float eyeY = 10;
+      case 10: {
+        if (tag == 85) {
+         parse_eyeY:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &eyey_)));
+          set_has_eyey();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(93)) goto parse_eyeZ;
+        break;
+      }
+
+      // required float eyeZ = 11;
+      case 11: {
+        if (tag == 93) {
+         parse_eyeZ:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &eyez_)));
+          set_has_eyez();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -363,6 +456,31 @@ void Position::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->dir(), output);
   }
 
+  // required float worldCenterX = 7;
+  if (has_worldcenterx()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(7, this->worldcenterx(), output);
+  }
+
+  // required float worldCenterY = 8;
+  if (has_worldcentery()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(8, this->worldcentery(), output);
+  }
+
+  // required float eyeX = 9;
+  if (has_eyex()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(9, this->eyex(), output);
+  }
+
+  // required float eyeY = 10;
+  if (has_eyey()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(10, this->eyey(), output);
+  }
+
+  // required float eyeZ = 11;
+  if (has_eyez()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(11, this->eyez(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -409,6 +527,31 @@ void Position::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->dir(), target);
   }
 
+  // required float worldCenterX = 7;
+  if (has_worldcenterx()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(7, this->worldcenterx(), target);
+  }
+
+  // required float worldCenterY = 8;
+  if (has_worldcentery()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(8, this->worldcentery(), target);
+  }
+
+  // required float eyeX = 9;
+  if (has_eyex()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(9, this->eyex(), target);
+  }
+
+  // required float eyeY = 10;
+  if (has_eyey()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(10, this->eyey(), target);
+  }
+
+  // required float eyeZ = 11;
+  if (has_eyez()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(11, this->eyez(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -450,6 +593,33 @@ int Position::ByteSize() const {
 
     // required float dir = 6;
     if (has_dir()) {
+      total_size += 1 + 4;
+    }
+
+    // required float worldCenterX = 7;
+    if (has_worldcenterx()) {
+      total_size += 1 + 4;
+    }
+
+    // required float worldCenterY = 8;
+    if (has_worldcentery()) {
+      total_size += 1 + 4;
+    }
+
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // required float eyeX = 9;
+    if (has_eyex()) {
+      total_size += 1 + 4;
+    }
+
+    // required float eyeY = 10;
+    if (has_eyey()) {
+      total_size += 1 + 4;
+    }
+
+    // required float eyeZ = 11;
+    if (has_eyez()) {
       total_size += 1 + 4;
     }
 
@@ -498,6 +668,23 @@ void Position::MergeFrom(const Position& from) {
     if (from.has_dir()) {
       set_dir(from.dir());
     }
+    if (from.has_worldcenterx()) {
+      set_worldcenterx(from.worldcenterx());
+    }
+    if (from.has_worldcentery()) {
+      set_worldcentery(from.worldcentery());
+    }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_eyex()) {
+      set_eyex(from.eyex());
+    }
+    if (from.has_eyey()) {
+      set_eyey(from.eyey());
+    }
+    if (from.has_eyez()) {
+      set_eyez(from.eyez());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -515,7 +702,7 @@ void Position::CopyFrom(const Position& from) {
 }
 
 bool Position::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000027) != 0x00000027) return false;
+  if ((_has_bits_[0] & 0x000007e7) != 0x000007e7) return false;
 
   return true;
 }
@@ -528,6 +715,11 @@ void Position::Swap(Position* other) {
     std::swap(deltat_, other->deltat_);
     std::swap(id_, other->id_);
     std::swap(dir_, other->dir_);
+    std::swap(worldcenterx_, other->worldcenterx_);
+    std::swap(worldcentery_, other->worldcentery_);
+    std::swap(eyex_, other->eyex_);
+    std::swap(eyey_, other->eyey_);
+    std::swap(eyez_, other->eyez_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -70,6 +70,51 @@ public final class Vbs3Protos {
      * <code>required float dir = 6;</code>
      */
     float getDir();
+
+    /**
+     * <code>required float worldCenterX = 7;</code>
+     */
+    boolean hasWorldCenterX();
+    /**
+     * <code>required float worldCenterX = 7;</code>
+     */
+    float getWorldCenterX();
+
+    /**
+     * <code>required float worldCenterY = 8;</code>
+     */
+    boolean hasWorldCenterY();
+    /**
+     * <code>required float worldCenterY = 8;</code>
+     */
+    float getWorldCenterY();
+
+    /**
+     * <code>required float eyeX = 9;</code>
+     */
+    boolean hasEyeX();
+    /**
+     * <code>required float eyeX = 9;</code>
+     */
+    float getEyeX();
+
+    /**
+     * <code>required float eyeY = 10;</code>
+     */
+    boolean hasEyeY();
+    /**
+     * <code>required float eyeY = 10;</code>
+     */
+    float getEyeY();
+
+    /**
+     * <code>required float eyeZ = 11;</code>
+     */
+    boolean hasEyeZ();
+    /**
+     * <code>required float eyeZ = 11;</code>
+     */
+    float getEyeZ();
   }
   /**
    * Protobuf type {@code VBS3.Position}
@@ -152,6 +197,31 @@ public final class Vbs3Protos {
             case 53: {
               bitField0_ |= 0x00000020;
               dir_ = input.readFloat();
+              break;
+            }
+            case 61: {
+              bitField0_ |= 0x00000040;
+              worldCenterX_ = input.readFloat();
+              break;
+            }
+            case 69: {
+              bitField0_ |= 0x00000080;
+              worldCenterY_ = input.readFloat();
+              break;
+            }
+            case 77: {
+              bitField0_ |= 0x00000100;
+              eyeX_ = input.readFloat();
+              break;
+            }
+            case 85: {
+              bitField0_ |= 0x00000200;
+              eyeY_ = input.readFloat();
+              break;
+            }
+            case 93: {
+              bitField0_ |= 0x00000400;
+              eyeZ_ = input.readFloat();
               break;
             }
           }
@@ -311,6 +381,81 @@ public final class Vbs3Protos {
       return dir_;
     }
 
+    public static final int WORLDCENTERX_FIELD_NUMBER = 7;
+    private float worldCenterX_;
+    /**
+     * <code>required float worldCenterX = 7;</code>
+     */
+    public boolean hasWorldCenterX() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required float worldCenterX = 7;</code>
+     */
+    public float getWorldCenterX() {
+      return worldCenterX_;
+    }
+
+    public static final int WORLDCENTERY_FIELD_NUMBER = 8;
+    private float worldCenterY_;
+    /**
+     * <code>required float worldCenterY = 8;</code>
+     */
+    public boolean hasWorldCenterY() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>required float worldCenterY = 8;</code>
+     */
+    public float getWorldCenterY() {
+      return worldCenterY_;
+    }
+
+    public static final int EYEX_FIELD_NUMBER = 9;
+    private float eyeX_;
+    /**
+     * <code>required float eyeX = 9;</code>
+     */
+    public boolean hasEyeX() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>required float eyeX = 9;</code>
+     */
+    public float getEyeX() {
+      return eyeX_;
+    }
+
+    public static final int EYEY_FIELD_NUMBER = 10;
+    private float eyeY_;
+    /**
+     * <code>required float eyeY = 10;</code>
+     */
+    public boolean hasEyeY() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>required float eyeY = 10;</code>
+     */
+    public float getEyeY() {
+      return eyeY_;
+    }
+
+    public static final int EYEZ_FIELD_NUMBER = 11;
+    private float eyeZ_;
+    /**
+     * <code>required float eyeZ = 11;</code>
+     */
+    public boolean hasEyeZ() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>required float eyeZ = 11;</code>
+     */
+    public float getEyeZ() {
+      return eyeZ_;
+    }
+
     private void initFields() {
       x_ = 0F;
       y_ = 0F;
@@ -318,6 +463,11 @@ public final class Vbs3Protos {
       deltaT_ = 0F;
       id_ = "";
       dir_ = 0F;
+      worldCenterX_ = 0F;
+      worldCenterY_ = 0F;
+      eyeX_ = 0F;
+      eyeY_ = 0F;
+      eyeZ_ = 0F;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -338,6 +488,26 @@ public final class Vbs3Protos {
         return false;
       }
       if (!hasDir()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasWorldCenterX()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasWorldCenterY()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEyeX()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEyeY()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEyeZ()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -365,6 +535,21 @@ public final class Vbs3Protos {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeFloat(6, dir_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeFloat(7, worldCenterX_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeFloat(8, worldCenterY_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeFloat(9, eyeX_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeFloat(10, eyeY_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeFloat(11, eyeZ_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -398,6 +583,26 @@ public final class Vbs3Protos {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(6, dir_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(7, worldCenterX_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(8, worldCenterY_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(9, eyeX_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(10, eyeY_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(11, eyeZ_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -528,6 +733,16 @@ public final class Vbs3Protos {
         bitField0_ = (bitField0_ & ~0x00000010);
         dir_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000020);
+        worldCenterX_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        worldCenterY_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        eyeX_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        eyeY_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        eyeZ_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -580,6 +795,26 @@ public final class Vbs3Protos {
           to_bitField0_ |= 0x00000020;
         }
         result.dir_ = dir_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.worldCenterX_ = worldCenterX_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.worldCenterY_ = worldCenterY_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.eyeX_ = eyeX_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.eyeY_ = eyeY_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.eyeZ_ = eyeZ_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -616,6 +851,21 @@ public final class Vbs3Protos {
         if (other.hasDir()) {
           setDir(other.getDir());
         }
+        if (other.hasWorldCenterX()) {
+          setWorldCenterX(other.getWorldCenterX());
+        }
+        if (other.hasWorldCenterY()) {
+          setWorldCenterY(other.getWorldCenterY());
+        }
+        if (other.hasEyeX()) {
+          setEyeX(other.getEyeX());
+        }
+        if (other.hasEyeY()) {
+          setEyeY(other.getEyeY());
+        }
+        if (other.hasEyeZ()) {
+          setEyeZ(other.getEyeZ());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -634,6 +884,26 @@ public final class Vbs3Protos {
           return false;
         }
         if (!hasDir()) {
+          
+          return false;
+        }
+        if (!hasWorldCenterX()) {
+          
+          return false;
+        }
+        if (!hasWorldCenterY()) {
+          
+          return false;
+        }
+        if (!hasEyeX()) {
+          
+          return false;
+        }
+        if (!hasEyeY()) {
+          
+          return false;
+        }
+        if (!hasEyeZ()) {
           
           return false;
         }
@@ -895,6 +1165,166 @@ public final class Vbs3Protos {
         return this;
       }
 
+      private float worldCenterX_ ;
+      /**
+       * <code>required float worldCenterX = 7;</code>
+       */
+      public boolean hasWorldCenterX() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>required float worldCenterX = 7;</code>
+       */
+      public float getWorldCenterX() {
+        return worldCenterX_;
+      }
+      /**
+       * <code>required float worldCenterX = 7;</code>
+       */
+      public Builder setWorldCenterX(float value) {
+        bitField0_ |= 0x00000040;
+        worldCenterX_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float worldCenterX = 7;</code>
+       */
+      public Builder clearWorldCenterX() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        worldCenterX_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private float worldCenterY_ ;
+      /**
+       * <code>required float worldCenterY = 8;</code>
+       */
+      public boolean hasWorldCenterY() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required float worldCenterY = 8;</code>
+       */
+      public float getWorldCenterY() {
+        return worldCenterY_;
+      }
+      /**
+       * <code>required float worldCenterY = 8;</code>
+       */
+      public Builder setWorldCenterY(float value) {
+        bitField0_ |= 0x00000080;
+        worldCenterY_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float worldCenterY = 8;</code>
+       */
+      public Builder clearWorldCenterY() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        worldCenterY_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private float eyeX_ ;
+      /**
+       * <code>required float eyeX = 9;</code>
+       */
+      public boolean hasEyeX() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>required float eyeX = 9;</code>
+       */
+      public float getEyeX() {
+        return eyeX_;
+      }
+      /**
+       * <code>required float eyeX = 9;</code>
+       */
+      public Builder setEyeX(float value) {
+        bitField0_ |= 0x00000100;
+        eyeX_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float eyeX = 9;</code>
+       */
+      public Builder clearEyeX() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        eyeX_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private float eyeY_ ;
+      /**
+       * <code>required float eyeY = 10;</code>
+       */
+      public boolean hasEyeY() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>required float eyeY = 10;</code>
+       */
+      public float getEyeY() {
+        return eyeY_;
+      }
+      /**
+       * <code>required float eyeY = 10;</code>
+       */
+      public Builder setEyeY(float value) {
+        bitField0_ |= 0x00000200;
+        eyeY_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float eyeY = 10;</code>
+       */
+      public Builder clearEyeY() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        eyeY_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private float eyeZ_ ;
+      /**
+       * <code>required float eyeZ = 11;</code>
+       */
+      public boolean hasEyeZ() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>required float eyeZ = 11;</code>
+       */
+      public float getEyeZ() {
+        return eyeZ_;
+      }
+      /**
+       * <code>required float eyeZ = 11;</code>
+       */
+      public Builder setEyeZ(float value) {
+        bitField0_ |= 0x00000400;
+        eyeZ_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float eyeZ = 11;</code>
+       */
+      public Builder clearEyeZ() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        eyeZ_ = 0F;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:VBS3.Position)
     }
 
@@ -920,10 +1350,12 @@ public final class Vbs3Protos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001" +
-      "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030" +
-      "\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002B \n\022com.ar" +
-      "tistech.vbs3B\nVbs3Protos"
+      "\n\020Vbs3GetPos.proto\022\004VBS3\"\252\001\n\010Position\022\t\n" +
+      "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT" +
+      "\030\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014world" +
+      "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002\022\014\n\004e" +
+      "yeX\030\t \002(\002\022\014\n\004eyeY\030\n \002(\002\022\014\n\004eyeZ\030\013 \002(\002B \n" +
+      "\022com.artistech.vbs3B\nVbs3Protos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -942,7 +1374,7 @@ public final class Vbs3Protos {
     internal_static_VBS3_Position_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_VBS3_Position_descriptor,
-        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", "Dir", });
+        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", "Dir", "WorldCenterX", "WorldCenterY", "EyeX", "EyeY", "EyeZ", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
