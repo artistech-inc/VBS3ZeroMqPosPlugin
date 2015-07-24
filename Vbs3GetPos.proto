@@ -9,4 +9,5 @@ message Position {
     required float z = 3;
     optional float deltaT = 4;
     optional string id = 5;
+    required float dir = 6;
 }

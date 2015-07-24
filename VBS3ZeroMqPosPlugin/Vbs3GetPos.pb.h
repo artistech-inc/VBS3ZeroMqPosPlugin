@@ -130,6 +130,13 @@ class Position : public ::google::protobuf::Message {
   inline ::std::string* release_id();
   inline void set_allocated_id(::std::string* id);
 
+  // required float dir = 6;
+  inline bool has_dir() const;
+  inline void clear_dir();
+  static const int kDirFieldNumber = 6;
+  inline float dir() const;
+  inline void set_dir(float value);
+
   // @@protoc_insertion_point(class_scope:VBS3.Position)
  private:
   inline void set_has_x();
@@ -142,6 +149,8 @@ class Position : public ::google::protobuf::Message {
   inline void clear_has_deltat();
   inline void set_has_id();
   inline void clear_has_id();
+  inline void set_has_dir();
+  inline void clear_has_dir();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -152,6 +161,7 @@ class Position : public ::google::protobuf::Message {
   float z_;
   float deltat_;
   ::std::string* id_;
+  float dir_;
   friend void  protobuf_AddDesc_Vbs3GetPos_2eproto();
   friend void protobuf_AssignDesc_Vbs3GetPos_2eproto();
   friend void protobuf_ShutdownFile_Vbs3GetPos_2eproto();
@@ -336,6 +346,30 @@ inline void Position::set_allocated_id(::std::string* id) {
     id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:VBS3.Position.id)
+}
+
+// required float dir = 6;
+inline bool Position::has_dir() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Position::set_has_dir() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Position::clear_has_dir() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Position::clear_dir() {
+  dir_ = 0;
+  clear_has_dir();
+}
+inline float Position::dir() const {
+  // @@protoc_insertion_point(field_get:VBS3.Position.dir)
+  return dir_;
+}
+inline void Position::set_dir(float value) {
+  set_has_dir();
+  dir_ = value;
+  // @@protoc_insertion_point(field_set:VBS3.Position.dir)
 }
 
 

@@ -61,6 +61,15 @@ public final class Vbs3Protos {
      */
     com.google.protobuf.ByteString
         getIdBytes();
+
+    /**
+     * <code>required float dir = 6;</code>
+     */
+    boolean hasDir();
+    /**
+     * <code>required float dir = 6;</code>
+     */
+    float getDir();
   }
   /**
    * Protobuf type {@code VBS3.Position}
@@ -138,6 +147,11 @@ public final class Vbs3Protos {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
               id_ = bs;
+              break;
+            }
+            case 53: {
+              bitField0_ |= 0x00000020;
+              dir_ = input.readFloat();
               break;
             }
           }
@@ -282,12 +296,28 @@ public final class Vbs3Protos {
       }
     }
 
+    public static final int DIR_FIELD_NUMBER = 6;
+    private float dir_;
+    /**
+     * <code>required float dir = 6;</code>
+     */
+    public boolean hasDir() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>required float dir = 6;</code>
+     */
+    public float getDir() {
+      return dir_;
+    }
+
     private void initFields() {
       x_ = 0F;
       y_ = 0F;
       z_ = 0F;
       deltaT_ = 0F;
       id_ = "";
+      dir_ = 0F;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -304,6 +334,10 @@ public final class Vbs3Protos {
         return false;
       }
       if (!hasZ()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDir()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -328,6 +362,9 @@ public final class Vbs3Protos {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(5, getIdBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeFloat(6, dir_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -357,6 +394,10 @@ public final class Vbs3Protos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, getIdBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(6, dir_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -485,6 +526,8 @@ public final class Vbs3Protos {
         bitField0_ = (bitField0_ & ~0x00000008);
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
+        dir_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -533,6 +576,10 @@ public final class Vbs3Protos {
           to_bitField0_ |= 0x00000010;
         }
         result.id_ = id_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.dir_ = dir_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -566,6 +613,9 @@ public final class Vbs3Protos {
           id_ = other.id_;
           onChanged();
         }
+        if (other.hasDir()) {
+          setDir(other.getDir());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -580,6 +630,10 @@ public final class Vbs3Protos {
           return false;
         }
         if (!hasZ()) {
+          
+          return false;
+        }
+        if (!hasDir()) {
           
           return false;
         }
@@ -809,6 +863,38 @@ public final class Vbs3Protos {
         return this;
       }
 
+      private float dir_ ;
+      /**
+       * <code>required float dir = 6;</code>
+       */
+      public boolean hasDir() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>required float dir = 6;</code>
+       */
+      public float getDir() {
+        return dir_;
+      }
+      /**
+       * <code>required float dir = 6;</code>
+       */
+      public Builder setDir(float value) {
+        bitField0_ |= 0x00000020;
+        dir_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float dir = 6;</code>
+       */
+      public Builder clearDir() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        dir_ = 0F;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:VBS3.Position)
     }
 
@@ -834,10 +920,10 @@ public final class Vbs3Protos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020Vbs3GetPos.proto\022\004VBS3\"G\n\010Position\022\t\n\001" +
+      "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001" +
       "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030" +
-      "\004 \001(\002\022\n\n\002id\030\005 \001(\tB \n\022com.artistech.vbs3B" +
-      "\nVbs3Protos"
+      "\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002B \n\022com.ar" +
+      "tistech.vbs3B\nVbs3Protos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -856,7 +942,7 @@ public final class Vbs3Protos {
     internal_static_VBS3_Position_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_VBS3_Position_descriptor,
-        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", });
+        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", "Dir", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

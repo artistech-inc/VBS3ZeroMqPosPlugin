@@ -34,12 +34,13 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
       "Vbs3GetPos.proto");
   GOOGLE_CHECK(file != NULL);
   Position_descriptor_ = file->message_type(0);
-  static const int Position_offsets_[5] = {
+  static const int Position_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, z_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, deltat_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, dir_),
   };
   Position_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -82,10 +83,10 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020Vbs3GetPos.proto\022\004VBS3\"G\n\010Position\022\t\n\001"
+    "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001"
     "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030"
-    "\004 \001(\002\022\n\n\002id\030\005 \001(\tB \n\022com.artistech.vbs3B"
-    "\nVbs3Protos", 131);
+    "\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002B \n\022com.ar"
+    "tistech.vbs3B\nVbs3Protos", 144);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
   Position::default_instance_ = new Position();
@@ -108,6 +109,7 @@ const int Position::kYFieldNumber;
 const int Position::kZFieldNumber;
 const int Position::kDeltaTFieldNumber;
 const int Position::kIdFieldNumber;
+const int Position::kDirFieldNumber;
 #endif  // !_MSC_VER
 
 Position::Position()
@@ -134,6 +136,7 @@ void Position::SharedCtor() {
   z_ = 0;
   deltat_ = 0;
   id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  dir_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -182,13 +185,14 @@ void Position::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 31) {
+  if (_has_bits_[0 / 32] & 63) {
     ZR_(x_, deltat_);
     if (has_id()) {
       if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         id_->clear();
       }
     }
+    dir_ = 0;
   }
 
 #undef OFFSET_OF_FIELD_
@@ -280,6 +284,21 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(53)) goto parse_dir;
+        break;
+      }
+
+      // required float dir = 6;
+      case 6: {
+        if (tag == 53) {
+         parse_dir:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &dir_)));
+          set_has_dir();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -339,6 +358,11 @@ void Position::SerializeWithCachedSizes(
       5, this->id(), output);
   }
 
+  // required float dir = 6;
+  if (has_dir()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->dir(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -380,6 +404,11 @@ void Position::SerializeWithCachedSizes(
         5, this->id(), target);
   }
 
+  // required float dir = 6;
+  if (has_dir()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->dir(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -417,6 +446,11 @@ int Position::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->id());
+    }
+
+    // required float dir = 6;
+    if (has_dir()) {
+      total_size += 1 + 4;
     }
 
   }
@@ -461,6 +495,9 @@ void Position::MergeFrom(const Position& from) {
     if (from.has_id()) {
       set_id(from.id());
     }
+    if (from.has_dir()) {
+      set_dir(from.dir());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -478,7 +515,7 @@ void Position::CopyFrom(const Position& from) {
 }
 
 bool Position::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x00000027) != 0x00000027) return false;
 
   return true;
 }
@@ -490,6 +527,7 @@ void Position::Swap(Position* other) {
     std::swap(z_, other->z_);
     std::swap(deltat_, other->deltat_);
     std::swap(id_, other->id_);
+    std::swap(dir_, other->dir_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
