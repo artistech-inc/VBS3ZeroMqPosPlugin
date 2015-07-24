@@ -8,6 +8,8 @@ message Position {
     required float x = 1;
     required float y = 2;
     required float z = 3;
-    optional float deltaT = 4;
-    optional string id = 5;
+    required float dir = 4;
+    required float dirVisual = 5;
+    optional float deltaT = 6;
+    optional string id = 7;
 }
