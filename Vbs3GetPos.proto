@@ -12,7 +12,4 @@ message Position {
     required float dir = 6;
     required float worldCenterX = 7;
     required float worldCenterY = 8;
-    required float eyeX = 9;
-    required float eyeY = 10;
-    required float eyeZ = 11;
 }

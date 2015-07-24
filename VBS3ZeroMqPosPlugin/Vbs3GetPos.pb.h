@@ -151,27 +151,6 @@ class Position : public ::google::protobuf::Message {
   inline float worldcentery() const;
   inline void set_worldcentery(float value);
 
-  // required float eyeX = 9;
-  inline bool has_eyex() const;
-  inline void clear_eyex();
-  static const int kEyeXFieldNumber = 9;
-  inline float eyex() const;
-  inline void set_eyex(float value);
-
-  // required float eyeY = 10;
-  inline bool has_eyey() const;
-  inline void clear_eyey();
-  static const int kEyeYFieldNumber = 10;
-  inline float eyey() const;
-  inline void set_eyey(float value);
-
-  // required float eyeZ = 11;
-  inline bool has_eyez() const;
-  inline void clear_eyez();
-  static const int kEyeZFieldNumber = 11;
-  inline float eyez() const;
-  inline void set_eyez(float value);
-
   // @@protoc_insertion_point(class_scope:VBS3.Position)
  private:
   inline void set_has_x();
@@ -190,12 +169,6 @@ class Position : public ::google::protobuf::Message {
   inline void clear_has_worldcenterx();
   inline void set_has_worldcentery();
   inline void clear_has_worldcentery();
-  inline void set_has_eyex();
-  inline void clear_has_eyex();
-  inline void set_has_eyey();
-  inline void clear_has_eyey();
-  inline void set_has_eyez();
-  inline void clear_has_eyez();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -209,9 +182,6 @@ class Position : public ::google::protobuf::Message {
   float dir_;
   float worldcenterx_;
   float worldcentery_;
-  float eyex_;
-  float eyey_;
-  float eyez_;
   friend void  protobuf_AddDesc_Vbs3GetPos_2eproto();
   friend void protobuf_AssignDesc_Vbs3GetPos_2eproto();
   friend void protobuf_ShutdownFile_Vbs3GetPos_2eproto();
@@ -468,78 +438,6 @@ inline void Position::set_worldcentery(float value) {
   set_has_worldcentery();
   worldcentery_ = value;
   // @@protoc_insertion_point(field_set:VBS3.Position.worldCenterY)
-}
-
-// required float eyeX = 9;
-inline bool Position::has_eyex() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void Position::set_has_eyex() {
-  _has_bits_[0] |= 0x00000100u;
-}
-inline void Position::clear_has_eyex() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void Position::clear_eyex() {
-  eyex_ = 0;
-  clear_has_eyex();
-}
-inline float Position::eyex() const {
-  // @@protoc_insertion_point(field_get:VBS3.Position.eyeX)
-  return eyex_;
-}
-inline void Position::set_eyex(float value) {
-  set_has_eyex();
-  eyex_ = value;
-  // @@protoc_insertion_point(field_set:VBS3.Position.eyeX)
-}
-
-// required float eyeY = 10;
-inline bool Position::has_eyey() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void Position::set_has_eyey() {
-  _has_bits_[0] |= 0x00000200u;
-}
-inline void Position::clear_has_eyey() {
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline void Position::clear_eyey() {
-  eyey_ = 0;
-  clear_has_eyey();
-}
-inline float Position::eyey() const {
-  // @@protoc_insertion_point(field_get:VBS3.Position.eyeY)
-  return eyey_;
-}
-inline void Position::set_eyey(float value) {
-  set_has_eyey();
-  eyey_ = value;
-  // @@protoc_insertion_point(field_set:VBS3.Position.eyeY)
-}
-
-// required float eyeZ = 11;
-inline bool Position::has_eyez() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
-inline void Position::set_has_eyez() {
-  _has_bits_[0] |= 0x00000400u;
-}
-inline void Position::clear_has_eyez() {
-  _has_bits_[0] &= ~0x00000400u;
-}
-inline void Position::clear_eyez() {
-  eyez_ = 0;
-  clear_has_eyez();
-}
-inline float Position::eyez() const {
-  // @@protoc_insertion_point(field_get:VBS3.Position.eyeZ)
-  return eyez_;
-}
-inline void Position::set_eyez(float value) {
-  set_has_eyez();
-  eyez_ = value;
-  // @@protoc_insertion_point(field_set:VBS3.Position.eyeZ)
 }
 
 
