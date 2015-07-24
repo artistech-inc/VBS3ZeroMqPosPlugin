@@ -85,7 +85,7 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001"
     "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\013\n\003dir\030\004 \002"
-    "(\002\022\016\n\006deltaT\030\006 \001(\002\022\n\n\002id\030\007 \001(\tB\"\n\022com.ar"
+    "(\002\022\016\n\006deltaT\030\005 \001(\002\022\n\n\002id\030\006 \001(\tB\"\n\022com.ar"
     "tistech.vbs3B\nVbs3ProtosH\001", 146);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
@@ -267,13 +267,13 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(53)) goto parse_deltaT;
+        if (input->ExpectTag(45)) goto parse_deltaT;
         break;
       }
 
-      // optional float deltaT = 6;
-      case 6: {
-        if (tag == 53) {
+      // optional float deltaT = 5;
+      case 5: {
+        if (tag == 45) {
          parse_deltaT:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -282,13 +282,13 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_id;
+        if (input->ExpectTag(50)) goto parse_id;
         break;
       }
 
-      // optional string id = 7;
-      case 7: {
-        if (tag == 58) {
+      // optional string id = 6;
+      case 6: {
+        if (tag == 50) {
          parse_id:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_id()));
@@ -348,19 +348,19 @@ void Position::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->dir(), output);
   }
 
-  // optional float deltaT = 6;
+  // optional float deltaT = 5;
   if (has_deltat()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->deltat(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->deltat(), output);
   }
 
-  // optional string id = 7;
+  // optional string id = 6;
   if (has_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->id().data(), this->id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
       "id");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      7, this->id(), output);
+      6, this->id(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -393,12 +393,12 @@ void Position::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->dir(), target);
   }
 
-  // optional float deltaT = 6;
+  // optional float deltaT = 5;
   if (has_deltat()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->deltat(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->deltat(), target);
   }
 
-  // optional string id = 7;
+  // optional string id = 6;
   if (has_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->id().data(), this->id().length(),
@@ -406,7 +406,7 @@ void Position::SerializeWithCachedSizes(
       "id");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        7, this->id(), target);
+        6, this->id(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -441,12 +441,12 @@ int Position::ByteSize() const {
       total_size += 1 + 4;
     }
 
-    // optional float deltaT = 6;
+    // optional float deltaT = 5;
     if (has_deltat()) {
       total_size += 1 + 4;
     }
 
-    // optional string id = 7;
+    // optional string id = 6;
     if (has_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(

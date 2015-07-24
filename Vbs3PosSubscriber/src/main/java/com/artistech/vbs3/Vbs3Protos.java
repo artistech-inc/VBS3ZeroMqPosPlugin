@@ -49,24 +49,24 @@ public final class Vbs3Protos {
     float getDir();
 
     /**
-     * <code>optional float deltaT = 6;</code>
+     * <code>optional float deltaT = 5;</code>
      */
     boolean hasDeltaT();
     /**
-     * <code>optional float deltaT = 6;</code>
+     * <code>optional float deltaT = 5;</code>
      */
     float getDeltaT();
 
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     boolean hasId();
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     java.lang.String getId();
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     com.google.protobuf.ByteString
         getIdBytes();
@@ -143,12 +143,12 @@ public final class Vbs3Protos {
               dir_ = input.readFloat();
               break;
             }
-            case 53: {
+            case 45: {
               bitField0_ |= 0x00000010;
               deltaT_ = input.readFloat();
               break;
             }
-            case 58: {
+            case 50: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
               id_ = bs;
@@ -254,31 +254,31 @@ public final class Vbs3Protos {
       return dir_;
     }
 
-    public static final int DELTAT_FIELD_NUMBER = 6;
+    public static final int DELTAT_FIELD_NUMBER = 5;
     private float deltaT_;
     /**
-     * <code>optional float deltaT = 6;</code>
+     * <code>optional float deltaT = 5;</code>
      */
     public boolean hasDeltaT() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional float deltaT = 6;</code>
+     * <code>optional float deltaT = 5;</code>
      */
     public float getDeltaT() {
       return deltaT_;
     }
 
-    public static final int ID_FIELD_NUMBER = 7;
+    public static final int ID_FIELD_NUMBER = 6;
     private java.lang.Object id_;
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -295,7 +295,7 @@ public final class Vbs3Protos {
       }
     }
     /**
-     * <code>optional string id = 7;</code>
+     * <code>optional string id = 6;</code>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -361,10 +361,10 @@ public final class Vbs3Protos {
         output.writeFloat(4, dir_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeFloat(6, deltaT_);
+        output.writeFloat(5, deltaT_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(7, getIdBytes());
+        output.writeBytes(6, getIdBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -393,11 +393,11 @@ public final class Vbs3Protos {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(6, deltaT_);
+          .computeFloatSize(5, deltaT_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, getIdBytes());
+          .computeBytesSize(6, getIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -789,19 +789,19 @@ public final class Vbs3Protos {
 
       private float deltaT_ ;
       /**
-       * <code>optional float deltaT = 6;</code>
+       * <code>optional float deltaT = 5;</code>
        */
       public boolean hasDeltaT() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional float deltaT = 6;</code>
+       * <code>optional float deltaT = 5;</code>
        */
       public float getDeltaT() {
         return deltaT_;
       }
       /**
-       * <code>optional float deltaT = 6;</code>
+       * <code>optional float deltaT = 5;</code>
        */
       public Builder setDeltaT(float value) {
         bitField0_ |= 0x00000010;
@@ -810,7 +810,7 @@ public final class Vbs3Protos {
         return this;
       }
       /**
-       * <code>optional float deltaT = 6;</code>
+       * <code>optional float deltaT = 5;</code>
        */
       public Builder clearDeltaT() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -821,13 +821,13 @@ public final class Vbs3Protos {
 
       private java.lang.Object id_ = "";
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -844,7 +844,7 @@ public final class Vbs3Protos {
         }
       }
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -860,7 +860,7 @@ public final class Vbs3Protos {
         }
       }
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public Builder setId(
           java.lang.String value) {
@@ -873,7 +873,7 @@ public final class Vbs3Protos {
         return this;
       }
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -882,7 +882,7 @@ public final class Vbs3Protos {
         return this;
       }
       /**
-       * <code>optional string id = 7;</code>
+       * <code>optional string id = 6;</code>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -922,7 +922,7 @@ public final class Vbs3Protos {
     java.lang.String[] descriptorData = {
       "\n\020Vbs3GetPos.proto\022\004VBS3\"T\n\010Position\022\t\n\001" +
       "x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\013\n\003dir\030\004 \002" +
-      "(\002\022\016\n\006deltaT\030\006 \001(\002\022\n\n\002id\030\007 \001(\tB\"\n\022com.ar" +
+      "(\002\022\016\n\006deltaT\030\005 \001(\002\022\n\n\002id\030\006 \001(\tB\"\n\022com.ar" +
       "tistech.vbs3B\nVbs3ProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

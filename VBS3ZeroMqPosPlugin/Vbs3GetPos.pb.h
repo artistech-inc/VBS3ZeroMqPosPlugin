@@ -118,17 +118,17 @@ class Position : public ::google::protobuf::Message {
   inline float dir() const;
   inline void set_dir(float value);
 
-  // optional float deltaT = 6;
+  // optional float deltaT = 5;
   inline bool has_deltat() const;
   inline void clear_deltat();
-  static const int kDeltaTFieldNumber = 6;
+  static const int kDeltaTFieldNumber = 5;
   inline float deltat() const;
   inline void set_deltat(float value);
 
-  // optional string id = 7;
+  // optional string id = 6;
   inline bool has_id() const;
   inline void clear_id();
-  static const int kIdFieldNumber = 7;
+  static const int kIdFieldNumber = 6;
   inline const ::std::string& id() const;
   inline void set_id(const ::std::string& value);
   inline void set_id(const char* value);
@@ -272,7 +272,7 @@ inline void Position::set_dir(float value) {
   // @@protoc_insertion_point(field_set:VBS3.Position.dir)
 }
 
-// optional float deltaT = 6;
+// optional float deltaT = 5;
 inline bool Position::has_deltat() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -296,7 +296,7 @@ inline void Position::set_deltat(float value) {
   // @@protoc_insertion_point(field_set:VBS3.Position.deltaT)
 }
 
-// optional string id = 7;
+// optional string id = 6;
 inline bool Position::has_id() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
