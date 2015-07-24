@@ -8,7 +8,6 @@
 #endif
 #include <cstring>
 #include <stdlib.h>
-
 #include "Vbs3GetPos.pb.h"
 
 using namespace std;
@@ -43,9 +42,9 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 	posBuffer.set_z(atof(strtok(NULL, "[],")));
 	posBuffer.set_deltat(deltaT);
 
-    //ExecuteCommand("getWorldCenter", pos, 255);
-	//posBuffer.set_eyex(atof(strtok(pos, "[],")));
-	//posBuffer.set_eyey(atof(strtok(NULL, "[],")));
+    ExecuteCommand("getWorldCenter", pos, 255);
+	posBuffer.set_worldcenterx(atof(strtok(pos, "[],")));
+	posBuffer.set_worldcentery(atof(strtok(NULL, "[],")));
 
     //ExecuteCommand("eyePos player", pos, 255);
 	//posBuffer.set_eyex(atof(strtok(pos, "[],")));
@@ -113,6 +112,9 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
+			//CANNOT CURRENTLY CLOSE W/O CRASH!
+			//This is because ZeroMQ is meant to be called within a single thread (at least open/close)
+			//and the VBS plugin is called by any indeterminate thread...
 			publisher->close();
 			//context->close();	// <-- causes hang if implemented
 			delete publisher;

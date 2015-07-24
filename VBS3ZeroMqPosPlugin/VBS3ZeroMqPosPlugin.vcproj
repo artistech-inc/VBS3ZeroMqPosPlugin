@@ -118,7 +118,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\protobuf-2.6.1\src;..\ZeroMQ\include"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;..\ZeroMQ\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -269,7 +269,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\protobuf-2.6.1\src;..\ZeroMQ\include"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;..\ZeroMQ\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;VBSPLUGIN_EXPORTS;WIN32_LEAN_AND_MEAN"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
