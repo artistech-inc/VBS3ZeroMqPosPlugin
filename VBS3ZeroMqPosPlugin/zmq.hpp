@@ -144,16 +144,15 @@ namespace zmq
     {
         return poll(items.data(), items.size(), timeout.count() );
     }
-    #endif
 
     inline int poll(std::vector<zmq_pollitem_t> const& items, long timeout_ = -1)
     {
 		//modified to be backward compatible w/ vs 2008
-		return poll(&items.front(), items.size(), timeout_);
-        //return poll(items.data(), items.size(), timeout_);
+		//return poll(&items.front(), items.size(), timeout_);
+        return poll(items.data(), items.size(), timeout_);
     }
 
-
+    #endif
 
     inline void proxy (void *frontend, void *backend, void *capture)
     {

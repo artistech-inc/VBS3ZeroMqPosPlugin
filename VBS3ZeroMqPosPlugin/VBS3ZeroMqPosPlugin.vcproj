@@ -382,10 +382,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Vbs3GetPos.proto"
-			>
-		</File>
-		<File
 			RelativePath=".\VBSPlugin.def"
 			>
 		</File>
