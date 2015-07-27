@@ -9,7 +9,7 @@ it in a Google Protocl Buffer wrapper which will then be broadcast using
 ZeroMq.
 
 If linking against czmq:
-Must also link agains:
+Must also link against:
 ws2_32.lib
 rpcrt4.lib
 
