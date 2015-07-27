@@ -10,11 +10,11 @@
 #include <stdlib.h>
 #include "Vbs3GetPos.pb.h"
 
-#include <czmq.h>
-#define HAVE_MODE_T
+//#include <czmq.h>
+//#define HAVE_MODE_T
 
-#include <pthread.h>
-#include <semaphore.h>
+//#include <pthread.h>
+//#include <semaphore.h>
 
 using namespace std;
 
