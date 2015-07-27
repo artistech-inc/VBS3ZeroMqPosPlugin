@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #include "Vbs3GetPos.pb.h"
 
+#include <czmq.h>
+#define HAVE_MODE_T
+
+#include <pthread.h>
+#include <semaphore.h>
+
 using namespace std;
 
 //https://resources.bisimulations.com/wiki/Category:VBS:_Scripting_Commands
@@ -20,6 +26,8 @@ typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int
 ExecuteCommandType ExecuteCommand = NULL;
 zmq::socket_t *publisher;
 zmq::context_t *context;
+
+/* this function is run by the second thread */
 
 // Function that will register the ExecuteCommand function of the engine
 VBSPLUGIN_EXPORT void WINAPI RegisterCommandFnc(void *executeCommandFnc)
