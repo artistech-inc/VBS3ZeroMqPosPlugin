@@ -330,10 +330,6 @@
 			ReferencedProjectIdentifier="{3E283F37-A4ED-41B7-A3E6-A2D89D131A30}"
 			RelativePathToProject=".\protobuf-2.6.1\vsprojects\libprotobuf.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{0C4A2E28-8C9E-4B27-85D9-BB679AD84AC7}"
-			RelativePathToProject=".\czmq-3.0.2\builds\msvc\vs2008\czmq\czmq.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

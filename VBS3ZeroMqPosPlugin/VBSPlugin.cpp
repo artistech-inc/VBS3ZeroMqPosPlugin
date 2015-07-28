@@ -1,13 +1,13 @@
 #include <windows.h>
 #include "VBSPlugin.h"
 
-//#define DEBUG
 #include "zmq.hpp"
 
-#ifdef DEBUG
+#ifdef _DEBUG
 #include <iostream>
 #include <fstream>
 #endif
+
 #include <cstring>
 #include <stdlib.h>
 #include "Vbs3GetPos.pb.h"
@@ -106,7 +106,7 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 		publisher->send(data, size);
 		free(data);
 
-#ifdef DEBUG
+#ifdef _DEBUG
 		ofstream file;
 		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 		file << "Protocol Buffer: " << endl << posBuffer.DebugString();
@@ -127,14 +127,14 @@ VBSPLUGIN_EXPORT const char* WINAPI PluginFunction(const char *input)
 // DllMain
 BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 {
-#ifdef DEBUG
+#ifdef _DEBUG
 	ofstream file;
 	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 #endif
 	switch(fdwReason)
 	{
 		case DLL_PROCESS_ATTACH:
-#ifdef DEBUG
+#ifdef _DEBUG
 			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
 			file.flush();
 #endif
@@ -144,7 +144,7 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
-#ifdef DEBUG
+#ifdef _DEBUG
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
@@ -162,7 +162,7 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			//OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
 		break;
 	}
-#ifdef DEBUG
+#ifdef _DEBUG
 	file.close();
 #endif
 	return TRUE;
