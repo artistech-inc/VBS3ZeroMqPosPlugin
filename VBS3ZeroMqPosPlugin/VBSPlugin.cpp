@@ -1,8 +1,10 @@
 #include <windows.h>
 #include "VBSPlugin.h"
+
+//#define DEBUG
 #include "zmq.hpp"
 
-#if DEBUG
+#ifdef DEBUG
 #include <iostream>
 #include <fstream>
 #endif
@@ -11,10 +13,13 @@
 #include "Vbs3GetPos.pb.h"
 
 //#include <czmq.h>
-//#define HAVE_MODE_T
+//#include <zwssock.h>
+#if defined(CZMQ_EXPORT)
+#define HAVE_MODE_T
+#endif
 
-//#include <pthread.h>
-//#include <semaphore.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 using namespace std;
 
@@ -24,8 +29,31 @@ typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int
 
 // Command function definition
 ExecuteCommandType ExecuteCommand = NULL;
+
 zmq::socket_t *publisher;
 zmq::context_t *context;
+sem_t sem;
+pthread_t thread;
+
+void *thread_func(void* arg)
+{
+	//zsock_t *pub = zsock_new_pub ("tcp://*:5552");
+	context = new zmq::context_t(1);
+	publisher = new zmq::socket_t(*context, ZMQ_PUB);
+	publisher->bind("tcp://*:5551");
+
+	//zctx_t *ctx = zctx_new();
+ //   void *pub = zsocket_new(ctx, ZMQ_SUB);
+	//zsocket_bind(pub, "tcp://*:5552");
+
+	sem_wait(&sem);
+
+	//CANNOT CURRENTLY CLOSE W/O CRASH!
+	delete publisher;
+	//delete context;	// <-- causes crash if implemented
+
+	return NULL;
+}
 
 /* this function is run by the second thread */
 
@@ -78,7 +106,7 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 		publisher->send(data, size);
 		free(data);
 
-#if DEBUG
+#ifdef DEBUG
 		ofstream file;
 		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 		file << "Protocol Buffer: " << endl << posBuffer.DebugString();
@@ -99,34 +127,30 @@ VBSPLUGIN_EXPORT const char* WINAPI PluginFunction(const char *input)
 // DllMain
 BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 {
-#if DEBUG
+#ifdef DEBUG
 	ofstream file;
 	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 #endif
 	switch(fdwReason)
 	{
 		case DLL_PROCESS_ATTACH:
-#if DEBUG
+#ifdef DEBUG
 			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
 			file.flush();
 #endif
-			context = new zmq::context_t(1);
-			publisher = new zmq::socket_t(*context, ZMQ_PUB);
-			publisher->bind("tcp://*:5551");
+			sem_init(&sem, 0, 0);
+			Sleep(1000);
+			pthread_create(&thread, NULL, thread_func, NULL);
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
-#if DEBUG
+#ifdef DEBUG
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
-			//CANNOT CURRENTLY CLOSE W/O CRASH!
-			//This is because ZeroMQ is meant to be called within a single thread (at least open/close)
-			//and the VBS plugin is called by any indeterminate thread...
-			publisher->close();
-			//context->close();	// <-- causes hang if implemented
-			delete publisher;
-			//delete context;	// <-- causes hang if implemented
+			sem_post(&sem);
+			Sleep(1000);
+			sem_destroy(&sem);
 			//OutputDebugString("Called DllMain with DLL_PROCESS_DETACH\n");
 		break;
 		case DLL_THREAD_ATTACH:
@@ -138,7 +162,7 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			//OutputDebugString("Called DllMain with DLL_THREAD_DETACH\n");
 		break;
 	}
-#if DEBUG
+#ifdef DEBUG
 	file.close();
 #endif
 	return TRUE;
