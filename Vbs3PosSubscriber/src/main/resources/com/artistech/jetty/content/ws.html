@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>VBS3 - GetPos (WebSockets)</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <link rel="icon" 
+              type="image/png" 
+              href="favicon.png" />
+
+        <script type="text/javascript">
+            var ws = null;
+
+            function webSocketTest()
+            {
+                if (ws === null) {
+                    // Let us open a web socket
+                    ws = new WebSocket("ws://localhost:8888/getpos");
+
+                    ws.onopen = function ()
+                    {
+                        connected = true;
+                        // Web Socket is connected, send data using send()
+                        console.log("Connected...");
+                        //ws.send("Message to send");
+                        //alert("Message is sent...");
+                    };
+
+                    ws.onmessage = function (evt)
+                    {
+                        console.log(evt.data);
+                        //var received_msg = evt.data;
+                        //alert("Message is received...");
+                    };
+
+                    ws.onclose = function ()
+                    {
+                        ws = null;
+                        console.log("Connection is closed...");
+                        // websocket is closed.
+                        //alert("Connection is closed..."); 
+                    };
+                }
+            }
+            function stopWebSocketTest() {
+                if (ws !== null) {
+                    ws.close();
+                    ws = null;
+                } else {
+                    console.log("Connection already closed...");
+                }
+            }
+        </script>
+
+    </head>
+    <body>
+
+        <div id="sse">
+            <h1>Example of using WebSockets to receive updates about position.</h1>
+            <ul>
+                <li><a href="javascript:webSocketTest()">Start Receiving Data</a></li>
+                <li><a href="javascript:stopWebSocketTest()">Stop Receiving Data</a></li>
+            </ul>
+            To view data (for now) you must view the web-browser's console.
+            <ul>
+                <li>Chrome: <kbd>ctrl + shift + j</kbd></li>
+                <li>FireFox: <kbd>ctrl + shift + j</kbd></li>
+            </ul>
+        </div>
+
+    </body>
+</html>
