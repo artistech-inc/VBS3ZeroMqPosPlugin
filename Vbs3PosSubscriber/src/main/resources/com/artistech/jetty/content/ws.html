@@ -8,8 +8,17 @@
         <link rel="icon" 
               type="image/png" 
               href="favicon.png" />
+        <script type="text/javascript" src="./Long.js"></script>
+        <script type="text/javascript" src="./ByteBufferAB.js"></script>
+        <script type="text/javascript" src="./ProtoBuf.js"></script>
 
         <script type="text/javascript">
+            if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
+                throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions."));
+            }
+            // Initialize ProtoBuf.js
+            var ProtoBuf = dcodeIO.ProtoBuf;
+            var Position = ProtoBuf.loadProtoFile("./Vbs3GetPos.proto").build("VBS3.Position");
             var ws = null;
 
             function webSocketTest()
@@ -17,6 +26,7 @@
                 if (ws === null) {
                     // Let us open a web socket
                     ws = new WebSocket("ws://localhost:8888/getpos");
+                    ws.binaryType = "arraybuffer";
 
                     ws.onopen = function ()
                     {
@@ -29,7 +39,20 @@
 
                     ws.onmessage = function (evt)
                     {
-                        console.log(evt.data);
+                        try {
+                            console.log(typeof(evt.data));
+                            var msg = Position.decode(evt.data);
+                            console.log("id: " + msg.id);
+                            console.log("x: " + msg.x);
+                            console.log("y: " + msg.y);
+                            console.log("z: " + msg.z);
+                            console.log("dir: " + msg.deltaT);
+                            console.log("deltaT: " + msg.dir);
+                            console.log("worldCenterX: " + msg.worldCenterX);
+                            console.log("worldCenterY: " + msg.worldCenterY);
+                        } catch (err) {
+                            console.log(err);
+                        }
                         //var received_msg = evt.data;
                         //alert("Message is received...");
                     };

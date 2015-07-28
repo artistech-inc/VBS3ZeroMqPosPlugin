@@ -15,6 +15,14 @@
  */
 package com.artistech.vbs3;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,8 +41,9 @@ public class GetPosSocket extends WebSocketAdapter {
             copy.addAll(instances);
         }
 
+        ByteBuffer bb = ByteBuffer.wrap(pos.toByteArray());
         for(GetPosSocket sock : copy) {
-            sock.getSession().getRemote().sendStringByFuture(pos.toString());
+            sock.getSession().getRemote().sendBytesByFuture(bb);
         }
     }
 
