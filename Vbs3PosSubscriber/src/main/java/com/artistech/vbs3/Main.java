@@ -28,6 +28,8 @@ import org.zeromq.ZMQ;
  * @author matta
  */
 public class Main {
+    
+    private static Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         String zeromq_port;
@@ -98,11 +100,10 @@ public class Main {
                     Vbs3Protos.Position message = Vbs3Protos.Position.parseFrom(recv);
                     GetPosSocket.broadcastPosition(message);
                     success = true;
-                    System.out.println(message.toString());
-                    System.out.flush();
+                    logger.log(Level.FINEST, message.toString());
                 } catch (Exception ex) {
                     success = false;
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
         }

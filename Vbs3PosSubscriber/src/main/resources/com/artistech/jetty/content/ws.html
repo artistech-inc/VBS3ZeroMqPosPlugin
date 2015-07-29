@@ -8,10 +8,65 @@
         <link rel="icon" 
               type="image/png" 
               href="favicon.png" />
-        <script type="text/javascript" src="./Long.js"></script>
-        <script type="text/javascript" src="./ByteBufferAB.js"></script>
-        <script type="text/javascript" src="./ProtoBuf.js"></script>
+        <script type="text/javascript" src="./Long-2.2.5-min.js"></script>
+        <script type="text/javascript" src="./ByteBufferAB-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./ProtoBuf-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./d3-3.5.6-min.js"></script>
+        <script type="text/javascript" src="./dial.chart.js"></script>
+        <style>
+            svg {
+                font: 10px sans-serif;
+            }
+            .line {
+                fill: none;
+                stroke: #000;
+                stroke-width: 1.5px;
+            }
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: #000;
+                shape-rendering: crispEdges;
+            }
+        </style>
+        <style type="text/css">
 
+            #dial-0 .needle path {
+                fill: beige;
+            }
+
+            #dial-1 .needle path {
+                fill: #b21f24;
+            }
+
+            #dial-2 .needle path {
+                fill: steelblue;
+            }
+
+            circle.label {
+                fill: white;
+            }       
+
+            line.label {
+                stroke: white; 
+                stroke-width: 1px;
+            }
+
+            text.label {
+                font-family: Arial;
+                font-size: 12px;
+                fill: white; 
+            }
+
+            #dial-1 text.label {
+                font-size: 16px;      
+            } 
+
+            #dial-2 text.label {
+                font-size: 14px;      
+            } 
+
+        </style>
         <script type="text/javascript">
             if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
                 throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions."));
@@ -40,16 +95,17 @@
                     ws.onmessage = function (evt)
                     {
                         try {
-                            console.log(typeof(evt.data));
                             var msg = Position.decode(evt.data);
-                            console.log("id: " + msg.id);
-                            console.log("x: " + msg.x);
-                            console.log("y: " + msg.y);
-                            console.log("z: " + msg.z);
-                            console.log("dir: " + msg.deltaT);
-                            console.log("deltaT: " + msg.dir);
-                            console.log("worldCenterX: " + msg.worldCenterX);
-                            console.log("worldCenterY: " + msg.worldCenterY);
+//                            console.log("id: " + msg.id);
+//                            console.log("x: " + msg.x);
+//                            console.log("y: " + msg.y);
+//                            console.log("z: " + msg.z);
+//                            console.log("dir: " + msg.deltaT);
+//                            console.log("deltaT: " + msg.dir);
+//                            console.log("worldCenterX: " + msg.worldCenterX);
+//                            console.log("worldCenterY: " + msg.worldCenterY);
+                            //updateData(msg);
+                            updateDials(msg);
                         } catch (err) {
                             console.log(err);
                         }
@@ -78,7 +134,6 @@
 
     </head>
     <body>
-
         <div id="sse">
             <h1>Example of using WebSockets to receive updates about position.</h1>
             <ul>
@@ -92,5 +147,146 @@
             </ul>
         </div>
 
+
+        <button id="update" onclick="transition()">Update</button>
+        <div id="chart">
+        </div>
+        <script type="text/javascript">
+
+            (function (chartselector) {
+
+                var w = 960,
+                        h = 500;
+
+                var layout = [
+                    {x: 150, y: 250, r: 80, m: 360, ticks: 2, mark: 'line'},
+                    {x: 460, y: 250, r: 200, m: 360, ticks: 4, mark: 'line'},
+                    {x: 810, y: 250, r: 120, m: 360, ticks: 2, mark: 'circle'}
+                ];
+                var charts = layout.map(function (d) {
+                    return NBXDialChart()
+                            .width(d.r * 2)
+                            .height(d.r * 2)
+                            .domain([0, d.m])
+                            .range([-180, 180])
+                            .minorTicks(d.ticks)
+                            .minorMark(d.mark);
+                });
+
+                var svg = d3.select(chartselector)
+                        .append('svg:svg')
+                        .attr('width', w)
+                        .attr('height', h);
+
+                var dials = svg.selectAll('g.dial')
+                        .data(layout)
+                        .enter().append('svg:g')
+                        .attr('class', 'dial')
+                        .attr('id', function (d, i) {
+                            return 'dial-' + i;
+                        })
+                        .attr('transform', function (d) {
+                            return 'translate(' + (d.x - d.r) + ',' + (d.y - d.r) + ')';
+                        });
+
+                dials.each(function (d, i) {
+                    d3.select(this).data([0]).call(charts[i]);
+                });
+
+                window.transition = function (x) {
+                    dials.each(function (d, i) {
+                        d3.select(this)
+                                .data([Math.random() * charts[i].domain()[1]])
+                                .call(charts[i]);
+                    });
+                };
+                
+                window.updateDials = function(msg) {
+                    dials.each(function (d, i) {
+                        d3.select(this)
+                                .data([msg.dir])
+                                .call(charts[i]);
+                    });
+                }
+
+            })('#chart');
+        </script>
+
+        <script>
+//            var n = 40,
+//                    random = d3.random.normal(0, .2),
+//                    data = d3.range(n).map(random);
+//            var margin = {top: 20, right: 20, bottom: 20, left: 40},
+//            width = 960 - margin.left - margin.right,
+//                    height = 500 - margin.top - margin.bottom;
+//            var x = d3.scale.linear()
+//                    .domain([0, n - 1])
+//                    .range([0, width]);
+//            var y = d3.scale.linear()
+//                    //.domain([-1, 1])
+//                    .domain([0, 360])
+//                    .range([height, 0]);
+//            var line = d3.svg.line()
+//                    .x(function (d, i) {
+//                        return x(i);
+//                    })
+//                    .y(function (d, i) {
+//                        return y(d);
+//                    });
+//            var svg = d3.select("body").append("svg")
+//                    .attr("width", width + margin.left + margin.right)
+//                    .attr("height", height + margin.top + margin.bottom)
+//                    .append("g")
+//                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//            svg.append("defs").append("clipPath")
+//                    .attr("id", "clip")
+//                    .append("rect")
+//                    .attr("width", width)
+//                    .attr("height", height);
+//            svg.append("g")
+//                    .attr("class", "x axis")
+//                    .attr("transform", "translate(0," + y(0) + ")")
+//                    .call(d3.svg.axis().scale(x).orient("bottom"));
+//            svg.append("g")
+//                    .attr("class", "y axis")
+//                    .call(d3.svg.axis().scale(y).orient("left"));
+//            var path = svg.append("g")
+//                    .attr("clip-path", "url(#clip)")
+//                    .append("path")
+//                    .datum(data)
+//                    .attr("class", "line")
+//                    .attr("d", line);
+//
+//            function updateData(msg) {
+//                // push a new data point onto the back
+//                data.push(msg.dir);
+//                // redraw the line, and slide it to the left
+//                path
+//                        .attr("d", line)
+//                        .attr("transform", null)
+//                        .transition()
+//                        .duration(500)
+//                        .ease("linear")
+//                        .attr("transform", "translate(" + x(-1) + ",0)");
+//                // pop the old data point off the front
+//                data.shift();
+//            }
+////            tick();
+////            function tick() {
+////                // push a new data point onto the back
+////                data.push(random());
+////                // redraw the line, and slide it to the left
+////                path
+////                        .attr("d", line)
+////                        .attr("transform", null)
+////                        .transition()
+////                        .duration(500)
+////                        .ease("linear")
+////                        .attr("transform", "translate(" + x(-1) + ",0)")
+////                        .each("end", tick);
+////                // pop the old data point off the front
+////                data.shift();
+////            }
+        </script>
     </body>
 </html>
