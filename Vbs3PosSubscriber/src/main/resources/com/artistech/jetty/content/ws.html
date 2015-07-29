@@ -96,6 +96,9 @@
                     {
                         try {
                             var msg = Position.decode(evt.data);
+                            msg.id = msg.id.replace(/\"/g, "");
+                            msg.id = "#player_" + msg.id;
+                            createDirDial(msg.id);
 //                            console.log("id: " + msg.id);
 //                            console.log("x: " + msg.x);
 //                            console.log("y: " + msg.y);
@@ -104,13 +107,10 @@
 //                            console.log("deltaT: " + msg.dir);
 //                            console.log("worldCenterX: " + msg.worldCenterX);
 //                            console.log("worldCenterY: " + msg.worldCenterY);
-                            //updateData(msg);
-                            updateDials(msg);
+                            direction_indicators[msg.id](msg);
                         } catch (err) {
                             console.log(err);
                         }
-                        //var received_msg = evt.data;
-                        //alert("Message is received...");
                     };
 
                     ws.onclose = function ()
@@ -140,31 +140,43 @@
                 <li><a href="javascript:webSocketTest()">Start Receiving Data</a></li>
                 <li><a href="javascript:stopWebSocketTest()">Stop Receiving Data</a></li>
             </ul>
-<!--            To view data (for now) you must view the web-browser's console.
-            <ul>
-                <li>Chrome: <kbd>ctrl + shift + j</kbd></li>
-                <li>FireFox: <kbd>ctrl + shift + j</kbd></li>
-            </ul>-->
+            <!--            To view data (for now) you must view the web-browser's console.
+                        <ul>
+                            <li>Chrome: <kbd>ctrl + shift + j</kbd></li>
+                            <li>FireFox: <kbd>ctrl + shift + j</kbd></li>
+                        </ul>-->
         </div>
 
         <h2>View a Single Player's Direction</h2>
-        This currently displays the direction from data received over the websockets.
-        Since there is no current method for separating out different players, all players will be displayed
-        at the same time.  So current limitations are to use only one player until multiple players can be handled properly.
-        <div id="chart">
-        </div>
+        This currently displays the direction from data received over the WebSockets.
+        In theory, a new directional indicator for each new player that is added.
+        Currently this is being tested in "training mode" so the player id is all ways "".
+        In a simulation, this should be set to unique identifiers.
         <script type="text/javascript">
+            var direction_indicators = {};
 
-            (function (chartselector) {
+            function createDirDial(chartselector) {
 
-                var w = 960,
-                        h = 500;
+                if (chartselector in direction_indicators) {
+                    return this;
+                }
 
+                var id = chartselector;
+                var svg = d3.select("body").append("div");
+                svg.attr("id", id.replace(/#/g, ""));
+                svg.append("h3").text("Player: " + id);
+
+                direction_indicators[id] = updateDirection;
+
+                //x, y values below are not used
                 var layout = [
-                    {x: 150, y: 250, r: 80, m: 360, ticks: 2, mark: 'line'},
-                    {x: 460, y: 250, r: 200, m: 360, ticks: 4, mark: 'line'},
+//                    {x: 150, y: 250, r: 80, m: 360, ticks: 2, mark: 'line'},
+//                    {x: 460, y: 250, r: 200, m: 360, ticks: 4, mark: 'line'},
                     {x: 810, y: 250, r: 120, m: 360, ticks: 2, mark: 'circle'}
                 ];
+                var w = layout[0].r * 4;
+                var h = layout[0].r * 4;
+
                 var charts = layout.map(function (d) {
                     return NBXDialChart()
                             .width(d.r * 2)
@@ -175,7 +187,7 @@
                             .minorMark(d.mark);
                 });
 
-                var svg = d3.select(chartselector)
+                var svg = d3.select(id)
                         .append('svg:svg')
                         .attr('width', w)
                         .attr('height', h);
@@ -188,22 +200,15 @@
                             return 'dial-' + i;
                         })
                         .attr('transform', function (d) {
-                            return 'translate(' + (d.x - d.r) + ',' + (d.y - d.r) + ')';
+                            //return 'translate(' + (d.x - d.r) + ',' + (d.y - d.r) + ')';
+                            return 'translate(' + (d.r) + ',' + (d.r) + ')';
                         });
 
                 dials.each(function (d, i) {
                     d3.select(this).data([0]).call(charts[i]);
                 });
 
-//                window.transition = function (x) {
-//                    dials.each(function (d, i) {
-//                        d3.select(this)
-//                                .data([Math.random() * charts[i].domain()[1]])
-//                                .call(charts[i]);
-//                    });
-//                };
-                
-                window.updateDials = function(msg) {
+                function updateDirection(msg) {
                     dials.each(function (d, i) {
                         d3.select(this)
                                 .data([msg.dir])
@@ -211,7 +216,8 @@
                     });
                 }
 
-            })('#chart');
+                return this;
+            }
         </script>
 
         <script>
