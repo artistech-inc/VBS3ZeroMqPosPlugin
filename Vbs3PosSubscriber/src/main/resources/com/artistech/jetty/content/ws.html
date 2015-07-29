@@ -140,15 +140,17 @@
                 <li><a href="javascript:webSocketTest()">Start Receiving Data</a></li>
                 <li><a href="javascript:stopWebSocketTest()">Stop Receiving Data</a></li>
             </ul>
-            To view data (for now) you must view the web-browser's console.
+<!--            To view data (for now) you must view the web-browser's console.
             <ul>
                 <li>Chrome: <kbd>ctrl + shift + j</kbd></li>
                 <li>FireFox: <kbd>ctrl + shift + j</kbd></li>
-            </ul>
+            </ul>-->
         </div>
 
-
-        <button id="update" onclick="transition()">Update</button>
+        <h2>View a Single Player's Direction</h2>
+        This currently displays the direction from data received over the websockets.
+        Since there is no current method for separating out different players, all players will be displayed
+        at the same time.  So current limitations are to use only one player until multiple players can be handled properly.
         <div id="chart">
         </div>
         <script type="text/javascript">
@@ -193,13 +195,13 @@
                     d3.select(this).data([0]).call(charts[i]);
                 });
 
-                window.transition = function (x) {
-                    dials.each(function (d, i) {
-                        d3.select(this)
-                                .data([Math.random() * charts[i].domain()[1]])
-                                .call(charts[i]);
-                    });
-                };
+//                window.transition = function (x) {
+//                    dials.each(function (d, i) {
+//                        d3.select(this)
+//                                .data([Math.random() * charts[i].domain()[1]])
+//                                .call(charts[i]);
+//                    });
+//                };
                 
                 window.updateDials = function(msg) {
                     dials.each(function (d, i) {
