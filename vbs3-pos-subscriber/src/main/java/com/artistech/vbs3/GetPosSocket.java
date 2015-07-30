@@ -27,7 +27,7 @@ public class GetPosSocket extends WebSocketAdapter {
     private static final Logger logger = Logger.getLogger(GetPosSocket.class.getName());
 
     private static final ArrayList<GetPosSocket> instances = new ArrayList<>();
-    
+
     public static void broadcastPosition(Vbs3Protos.Position pos) {
         ArrayList<GetPosSocket> copy = new ArrayList<>();
         synchronized (instances) {
@@ -35,8 +35,15 @@ public class GetPosSocket extends WebSocketAdapter {
         }
 
         ByteBuffer bb = ByteBuffer.wrap(pos.toByteArray());
-        for(GetPosSocket sock : copy) {
-            sock.getSession().getRemote().sendBytesByFuture(bb);
+        for (GetPosSocket sock : copy) {
+            try {
+                sock.getSession().getRemote().sendBytesByFuture(bb);
+            } catch (org.eclipse.jetty.websocket.api.WebSocketException ex) {
+                logger.log(Level.WARNING, "WebSocket error; removing socket from listeners: {0}", ex.getMessage());
+                synchronized (instances) {
+                    instances.remove(sock);
+                }
+            }
         }
     }
 
