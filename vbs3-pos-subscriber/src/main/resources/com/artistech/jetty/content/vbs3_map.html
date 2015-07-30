@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VBS3 - Map Test (D3JS)</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" 
+              type="image/png" 
+              href="favicon.png" />
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <script type="text/javascript" src="./d3-3.5.6-min.js"></script>
+        <script type="text/javascript" src="./queue-1.0.7.js"></script>
+        <script type="text/javascript" src="./topojson-1.6.19.js"></script>
+
+        <script type="text/javascript" src="./Long-2.2.5-min.js"></script>
+        <script type="text/javascript" src="./ByteBufferAB-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./ProtoBuf-4.0.0-min.js"></script>
+        <script type="text/javascript">
+            if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
+                throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions."));
+            }
+            // Initialize ProtoBuf.js
+            var ProtoBuf = dcodeIO.ProtoBuf;
+            var Position = ProtoBuf.loadProtoFile("./Vbs3GetPos.proto").build("VBS3.Position");
+            var ws = null;
+
+            function webSocketTest()
+            {
+                if (ws === null) {
+                    // Let us open a web socket
+                    ws = new WebSocket("ws://localhost:8888/getpos");
+                    ws.binaryType = "arraybuffer";
+
+                    ws.onopen = function ()
+                    {
+                        connected = true;
+                        // Web Socket is connected, send data using send()
+                        console.log("Connected...");
+                        //ws.send("Message to send");
+                        //alert("Message is sent...");
+                    };
+
+                    ws.onmessage = function (evt)
+                    {
+                        try {
+                            var msg = Position.decode(evt.data);
+                            msg.id = msg.id.replace(/\"/g, "");
+                            msg.id = "#player_" + msg.id;
+                            createPlayer(msg);
+                            movePlayer(msg);
+                            rotatePlayer(msg);
+//                            createDirDial(msg.id);
+//                            console.log("id: " + msg.id);
+//                            console.log("x: " + msg.x);
+//                            console.log("y: " + msg.y);
+//                            console.log("z: " + msg.z);
+//                            console.log("dir: " + msg.deltaT);
+//                            console.log("deltaT: " + msg.dir);
+//                            console.log("worldCenterX: " + msg.worldCenterX);
+//                            console.log("worldCenterY: " + msg.worldCenterY);
+//                            direction_indicators[msg.id](msg);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    };
+
+                    ws.onclose = function ()
+                    {
+                        ws = null;
+                        console.log("Connection is closed...");
+                        // websocket is closed.
+                        //alert("Connection is closed..."); 
+                    };
+                }
+            }
+            function stopWebSocketTest() {
+                if (ws !== null) {
+                    ws.close();
+                    ws = null;
+                } else {
+                    console.log("Connection already closed...");
+                }
+            }
+        </script>
+        <style>
+            .g-graphic {
+                position: relative;
+            }
+
+            #g-play-button {
+                position: absolute;
+                top: 15px;
+                left: 10px;
+                background: #004276;
+                padding-right: 26px;
+                border-radius: 2px;
+                border: none;
+                color: white;
+                margin: 0;
+                padding: 0 12px;
+                width: 68px;
+                cursor: pointer;
+                height: 30px;
+                font: 13px sans-serif;
+            }
+
+            #g-play-button:hover {
+                background-color: #064d84;
+            }
+
+            #g-play-button:active {
+                background-color: #002657;
+            }
+
+            .g-graphic svg {
+                border-top: solid 1px #ccc;
+                font-family: Arial;
+            }
+
+            .g-background {
+                fill: #e0e9ef;
+            }
+
+            .g-land {
+                fill: white;
+            }
+
+            .g-course {
+                fill: none;
+                stroke: #333;
+            }
+
+            .g-course-crossed {
+                stroke-dasharray: 2,3;
+            }
+
+            .g-course-points {
+                fill: #fff;
+                stroke: #000;
+                stroke-width: 1.5px;
+            }
+
+            .g-course-labels {
+                font: bold 11px sans-serif;
+                text-anchor: middle;
+                text-transform: capitalize;
+            }
+
+            .g-shoreline {
+                fill: none;
+                stroke: none;
+                stroke-width: 1px;
+                stroke-linejoin: round;
+            }
+
+            .g-trail,
+            .g-track {
+                fill: none;
+                stroke: #000;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+            }
+
+            .g-track {
+                stroke-opacity: .2;
+            }
+
+            .g-trail {
+                stroke-width: 1.5px;
+            }
+
+            .g-boat circle {
+                stroke: #000;
+                stroke-opacity: .1;
+                stroke-width: 3px;
+            }
+
+            .g-trail-usa,
+            .g-track-usa {
+                stroke: #B43030;
+            }
+
+            .g-trail-nzl,
+            .g-track-nzl {
+                stroke: #405695;
+            }
+
+            .g-boat-usa {
+                fill: #B43030;
+            }
+
+            .g-boat-nzl {
+                fill: #405695;
+            }
+
+            .g-axis .tick-special.tick-usa {
+                fill: #B43030;
+            }
+
+            .g-axis .tick-special.tick-nzl {
+                fill: #405695;
+            }
+
+            .g-boat text {
+                text-anchor: middle;
+                fill: white;
+                stroke: none;
+                font-family: Arial;
+                font-size: 9px;
+            }
+
+            .g-axis {
+                font: 10px sans-serif;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+                fill: #777;
+            }
+
+            .g-axis .domain {
+                fill: none;
+                stroke: #fff;
+                stroke-width: 8px;
+                stroke-linecap: round;
+            }
+
+            .g-axis .tick line {
+                stroke: #aaa;
+                shape-rendering: crispEdges;
+            }
+
+            .g-axis .tick-special {
+                font-weight: bold;
+                fill: black;
+            }
+
+            .g-axis .g-halo {
+                fill: none;
+                stroke: #ccc;
+                stroke-width: 10px;
+                stroke-linecap: round;
+            }
+
+            .g-slider .background {
+                cursor: ew-resize !important;
+            }
+
+            .g-slider .g-handle {
+                fill: #fff;
+                stroke: #000;
+                stroke-width: 1.0px;
+                pointer-events: none;
+            }
+
+            .g-city {
+                font-family: Arial;
+                font-size: 11px;
+                fill: #aaa;
+            }
+
+            .g-island {
+                font-family: Arial;
+                font-size: 10px;
+                fill: #000;
+                fill-opacity: 0.3;
+            }
+
+            .g-wind text {
+                text-anchor: middle;
+                fill: #999;
+            }
+
+            .g-compass circle{
+                fill: white;
+                fill-opacity: 0.5;
+                stroke: none;
+                stroke-opacity: 0.2;
+            }
+
+            .g-compass line {
+                stroke: grey;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map">
+            <h1>Example of using WebSockets to receive updates about position.</h1>
+            <ul>
+                <li><a href="javascript:webSocketTest()">Start Receiving Data</a></li>
+                <li><a href="javascript:stopWebSocketTest()">Stop Receiving Data</a></li>
+            </ul>
+            <div class="g-graphic">
+            </div>
+            <script>
+                var created_players = {};
+                var width = 750,
+                        height = 750,
+                        brushHeight = 60;
+
+                var moving,
+                        minValue,
+                        maxValue,
+                        currentValue,
+                        targetValue,
+                        trailLength = 30,
+                        alpha = .25;
+
+                function projection(msg) {
+                    var w = msg.worldCenterX * 2;
+                    var h = msg.worldCenterY * 2;
+                    var wRatio = width / w;
+                    var hRatio = height / h;
+                    var x = wRatio * msg.x;
+                    var y = height - (hRatio * msg.y);
+                    return [x, y];
+                }
+
+                var path = d3.geo.path()
+                        .pointRadius(3.5);
+
+                var svg = d3.select(".g-graphic").append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+                svg.append("rect")
+                        .attr("class", "g-background")
+                        .attr("width", width)
+                        .attr("height", height + 1);
+
+                function movePlayer(msg) {
+                    var proj = projection(msg);
+                    created_players[msg.id].boat.attr("transform", "translate(" + proj + ")");
+                }
+                function rotatePlayer(msg) {
+                    var rot = msg.dir;
+                    created_players[msg.id].compass.attr("transform", "rotate(" + rot + ")");
+                }
+
+                function createPlayer(msg) {
+                    if (msg.id in created_players) {
+                        return created_players[msg.id];
+                    }
+                    var boats = [
+                        {type: "LineString", id: msg.id, data: msg}
+                    ];
+                    var track = svg.selectAll(".g-track")
+                            .data(boats)
+                            .enter().append("path")
+                            .attr("class", function (d) {
+                                return "g-track g-track-" + d.id;
+                            });
+
+                    var trail = svg.selectAll(".g-trail")
+                            .data(boats)
+                            .enter().append("path")
+                            .attr("class", function (d) {
+                                return "g-trail g-trail-" + d.id;
+                            });
+
+                    var boat = svg.selectAll(".g-boat")
+                            .data(boats)
+                            .enter().append("g")
+                            .attr("id", function (d) {
+                                return "g-boat-" + d.id;
+                            })
+                            .attr("class", function (d) {
+                                return "g-boat g-boat-" + d.id;
+                            });
+
+                    var compass = boat.append("g")
+                            .attr("class", "g-compass")
+                            .attr("id", function (d) {
+                                return "g-compass-" + d.id;
+                            });
+
+                    compass.append("circle")
+                            .attr("r", 10);
+
+                    compass.append("line")
+                            .attr("x1", 0)
+                            .attr("x2", 0)
+                            .attr("y1", 10)
+                            .attr("y2", -10);
+
+                    compass.append("line")
+                            .attr("x1", 0)
+                            .attr("x2", -4)
+                            .attr("y1", -10)
+                            .attr("y2", -6);
+
+                    compass.append("line")
+                            .attr("x1", 0)
+                            .attr("x2", 4)
+                            .attr("y1", -10)
+                            .attr("y2", -6);
+                    console.log("created player: " + msg.id);
+                    created_players[msg.id] = new Object();
+                    created_players[msg.id].boat = boat;
+                    created_players[msg.id].track = track;
+                    created_players[msg.id].trail = trail;
+                    created_players[msg.id].compass = compass;
+                    return created_players[msg.id];
+                }
+            </script>
+        </div>
+    </body>
+</html>

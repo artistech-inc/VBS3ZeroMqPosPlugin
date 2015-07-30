@@ -15,214 +15,281 @@
         <script type="text/javascript" src="./Long-2.2.5-min.js"></script>
         <script type="text/javascript" src="./ByteBufferAB-4.0.0-min.js"></script>
         <script type="text/javascript" src="./ProtoBuf-4.0.0-min.js"></script>
+        <script type="text/javascript">
+            if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
+                throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions."));
+            }
+            // Initialize ProtoBuf.js
+            var ProtoBuf = dcodeIO.ProtoBuf;
+            var Position = ProtoBuf.loadProtoFile("./Vbs3GetPos.proto").build("VBS3.Position");
+            var ws = null;
+
+            function webSocketTest()
+            {
+                if (ws === null) {
+                    // Let us open a web socket
+                    ws = new WebSocket("ws://localhost:8888/getpos");
+                    ws.binaryType = "arraybuffer";
+
+                    ws.onopen = function ()
+                    {
+                        connected = true;
+                        // Web Socket is connected, send data using send()
+                        console.log("Connected...");
+                        //ws.send("Message to send");
+                        //alert("Message is sent...");
+                    };
+
+                    ws.onmessage = function (evt)
+                    {
+                        try {
+                            var msg = Position.decode(evt.data);
+                            msg.id = msg.id.replace(/\"/g, "");
+                            msg.id = "#player_" + msg.id;
+//                            createDirDial(msg.id);
+//                            console.log("id: " + msg.id);
+//                            console.log("x: " + msg.x);
+//                            console.log("y: " + msg.y);
+//                            console.log("z: " + msg.z);
+//                            console.log("dir: " + msg.deltaT);
+//                            console.log("deltaT: " + msg.dir);
+//                            console.log("worldCenterX: " + msg.worldCenterX);
+//                            console.log("worldCenterY: " + msg.worldCenterY);
+//                            direction_indicators[msg.id](msg);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    };
+
+                    ws.onclose = function ()
+                    {
+                        ws = null;
+                        console.log("Connection is closed...");
+                        // websocket is closed.
+                        //alert("Connection is closed..."); 
+                    };
+                }
+            }
+            function stopWebSocketTest() {
+                if (ws !== null) {
+                    ws.close();
+                    ws = null;
+                } else {
+                    console.log("Connection already closed...");
+                }
+            }
+        </script>
+        <style>
+            .g-graphic {
+                position: relative;
+            }
+
+            #g-play-button {
+                position: absolute;
+                top: 15px;
+                left: 10px;
+                background: #004276;
+                padding-right: 26px;
+                border-radius: 2px;
+                border: none;
+                color: white;
+                margin: 0;
+                padding: 0 12px;
+                width: 68px;
+                cursor: pointer;
+                height: 30px;
+                font: 13px sans-serif;
+            }
+
+            #g-play-button:hover {
+                background-color: #064d84;
+            }
+
+            #g-play-button:active {
+                background-color: #002657;
+            }
+
+            .g-graphic svg {
+                border-top: solid 1px #ccc;
+                font-family: Arial;
+            }
+
+            .g-background {
+                fill: #e0e9ef;
+            }
+
+            .g-land {
+                fill: white;
+            }
+
+            .g-course {
+                fill: none;
+                stroke: #333;
+            }
+
+            .g-course-crossed {
+                stroke-dasharray: 2,3;
+            }
+
+            .g-course-points {
+                fill: #fff;
+                stroke: #000;
+                stroke-width: 1.5px;
+            }
+
+            .g-course-labels {
+                font: bold 11px sans-serif;
+                text-anchor: middle;
+                text-transform: capitalize;
+            }
+
+            .g-shoreline {
+                fill: none;
+                stroke: none;
+                stroke-width: 1px;
+                stroke-linejoin: round;
+            }
+
+            .g-trail,
+            .g-track {
+                fill: none;
+                stroke: #000;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+            }
+
+            .g-track {
+                stroke-opacity: .2;
+            }
+
+            .g-trail {
+                stroke-width: 1.5px;
+            }
+
+            .g-boat circle {
+                stroke: #000;
+                stroke-opacity: .1;
+                stroke-width: 3px;
+            }
+
+            .g-trail-usa,
+            .g-track-usa {
+                stroke: #B43030;
+            }
+
+            .g-trail-nzl,
+            .g-track-nzl {
+                stroke: #405695;
+            }
+
+            .g-boat-usa {
+                fill: #B43030;
+            }
+
+            .g-boat-nzl {
+                fill: #405695;
+            }
+
+            .g-axis .tick-special.tick-usa {
+                fill: #B43030;
+            }
+
+            .g-axis .tick-special.tick-nzl {
+                fill: #405695;
+            }
+
+            .g-boat text {
+                text-anchor: middle;
+                fill: white;
+                stroke: none;
+                font-family: Arial;
+                font-size: 9px;
+            }
+
+            .g-axis {
+                font: 10px sans-serif;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+                fill: #777;
+            }
+
+            .g-axis .domain {
+                fill: none;
+                stroke: #fff;
+                stroke-width: 8px;
+                stroke-linecap: round;
+            }
+
+            .g-axis .tick line {
+                stroke: #aaa;
+                shape-rendering: crispEdges;
+            }
+
+            .g-axis .tick-special {
+                font-weight: bold;
+                fill: black;
+            }
+
+            .g-axis .g-halo {
+                fill: none;
+                stroke: #ccc;
+                stroke-width: 10px;
+                stroke-linecap: round;
+            }
+
+            .g-slider .background {
+                cursor: ew-resize !important;
+            }
+
+            .g-slider .g-handle {
+                fill: #fff;
+                stroke: #000;
+                stroke-width: 1.0px;
+                pointer-events: none;
+            }
+
+            .g-city {
+                font-family: Arial;
+                font-size: 11px;
+                fill: #aaa;
+            }
+
+            .g-island {
+                font-family: Arial;
+                font-size: 10px;
+                fill: #000;
+                fill-opacity: 0.3;
+            }
+
+            .g-wind text {
+                text-anchor: middle;
+                fill: #999;
+            }
+
+            .g-compass circle{
+                fill: white;
+                fill-opacity: 0.5;
+                stroke: none;
+                stroke-opacity: 0.2;
+            }
+
+            .g-compass line {
+                stroke: grey;
+            }
+        </style>
     </head>
     <body>
         <div id="map">
-            <style>
-                .g-graphic {
-                    position: relative;
-                }
-
-                #g-play-button {
-                    position: absolute;
-                    top: 15px;
-                    left: 10px;
-                    background: #004276;
-                    padding-right: 26px;
-                    border-radius: 2px;
-                    border: none;
-                    color: white;
-                    margin: 0;
-                    padding: 0 12px;
-                    width: 68px;
-                    cursor: pointer;
-                    height: 30px;
-                    font: 13px sans-serif;
-                }
-
-                #g-play-button:hover {
-                    background-color: #064d84;
-                }
-
-                #g-play-button:active {
-                    background-color: #002657;
-                }
-
-                .g-graphic svg {
-                    border-top: solid 1px #ccc;
-                    font-family: Arial;
-                }
-
-                .g-background {
-                    fill: #e0e9ef;
-                }
-
-                .g-land {
-                    fill: white;
-                }
-
-                .g-course {
-                    fill: none;
-                    stroke: #333;
-                }
-
-                .g-course-crossed {
-                    stroke-dasharray: 2,3;
-                }
-
-                .g-course-points {
-                    fill: #fff;
-                    stroke: #000;
-                    stroke-width: 1.5px;
-                }
-
-                .g-course-labels {
-                    font: bold 11px sans-serif;
-                    text-anchor: middle;
-                    text-transform: capitalize;
-                }
-
-                .g-shoreline {
-                    fill: none;
-                    stroke: none;
-                    stroke-width: 1px;
-                    stroke-linejoin: round;
-                }
-
-                .g-trail,
-                .g-track {
-                    fill: none;
-                    stroke: #000;
-                    stroke-linejoin: round;
-                    stroke-linecap: round;
-                }
-
-                .g-track {
-                    stroke-opacity: .2;
-                }
-
-                .g-trail {
-                    stroke-width: 1.5px;
-                }
-
-                .g-boat circle {
-                    stroke: #000;
-                    stroke-opacity: .1;
-                    stroke-width: 3px;
-                }
-
-                .g-trail-usa,
-                .g-track-usa {
-                    stroke: #B43030;
-                }
-
-                .g-trail-nzl,
-                .g-track-nzl {
-                    stroke: #405695;
-                }
-
-                .g-boat-usa {
-                    fill: #B43030;
-                }
-
-                .g-boat-nzl {
-                    fill: #405695;
-                }
-
-                .g-axis .tick-special.tick-usa {
-                    fill: #B43030;
-                }
-
-                .g-axis .tick-special.tick-nzl {
-                    fill: #405695;
-                }
-
-                .g-boat text {
-                    text-anchor: middle;
-                    fill: white;
-                    stroke: none;
-                    font-family: Arial;
-                    font-size: 9px;
-                }
-
-                .g-axis {
-                    font: 10px sans-serif;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    user-select: none;
-                    fill: #777;
-                }
-
-                .g-axis .domain {
-                    fill: none;
-                    stroke: #fff;
-                    stroke-width: 8px;
-                    stroke-linecap: round;
-                }
-
-                .g-axis .tick line {
-                    stroke: #aaa;
-                    shape-rendering: crispEdges;
-                }
-
-                .g-axis .tick-special {
-                    font-weight: bold;
-                    fill: black;
-                }
-
-                .g-axis .g-halo {
-                    fill: none;
-                    stroke: #ccc;
-                    stroke-width: 10px;
-                    stroke-linecap: round;
-                }
-
-                .g-slider .background {
-                    cursor: ew-resize !important;
-                }
-
-                .g-slider .g-handle {
-                    fill: #fff;
-                    stroke: #000;
-                    stroke-width: 1.0px;
-                    pointer-events: none;
-                }
-
-                .g-city {
-                    font-family: Arial;
-                    font-size: 11px;
-                    fill: #aaa;
-                }
-
-                .g-island {
-                    font-family: Arial;
-                    font-size: 10px;
-                    fill: #000;
-                    fill-opacity: 0.3;
-                }
-
-                .g-wind text {
-                    text-anchor: middle;
-                    fill: #999;
-                }
-
-                .g-compass circle{
-                    fill: white;
-                    fill-opacity: 0.5;
-                    stroke: none;
-                    stroke-opacity: 0.2;
-                }
-
-                .g-compass line {
-                    stroke: grey;
-                }
-
-            </style>
+            <h1>Example of using WebSockets to receive updates about position.</h1>
+            <ul>
+                <li><a href="javascript:webSocketTest()">Start Receiving Data</a></li>
+                <li><a href="javascript:stopWebSocketTest()">Stop Receiving Data</a></li>
+            </ul>
             <div class="g-graphic">
                 <button id="g-play-button">Pause</button>
             </div>
             <script>(function () {
-
                     var width = 970,
                             height = 500,
                             brushHeight = 60;
@@ -246,8 +313,6 @@
                         "1404": "USA",
                         "1448": "NZL"
                     };
-
-                    var windFormat = d3.format(".1f");
 
                     var xAxis = d3.svg.axis()
                             .scale(x)
@@ -285,23 +350,22 @@
                             .attr("width", width)
                             .attr("height", height + 1);
 
+                    //variables:
                     var slider,
                             handle,
                             track,
                             trail,
                             boat,
-                            wind,
-                            gate,
                             compass;
 
+                    //Load External Data (tsv files)
                     queue()
-                            .defer(d3.json, "./topo.json")
                             .defer(d3.tsv, "./usa.tsv", type)
                             .defer(d3.tsv, "./nzl.tsv", type)
                             .await(ready);
 
-                    function ready(error, topo, usa, nzl) {
-                        var course = topojson.feature(topo, topo.objects.course);
+                    //when data is loaded, this is called
+                    function ready(error, usa, nzl) {
 
                         indexOffset = -usa[0][2]; // offset from time -> index
 
@@ -315,48 +379,6 @@
 
                         x.domain([minValue, maxValue]);
                         xAxis.tickValues(d3.range(0, targetValue, 60 * 5).concat(-180, d3.keys(xTicks)));
-
-                        svg.append("path")
-                                .datum(topojson.mesh(topo, topo.objects.shoreline))
-                                .attr("class", "g-shoreline")
-                                .attr("d", path);
-
-                        svg.append("path")
-                                .datum(topojson.feature(topo, topo.objects.shoreline))
-                                .attr("class", "g-land")
-                                .attr("d", path);
-
-                        gate = svg.append("g")
-                                .attr("class", "g-course")
-                                .selectAll("path")
-                                .data(course.features.filter(function (d) {
-                                    return d.geometry.type === "LineString";
-                                }))
-                                .enter().append("path")
-                                .attr("class", function (d) {
-                                    return "g-course-" + d.id;
-                                })
-                                .attr("d", path);
-
-                        svg.append("path")
-                                .datum({type: "MultiPoint", coordinates: d3.merge(course.features.map(function (d) {
-                                        return d.geometry.type === "LineString" ? d.geometry.coordinates : [d.geometry.coordinates];
-                                    }))})
-                                .attr("class", "g-course-points")
-                                .attr("d", path);
-
-                        svg.append("g")
-                                .attr("class", "g-course-labels")
-                                .selectAll("text")
-                                .data(topojson.feature(topo, topo.objects.labels).features)
-                                .enter().append("text")
-                                .attr("transform", function (d) {
-                                    return "translate(" + projection(d.geometry.coordinates) + ")";
-                                })
-                                .attr("dy", ".35em")
-                                .text(function (d) {
-                                    return d.id;
-                                });
 
                         var gX = svg.append("g")
                                 .attr("class", "g-x g-axis")
@@ -416,37 +438,18 @@
                         boat = svg.selectAll(".g-boat")
                                 .data(boats)
                                 .enter().append("g")
+                                .attr("id", function (d) {
+                                    return "g-boat-" + d.id;
+                                })
                                 .attr("class", function (d) {
                                     return "g-boat g-boat-" + d.id;
-                                })
+                                });
 
-                        boat.append("circle").attr("r", 7);
-
-                        boat.append("text")
-                                .text(function (d) {
-                                    return d.id.substr(0, 2);
-                                })
-                                .attr("dy", "0.3em");
-
-                        d3.select(window)
-                                .on("keydown", keydowned);
-
-                        wind = svg.append("g")
-                                .datum(usa)
-                                .attr("class", "g-wind")
-                                .attr("transform", "translate(900,130)");
-
-                        wind.append("text")
-                                .attr("dy", -18)
-                                .text("Wind");
-
-                        wind.append("text")
-                                .attr("class", "g-speed")
-                                .attr("dy", 22)
-                                .text("");
-
-                        compass = wind.append("g")
+                        compass = boat.append("g")
                                 .attr("class", "g-compass")
+                                .attr("id", function (d) {
+                                    return "g-compass-" + d.id;
+                                });
 
                         compass.append("circle")
                                 .attr("r", 10);
@@ -469,17 +472,14 @@
                                 .attr("y1", -10)
                                 .attr("y2", -6);
 
-                        svg.append("text")
-                                .attr("x", width / 2)
-                                .attr("y", height - 20)
-                                .attr("class", "g-city")
-                                .text("San Francisco");
+//                        boat.append("text")
+//                                .text(function (d) {
+//                                    return d.id.substr(0, 2);
+//                                })
+//                                .attr("dy", "0.3em");
 
-                        svg.append("text")
-                                .attr("x", 530)
-                                .attr("y", 120)
-                                .attr("class", "g-island")
-                                .text("Alcatraz Island");
+//                        d3.select(window)
+//                                .on("keydown", keydowned);
 
                         playButton
                                 .on("click", paused)
@@ -510,24 +510,24 @@
                         }
                     }
 
-                    function keydowned() {
-                        if (d3.event.metaKey || d3.event.altKey)
-                            return;
-                        switch (d3.event.keyCode) {
-                            case 37:
-                                targetValue = Math.max(x.domain()[0], currentValue - trailLength);
-                                break;
-                            case 39:
-                                targetValue = Math.min(x.domain()[1], currentValue + trailLength);
-                                break;
-                            default:
-                                return;
-                        }
-                        playButton.text("Play");
-                        slider.interrupt();
-                        move();
-                        d3.event.preventDefault();
-                    }
+//                    function keydowned() {
+//                        if (d3.event.metaKey || d3.event.altKey)
+//                            return;
+//                        switch (d3.event.keyCode) {
+//                            case 37:
+//                                targetValue = Math.max(x.domain()[0], currentValue - trailLength);
+//                                break;
+//                            case 39:
+//                                targetValue = Math.min(x.domain()[1], currentValue + trailLength);
+//                                break;
+//                            default:
+//                                return;
+//                        }
+//                        playButton.text("Play");
+//                        slider.interrupt();
+//                        move();
+//                        d3.event.preventDefault();
+//                    }
 
                     function brushed() {
                         if (d3.event.sourceEvent) { // not a programmatic event
@@ -540,9 +540,7 @@
                             currentValue = brush.extent()[0];
                             handle.attr("cx", x(currentValue));
                             var i = Math.round(currentValue) + indexOffset;
-                            gate.classed("g-course-crossed", function (d) {
-                                return currentValue >= d.properties.time;
-                            });
+
                             boat.attr("transform", function (d) {
                                 return "translate(" + projection(d.coordinates[i]) + ")";
                             });
@@ -552,11 +550,9 @@
                             trail.attr("d", function (d) {
                                 return path({type: "LineString", coordinates: d.coordinates.slice(Math.max(0, i - trailLength), i + 1)});
                             });
-                            wind.select(".g-speed").text(function (d) {
-                                return windFormat(d[i][3]) + " knots";
-                            });
+
                             compass.attr("transform", function (d) {
-                                return "rotate(" + (180 + d[i][4]) + ")";
+                                return "rotate(" + (180 + d.coordinates[i][4]) + ")";
                             });
                         }
                     }
@@ -590,11 +586,15 @@
                         });
                     }
 
+                    //parses data and converts all values to numbers (using '+')
+                    //returns as an array
+                    //used in by the queue() call when loading the data
                     function type(d) {
                         return [+d.x, +d.y, +d.t, +d.ws, +d.wd];
                     }
 
-                })()</script>
+                })();
+            </script>
         </div>
     </body>
 </html>
