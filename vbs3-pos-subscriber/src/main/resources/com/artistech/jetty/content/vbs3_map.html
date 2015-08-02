@@ -11,6 +11,7 @@
         <script type="text/javascript" src="./d3-3.5.6-min.js"></script>
         <script type="text/javascript" src="./queue-1.0.7.js"></script>
         <script type="text/javascript" src="./topojson-1.6.19.js"></script>
+        <script type="text/javascript" src="./d3-tip-0.6.7.js"></script>
 
         <script type="text/javascript" src="./Long-2.2.5-min.js"></script>
         <script type="text/javascript" src="./ByteBufferAB-4.0.0-min.js"></script>
@@ -46,9 +47,10 @@
                             var msg = Position.decode(evt.data);
                             msg.id = msg.id.replace(/\"/g, "");
                             msg.id = "#player_" + msg.id;
-                            createPlayer(msg).
-                                    movePlayer(msg);
+                            createPlayer(msg);
+                            movePlayer(msg);
                             rotatePlayer(msg);
+                            updateTip(msg);
                         } catch (err) {
                             console.log(err);
                         }
@@ -126,6 +128,36 @@
             .g-compass line {
                 stroke: grey;
             }
+
+
+            .d3-tip {
+                line-height: 1;
+                font-weight: bold;
+                padding: 12px;
+                background: rgba(0, 0, 0, 0.8);
+                color: #fff;
+                border-radius: 2px;
+            }
+
+            /* Creates a small triangle extender for the tooltip */
+            .d3-tip:after {
+                box-sizing: border-box;
+                display: inline;
+                font-size: 10px;
+                width: 100%;
+                line-height: 1;
+                color: rgba(0, 0, 0, 0.8);
+                content: "\25BC";
+                position: absolute;
+                text-align: center;
+            }
+
+            /* Style northward tooltips differently */
+            .d3-tip.n:after {
+                margin: -1px 0 0 0;
+                top: 100%;
+                left: 0;
+            }
         </style>
     </head>
     <body>
@@ -174,6 +206,20 @@
                     return this;
                 }
 
+                function updateTip(msg) {
+                    var tmp_id = msg.id;//.replace(/#/g, "");
+                    tmp_id = tmp_id.replace(/#/g, "");
+                    var elem = document.getElementById("tip-id-" + tmp_id);//.innerHTML = msg.dir;
+                    if (elem !== null) {
+                        var htm = "<strong>ID: </strong> <span style='color:red'>" + msg.id + "</span><br />";
+                        htm += "<strong>X: </strong> <span style='color:red'>" + msg.x + "</span><br />";
+                        htm += "<strong>Y: </strong> <span style='color:red'>" + msg.y + "</span><br />";
+                        htm += "<strong>Dir: </strong> <span style='color:red'>" + msg.dir + "</span><br />";
+                        elem.innerHTML = htm;
+                    }
+                    return this;
+                }
+
                 function createPlayer(msg) {
                     if (msg.id in created_players) {
                         return this;
@@ -181,6 +227,16 @@
                     var boats = [
                         {type: "LineString", id: msg.id, data: msg}
                     ];
+
+                    var tip = d3.tip()
+                            .attr('class', 'd3-tip')
+                            .offset([-10, 0])
+                            .html(function (d) {
+                                var tmp_id = msg.id;//.replace(/#/g, "");
+                                tmp_id = tmp_id.replace(/#/g, "");
+                                return "<div style=\"width: 250px; height: 50px\" id=\"tip-id-" + tmp_id + "\"></div>";
+                            });
+
                     var track = svg.selectAll(".g-track")
                             .data(boats)
                             .enter().append("path")
@@ -203,13 +259,17 @@
                             })
                             .attr("class", function (d) {
                                 return "g-boat g-boat-" + d.id;
-                            });
+                            })
+                            .on('mouseover', tip.show)
+                            .on('mouseout', tip.hide);
 
                     var compass = boat.append("g")
                             .attr("class", "g-compass")
                             .attr("id", function (d) {
                                 return "g-compass-" + d.id;
                             });
+
+                    svg.call(tip);
 
                     compass.append("circle")
                             .attr("r", 10);
@@ -238,6 +298,7 @@
                     created_players[msg.id].track = track;
                     created_players[msg.id].trail = trail;
                     created_players[msg.id].compass = compass;
+                    created_players[msg.id].tip = tip;
                     return this;
                 }
             </script>
