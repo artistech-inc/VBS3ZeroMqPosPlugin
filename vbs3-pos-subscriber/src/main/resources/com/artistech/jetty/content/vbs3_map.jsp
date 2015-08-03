@@ -1,3 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean scope="request" class="com.artistech.vbs3.JettyBean" id="jettyBean" type="com.artistech.vbs3.JettyBean">
+    <jsp:setProperty name="jettyBean" property="*" />
+</jsp:useBean>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,14 +13,14 @@
               type="image/png" 
               href="favicon.png" />
         <link rel="stylesheet" href="style.css" type="text/css">
-        <script type="text/javascript" src="./d3-3.5.6-min.js"></script>
-        <script type="text/javascript" src="./queue-1.0.7.js"></script>
-        <script type="text/javascript" src="./topojson-1.6.19.js"></script>
-        <script type="text/javascript" src="./d3-tip-0.6.7.js"></script>
+        <script type="text/javascript" src="./js/d3-3.5.6-min.js"></script>
+        <script type="text/javascript" src="./js/queue-1.0.7.js"></script>
+        <script type="text/javascript" src="./js/topojson-1.6.19.js"></script>
+        <script type="text/javascript" src="./js/d3-tip-0.6.7.js"></script>
 
-        <script type="text/javascript" src="./Long-2.2.5-min.js"></script>
-        <script type="text/javascript" src="./ByteBufferAB-4.0.0-min.js"></script>
-        <script type="text/javascript" src="./ProtoBuf-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./js/Long-2.2.5-min.js"></script>
+        <script type="text/javascript" src="./js/ByteBufferAB-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./js/ProtoBuf-4.0.0-min.js"></script>
         <script type="text/javascript">
             if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
                 throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions."));
@@ -29,7 +34,8 @@
             {
                 if (ws === null) {
                     // Let us open a web socket
-                    ws = new WebSocket("ws://localhost:8888/getpos");
+                    var ws_uri = "<c:out value="${jettyBean.server}" />";
+                    ws = new WebSocket("ws://" + ws_uri + "/getpos");
                     ws.binaryType = "arraybuffer";
 
                     ws.onopen = function ()

@@ -15,6 +15,16 @@
  */
 package com.artistech.vbs3;
 
+import com.artistech.utils.NetUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +33,16 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import org.apache.tomcat.InstanceManager;
+import org.apache.tomcat.SimpleInstanceManager;
+import org.eclipse.jetty.annotations.ServletContainerInitializersStarter;
+import org.eclipse.jetty.apache.jsp.JettyJasperInitializer;
+import org.eclipse.jetty.jsp.JettyJspServlet;
+import org.eclipse.jetty.plus.annotation.ContainerInitializer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
+
 /**
  *
  * @author matta
@@ -36,6 +53,7 @@ public class Jetty {
     private static final Logger logger = Logger.getLogger(Jetty.class.getName());
     private static WebAppContext webapp;
     private static int _port;
+    private static final String WEBROOT_INDEX = "/com/artistech/jetty/content/";
 
     public static int getPort() {
         return _port;
@@ -78,7 +96,57 @@ public class Jetty {
         }
     }
 
+    private static File getScratchDir() throws IOException {
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        File scratchDir = new File(tempDir.toString(), "embedded-jetty-jsp");
+
+        if (!scratchDir.exists()) {
+            if (!scratchDir.mkdirs()) {
+                throw new IOException("Unable to create scratch directory: " + scratchDir);
+            }
+        }
+        return scratchDir;
+    }
+
+    /**
+     * Ensure the jsp engine is initialized correctly
+     */
+    private static List<ContainerInitializer> jspInitializers() {
+        JettyJasperInitializer sci = new JettyJasperInitializer();
+        ContainerInitializer initializer = new ContainerInitializer(sci, null);
+        List<ContainerInitializer> initializers = new ArrayList<>();
+        initializers.add(initializer);
+        return initializers;
+    }
+
+    /**
+     * Set Classloader of Context to be sane (needed for JSTL) JSP requires a
+     * non-System classloader, this simply wraps the embedded System classloader
+     * in a way that makes it suitable for JSP to use
+     */
+    private static ClassLoader getUrlClassLoader() {
+        ClassLoader jspClassLoader = new URLClassLoader(new URL[0], Jetty.class.getClassLoader());
+        return jspClassLoader;
+    }
+
+    /**
+     * Create JSP Servlet (must be named "jsp")
+     */
+    private static ServletHolder jspServletHolder() {
+        ServletHolder holderJsp = new ServletHolder("jsp", JettyJspServlet.class);
+        holderJsp.setInitOrder(0);
+        holderJsp.setInitParameter("logVerbosityLevel", "DEBUG");
+        holderJsp.setInitParameter("fork", "false");
+        holderJsp.setInitParameter("xpoweredBy", "false");
+        holderJsp.setInitParameter("compilerTargetVM", "1.7");
+        holderJsp.setInitParameter("compilerSourceVM", "1.7");
+        holderJsp.setInitParameter("keepgenerated", "true");
+        return holderJsp;
+    }
+
     public static void startServer(int port) {
+        // Set JSP to use Standard JavaC always
+        System.setProperty("org.apache.jasper.compiler.disablejsr199", "false");
         try {
             boolean success = false;
             for (int ii = 0; ii < 10 && !success; ii++) {
@@ -100,6 +168,11 @@ public class Jetty {
                 return;
             }
 
+            //This bean is used in the JSP to allow access back to this server.
+            String uri = NetUtils.getIP().toString() + ":" + Integer.toString(_port);
+            JettyBean jb = new JettyBean();
+            jb.setServer(uri.replace("/", ""));
+            
             webapp = new WebAppContext();
             server.setHandler(webapp);
 
@@ -107,6 +180,16 @@ public class Jetty {
             String webDir = ClassLoader.getSystemClassLoader().getResource("com/artistech/jetty/content").toExternalForm();
             webapp.setResourceBase(webDir);
             webapp.setContextPath("/");
+
+            //init support for JSP
+            webapp.setAttribute("javax.servlet.context.tempdir", getScratchDir());
+            webapp.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
+                    ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
+            webapp.setAttribute("org.eclipse.jetty.containerInitializers", jspInitializers());
+            webapp.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());
+            webapp.addBean(new ServletContainerInitializersStarter(webapp), true);
+            webapp.setClassLoader(getUrlClassLoader());
+            webapp.addServlet(jspServletHolder(), "*.jsp");
 
             ServiceLoader<ServletContextListener> listeners = ServiceLoader.load(ServletContextListener.class);
 
