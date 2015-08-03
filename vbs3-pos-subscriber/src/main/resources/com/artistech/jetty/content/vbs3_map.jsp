@@ -14,7 +14,6 @@ com.artistech.vbs3.JettyBean jettyBean = new com.artistech.vbs3.JettyBean();
         <link rel="stylesheet" href="style.css" type="text/css">
         <script type="text/javascript" src="./js/d3-3.5.6-min.js"></script>
         <script type="text/javascript" src="./js/queue-1.0.7.js"></script>
-        <script type="text/javascript" src="./js/topojson-1.6.19.js"></script>
         <script type="text/javascript" src="./js/d3-tip-0.6.7.js"></script>
 
         <script type="text/javascript" src="./js/Long-2.2.5-min.js"></script>
