@@ -34,10 +34,10 @@ public class GetPosSocket extends WebSocketAdapter {
             copy.addAll(instances);
         }
 
-        ByteBuffer bb = ByteBuffer.wrap(pos.toByteArray());
+        byte[] data = pos.toByteArray();
         for (GetPosSocket sock : copy) {
             try {
-                sock.getSession().getRemote().sendBytesByFuture(bb);
+                sock.getSession().getRemote().sendBytesByFuture(ByteBuffer.wrap(data));
             } catch (org.eclipse.jetty.websocket.api.WebSocketException ex) {
                 logger.log(Level.WARNING, "WebSocket error; removing socket from listeners: {0}", ex.getMessage());
                 synchronized (instances) {

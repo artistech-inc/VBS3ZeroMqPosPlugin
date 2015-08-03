@@ -15,6 +15,7 @@
  */
 package com.artistech.vbs3;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.CommandLine;
@@ -28,7 +29,7 @@ import org.zeromq.ZMQ;
  * @author matta
  */
 public class Main {
-    
+
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
@@ -40,10 +41,13 @@ public class Main {
         options.addOption("z", "zeromq-port", true, "ZeroMQ Server:Port to subscribe to. (-z localhost:5565)");
         options.addOption("h", "help", false, "Show this message.");
         HelpFormatter formatter = new HelpFormatter();
+        String[] zeroMqServers;
 
         try {
             CommandLineParser parser = new org.apache.commons.cli.BasicParser();
             CommandLine cmd = parser.parse(options, args);
+
+            zeroMqServers = cmd.getOptionValues("z");
 
             if (cmd.hasOption("j") || cmd.hasOption("jetty-port")) {
                 jettyPort = Integer.parseInt(cmd.getOptionValue("j"));
@@ -53,11 +57,9 @@ public class Main {
                 formatter.printHelp("tuio-mouse-driver", options);
                 return;
             } else {
-                if (cmd.hasOption("z") || cmd.hasOption("zeromq-port")) {
-                    zeromq_port = cmd.getOptionValue("z");
-                } else {
-                    System.err.println("The zeromq-port value must be specified.");
-                    formatter.printHelp("tuio-mouse-driver", options);
+                if (zeroMqServers == null || zeroMqServers.length <= 0) {
+                    System.err.println("The zeromq-port value(s) must be specified.");
+                    formatter.printHelp("vbs3-pos-subscriber", options);
                     return;
                 }
             }
@@ -72,40 +74,56 @@ public class Main {
         //create zeromq context
         ZMQ.Context context = ZMQ.context(1);
 
-        // Connect our subscriber socket
-        ZMQ.Socket subscriber = context.socket(ZMQ.SUB);
-        subscriber.setIdentity(Main.class.getName().getBytes());
+        int counter = 1;
+        final ArrayList<Thread> threads = new ArrayList<>();
+        for (String zeroMqServer : zeroMqServers) {
+            // Connect our subscriber socket
+            final ZMQ.Socket subscriber = context.socket(ZMQ.SUB);
+            subscriber.setIdentity((Main.class.getName() + Integer.toString(counter++)).getBytes());
+            //this could change I guess so we can get different data subscrptions.
+            subscriber.subscribe("".getBytes());
+            subscriber.connect("tcp://" + zeroMqServer);
+            logger.log(Level.INFO, "Subscribed to {0} for ZeroMQ messages.", zeroMqServer);
 
-        //this could change I guess so we can get different data subscrptions.
-        subscriber.subscribe("".getBytes());
-        subscriber.connect("tcp://" + zeromq_port);
+            final Thread recvThread = new Thread(new Runnable() {
 
-        System.out.println("Subscribed to " + zeromq_port + " for ZeroMQ messages.");
+                @Override
+                public void run() {
+                    // Get updates, expect random Ctrl-C death
+                    boolean success = true;
+                    while (success) {
+                        success = false;
+                        byte[] recv = subscriber.recv();
+                        if (recv.length > 0) {
+                            try {
+                                Vbs3Protos.Position message = Vbs3Protos.Position.parseFrom(recv);
+                                GetPosSocket.broadcastPosition(message);
+                                success = true;
+                                logger.log(Level.FINEST, message.toString());
+                            } catch (Exception ex) {
+                                success = false;
+                                logger.log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }
+            });
+            threads.add(recvThread);
+            recvThread.start();
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             @Override
             public void run() {
                 Jetty.stopServer();
-            }
-        }));
-
-        // Get updates, expect random Ctrl-C death
-        boolean success = true;
-        while (success) {
-            success = false;
-            byte[] recv = subscriber.recv();
-            if (recv.length > 0) {
-                try {
-                    Vbs3Protos.Position message = Vbs3Protos.Position.parseFrom(recv);
-                    GetPosSocket.broadcastPosition(message);
-                    success = true;
-                    logger.log(Level.FINEST, message.toString());
-                } catch (Exception ex) {
-                    success = false;
-                    logger.log(Level.SEVERE, null, ex);
+                for (Thread t : threads) {
+                    try {
+                        t.interrupt();
+                    } catch (Exception ex) {
+                    }
                 }
             }
-        }
+        }));
     }
 }
