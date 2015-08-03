@@ -17,10 +17,7 @@ package com.artistech.vbs3;
 
 import com.artistech.utils.NetUtils;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -40,6 +37,7 @@ import org.eclipse.jetty.apache.jsp.JettyJasperInitializer;
 import org.eclipse.jetty.jsp.JettyJspServlet;
 import org.eclipse.jetty.plus.annotation.ContainerInitializer;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -172,7 +170,7 @@ public class Jetty {
             String uri = NetUtils.getIP().toString() + ":" + Integer.toString(_port);
             JettyBean jb = new JettyBean();
             jb.setServer(uri.replace("/", ""));
-            
+
             webapp = new WebAppContext();
             server.setHandler(webapp);
 
@@ -190,6 +188,12 @@ public class Jetty {
             webapp.addBean(new ServletContainerInitializersStarter(webapp), true);
             webapp.setClassLoader(getUrlClassLoader());
             webapp.addServlet(jspServletHolder(), "*.jsp");
+
+            // Add Default Servlet (must be named "default")
+            ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
+            holderDefault.setInitParameter("resourceBase", webDir);
+            holderDefault.setInitParameter("dirAllowed", "true");
+            webapp.addServlet(holderDefault, "/");
 
             ServiceLoader<ServletContextListener> listeners = ServiceLoader.load(ServletContextListener.class);
 

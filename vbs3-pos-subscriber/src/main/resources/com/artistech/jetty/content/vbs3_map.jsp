@@ -1,9 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean scope="request" class="com.artistech.vbs3.JettyBean" id="jettyBean" type="com.artistech.vbs3.JettyBean">
-    <jsp:setProperty name="jettyBean" property="*" />
-</jsp:useBean>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
+<%
+com.artistech.vbs3.JettyBean jettyBean = new com.artistech.vbs3.JettyBean();
+%>
 <html>
     <head>
         <title>VBS3 - Map Test (D3JS)</title>
@@ -34,7 +33,7 @@
             {
                 if (ws === null) {
                     // Let us open a web socket
-                    var ws_uri = "<c:out value="${jettyBean.server}" />";
+                    var ws_uri = "<%= jettyBean.getServer() %>";
                     ws = new WebSocket("ws://" + ws_uri + "/getpos");
                     ws.binaryType = "arraybuffer";
 
