@@ -15,6 +15,8 @@
  */
 package com.artistech.vbs3;
 
+import com.artistech.utils.HaltMonitor;
+import com.artistech.utils.Mailbox;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -24,27 +26,79 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 public class GetPosSocket extends WebSocketAdapter {
 
-    private static final Logger logger = Logger.getLogger(GetPosSocket.class.getName());
+    public static class BroadcasterThread extends Thread {
 
-    private static final ArrayList<GetPosSocket> instances = new ArrayList<>();
+        private final HaltMonitor monitor;
+        private final Mailbox<Vbs3Protos.Position> messages;
 
-    public static void broadcastPosition(Vbs3Protos.Position pos) {
-        ArrayList<GetPosSocket> copy = new ArrayList<>();
-        synchronized (instances) {
-            copy.addAll(instances);
+        public BroadcasterThread() {
+            monitor = new HaltMonitor();
+            messages = new Mailbox<>();
         }
 
-        byte[] data = pos.toByteArray();
-        for (GetPosSocket sock : copy) {
-            try {
-                sock.getSession().getRemote().sendBytesByFuture(ByteBuffer.wrap(data));
-            } catch (org.eclipse.jetty.websocket.api.WebSocketException ex) {
-                logger.log(Level.WARNING, "WebSocket error; removing socket from listeners: {0}", ex.getMessage());
-                synchronized (instances) {
-                    instances.remove(sock);
+        @Override
+        public void run() {
+            while (!monitor.isHalted()) {
+                ArrayList<Vbs3Protos.Position> msgs = messages.getMessages();
+                if (msgs != null && !msgs.isEmpty()) {
+                    for (Vbs3Protos.Position pos : msgs) {
+                        broadcastPosition(pos);
+                    }
+                } else {
+                    halt();
                 }
             }
         }
+
+        public void halt() {
+            monitor.halt();
+        }
+
+        public void submit(Vbs3Protos.Position pos) {
+            messages.addMessage(pos);
+        }
+
+        private void broadcastPosition(Vbs3Protos.Position pos) {
+            ArrayList<GetPosSocket> copy = new ArrayList<>();
+            synchronized (instances) {
+                copy.addAll(instances);
+            }
+
+            byte[] data = pos.toByteArray();
+            for (GetPosSocket sock : copy) {
+                try {
+                    sock.getSession().getRemote().sendBytesByFuture(ByteBuffer.wrap(data));
+                } catch (org.eclipse.jetty.websocket.api.WebSocketException ex) {
+                    logger.log(Level.WARNING, "WebSocket error; removing socket from listeners: {0}", ex.getMessage());
+                    synchronized (instances) {
+                        instances.remove(sock);
+                    }
+                }
+            }
+        }
+    }
+
+    private static final Logger logger = Logger.getLogger(GetPosSocket.class.getName());
+
+    private static final ArrayList<GetPosSocket> instances = new ArrayList<>();
+    private static final BroadcasterThread broadcaster;
+
+    static {
+        broadcaster = new BroadcasterThread();
+        broadcaster.setDaemon(true);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                broadcaster.halt();
+            }
+        }));
+        broadcaster.start();
+    }
+
+    public static void broadcastPosition(Vbs3Protos.Position pos) {
+        broadcaster.submit(pos);
     }
 
     @Override
