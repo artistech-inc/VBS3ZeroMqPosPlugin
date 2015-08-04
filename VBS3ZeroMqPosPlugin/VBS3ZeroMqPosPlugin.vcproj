@@ -171,7 +171,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="C:\Bohemia Interactive\VBS3\plugins\"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -215,7 +215,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib"
+				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;;&quot;..\zeromq-4.0.4\lib-x86\&quot;"
 				GenerateDebugInformation="true"
@@ -292,7 +292,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib ws2_32.lib rpcrt4.lib"
+				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;;&quot;..\zeromq-4.0.4\lib-x64\&quot;"
 				ModuleDefinitionFile=".\VBSPlugin.def"
