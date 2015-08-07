@@ -22,7 +22,7 @@ This is a demo application for acting as a sink for listening to multiple VBS3Ze
 ###Requirements:
  1. Ubuntu 14.04/14.10/15.04
   1. sudo apt-get install libzmq3 libzmq3-dev
-  2. Install libjzmq Java Binding for Ubuntu 14.04/14.10
+  2. Install libjzmq - Java Binding for Ubuntu 14.04/14.10
     1. git clone https://github.com/zeromq/jzmq.git
     2. cd jzmq
     3. git checkout v3.1.0
@@ -31,7 +31,7 @@ This is a demo application for acting as a sink for listening to multiple VBS3Ze
     6. make
     7. sudo make install
     8. sudo ln -s /usr/local/lib/libjzmq.so /usr/lib/libjzmq.so
-  3. Install libjzmq Java Binding for Ubuntu 15.04
+  3. Install libjzmq - Java Binding for Ubuntu 15.04
     1. sudo apt-get install libzmq-java
     2. If using Oracle Java, the libjzmq library must be able to be found in /usr/lib
     3. [REQUIRED] sudo ln -s /usr/lib/jni/libjzmq.so /usr/lib/libjzmq.so
