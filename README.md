@@ -7,7 +7,9 @@ Currently builds for Visual Studio 2008 (x86 and x64).
 ##Installation
  1. Determine which DLL to use (x86 or x64).
  2. Download [pre-built dll](https://github.com/artistech-inc/VBS3ZeroMqPosPlugin/tree/v1.0/VBS3ZeroMqPosPlugin/bin).
- 3. Place in C:\Bohemia Interactive\VBS3\plugins[64].
+ 3. Place in plugins directory
+   1. C:\Bohemia Interactive\VBS3\plugins for x86
+   2. C:\Bohemia Interactive\VBS3\plugins64 for x64
  4. Download the appropariate [ZeroMQ DLL](https://github.com/artistech-inc/VBS3ZeroMqPosPlugin/tree/v1.0/zeromq-4.0.4) for the target platform (x86 or x64).
  5. Download the appropariate [pthreads DLL](https://github.com/artistech-inc/VBS3ZeroMqPosPlugin/tree/v1.0/pthreads-2.9.1/lib) for the target platform (x86 or x64).
  6. These 2 DLLs must be placed in the Windows System PATH.
