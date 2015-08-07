@@ -82,6 +82,11 @@
             <artifactId>jzmq</artifactId>
             <version>3.1.0</version>
         </dependency>
+<!--        <dependency>
+            <groupId>org.zeromq</groupId>
+            <artifactId>jeromq</artifactId>
+            <version>0.3.4</version>
+        </dependency>-->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
