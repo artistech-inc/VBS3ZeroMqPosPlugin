@@ -5,6 +5,78 @@
     <artifactId>vbs3-pos-subscriber</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <profiles>
+        <profile>
+            <id>jzmq-linux</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <family>unix</family>
+                </os>
+                <file>
+                    <exists>/usr/lib/libjzmq.so</exists>
+                </file>
+            </activation>   
+            <dependencies>
+                <dependency>
+                    <groupId>org.zeromq</groupId>
+                    <artifactId>jzmq</artifactId>
+                    <version>3.1.0</version>
+                </dependency>
+            </dependencies>
+        </profile>        
+        <profile>
+            <id>jeromq-mac</id>
+            <activation>
+                <os>
+                    <name>Mac OS X</name>
+                    <family>mac</family>
+                </os>
+            </activation>   
+            <dependencies>
+                <dependency>
+                    <groupId>org.zeromq</groupId>
+                    <artifactId>jeromq</artifactId>
+                    <version>0.3.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jeromq-linux</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <family>unix</family>
+                </os>
+                <file>
+                    <missing>/usr/lib/libjzmq.so</missing>
+                </file>
+            </activation>   
+            <dependencies>
+                <dependency>
+                    <groupId>org.zeromq</groupId>
+                    <artifactId>jeromq</artifactId>
+                    <version>0.3.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jeromq-win</id>
+            <activation>
+                <os>
+                    <name>windows</name>
+                    <family>windows</family>
+                </os>
+            </activation>   
+            <dependencies>
+                <dependency>
+                    <groupId>org.zeromq</groupId>
+                    <artifactId>jeromq</artifactId>
+                    <version>0.3.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -77,11 +149,11 @@
             <artifactId>protobuf-java</artifactId>
             <version>2.6.1</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.zeromq</groupId>
             <artifactId>jzmq</artifactId>
             <version>3.1.0</version>
-        </dependency>
+        </dependency>-->
 <!--        <dependency>
             <groupId>org.zeromq</groupId>
             <artifactId>jeromq</artifactId>
