@@ -23,14 +23,25 @@ public class JettyBean {
 
     private static String server;
     
+    /**
+     * Static Constructor
+     */
     static {
         server = "localhost:8888";
     }
 
+    /**
+     * Get the server URL
+     * @return 
+     */
     public String getServer() {
         return server;
     }
 
+    /**
+     * Set the server URL
+     * @param value 
+     */
     public void setServer(String value) {
         server = value;
     }

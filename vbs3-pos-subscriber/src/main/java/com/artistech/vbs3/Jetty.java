@@ -53,14 +53,27 @@ public class Jetty {
     private static int _port;
     private static final String WEBROOT_INDEX = "/com/artistech/jetty/content/";
 
+    /**
+     * Get the port value.
+     * @return 
+     */
     public static int getPort() {
         return _port;
     }
 
+    /**
+     * Add a new class type for a servlet.
+     * @param x 
+     */
     public static void addJettyServlet(Class<? extends HttpServlet> x) {
         addJettyServlet(x, "");
     }
 
+    /**
+     * Add a new class type for a servlet.
+     * @param x
+     * @param suffix 
+     */
     public static void addJettyServlet(Class<? extends HttpServlet> x, String suffix) {
         try {
             addJettyServlet(x.newInstance(), suffix);
@@ -69,10 +82,19 @@ public class Jetty {
         }
     }
 
+    /**
+     * Add a new servlet.
+     * @param servelet 
+     */
     public static void addJettyServlet(HttpServlet servelet) {
         addJettyServlet(servelet, "");
     }
 
+    /**
+     * Add a new servlet.
+     * @param servelet
+     * @param suffix 
+     */
     public static void addJettyServlet(HttpServlet servelet, String suffix) {
         if (webapp != null) {
             Class<? extends HttpServlet> x = servelet.getClass();
@@ -94,6 +116,11 @@ public class Jetty {
         }
     }
 
+    /**
+     * Get the scratch dir.
+     * @return
+     * @throws IOException 
+     */
     private static File getScratchDir() throws IOException {
         File tempDir = new File(System.getProperty("java.io.tmpdir"));
         File scratchDir = new File(tempDir.toString(), "embedded-jetty-jsp");
@@ -142,6 +169,10 @@ public class Jetty {
         return holderJsp;
     }
 
+    /**
+     * Start the Jetty Server.
+     * @param port
+     */
     public static void startServer(int port) {
         // Set JSP to use Standard JavaC always
         System.setProperty("org.apache.jasper.compiler.disablejsr199", "false");
@@ -216,6 +247,9 @@ public class Jetty {
         }
     }
 
+    /**
+     * Stop the server.
+     */
     public static void stopServer() {
         try {
             server.stop();
