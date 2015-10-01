@@ -1,1 +1,3 @@
 com.artistech.vbs3.GetPosServlet
+com.artistech.kml.KmlServlet
+com.artistech.kml.Vbs3Pos

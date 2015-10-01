@@ -29,9 +29,9 @@ import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
-public class GetPosSocket extends WebSocketAdapter {
+public class GetPosSocket extends WebSocketAdapter implements PositionBroadcaster {
 
-    public static class BroadcasterThread extends Thread {
+    public class BroadcasterThread extends Thread {
 
         private final HaltMonitor monitor;
         private final Mailbox<Vbs3Protos.Position> messages;
@@ -96,7 +96,7 @@ public class GetPosSocket extends WebSocketAdapter {
 
                 CONVERSION.getMin().setPoint(new PointF(0, worldCenterY));
                 CONVERSION.getMax().setPoint(new PointF(worldCenterX, 0));
-                
+
                 _conversionPointInitialized = true;
 
                 LOGGER.log(Level.INFO, "MAX POINT: {0}", CONVERSION.getMax().getPoint().toString());
@@ -148,20 +148,18 @@ public class GetPosSocket extends WebSocketAdapter {
 
     private static final Logger LOGGER = Logger.getLogger(GetPosSocket.class.getName());
 
-    private static final ArrayList<GetPosSocket> INSTANCES = new ArrayList<>();
-    private static final BroadcasterThread BROADCASTER;
-    private static final GridConversion CONVERSION;
-    private static boolean _conversionPointInitialized;
-    private static final AtomicBoolean DO_GRID_CONVERSION;
+    private final static ArrayList<GetPosSocket> INSTANCES = new ArrayList<>();
+    private BroadcasterThread BROADCASTER;
+    private final GridConversion CONVERSION;
+    private boolean _conversionPointInitialized;
+    private final AtomicBoolean DO_GRID_CONVERSION;
 
     /**
-     * Static Constructor
+     * Default Constructor
      */
-    static {
+    public GetPosSocket() {
         //initialize all necessary objects
         DO_GRID_CONVERSION = new AtomicBoolean(false);
-        BROADCASTER = new BroadcasterThread();
-        BROADCASTER.setDaemon(true);
         CONVERSION = new GridConversion();
         GridConversionPoint gcp = new GridConversionPoint();
         gcp.setCoordinate(Coordinate.MIN);
@@ -172,7 +170,12 @@ public class GetPosSocket extends WebSocketAdapter {
         gcp.setCoordinate(Coordinate.MAX);
         gcp.setPoint(new PointF(1, 1));
         CONVERSION.setMax(gcp);
+    }
 
+    @Override
+    public void initialize() {
+        BROADCASTER = new BroadcasterThread();
+        BROADCASTER.setDaemon(true);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
             @Override
@@ -184,29 +187,38 @@ public class GetPosSocket extends WebSocketAdapter {
     }
 
     /**
+     * Static Constructor
+     */
+    static {
+    }
+
+    /**
      * See if we are to do the grid conversion.
      *
      * @return
      */
-    public static boolean getDoGridConversion() {
+    @Override
+    public boolean getDoGridConversion() {
         return DO_GRID_CONVERSION.get();
     }
 
-    /**
-     * Set if we are to do the grid conversion.
-     *
-     * @param value
-     */
-    public static void setDoGridConversion(boolean value) {
-        DO_GRID_CONVERSION.set(value);
-    }
+//    /**
+//     * Set if we are to do the grid conversion.
+//     *
+//     * @param value
+//     */
+//    @Override
+//    public void setDoGridConversion(boolean value) {
+////        DO_GRID_CONVERSION.set(value);
+//    }
 
     /**
      * Set the minimum conversion point.
      *
      * @param value
      */
-    public static void setMinGridConversionPoint(GridConversionPoint value) {
+    @Override
+    public void setMinGridConversionPoint(GridConversionPoint value) {
         CONVERSION.setMin(value);
     }
 
@@ -215,7 +227,8 @@ public class GetPosSocket extends WebSocketAdapter {
      *
      * @param value
      */
-    public static void setMaxGridConversionPoint(GridConversionPoint value) {
+    @Override
+    public void setMaxGridConversionPoint(GridConversionPoint value) {
         CONVERSION.setMax(value);
     }
 
@@ -224,7 +237,8 @@ public class GetPosSocket extends WebSocketAdapter {
      *
      * @return
      */
-    public static GridConversionPoint getMinGridConversionPoint() {
+    @Override
+    public GridConversionPoint getMinGridConversionPoint() {
         return CONVERSION.getMin();
     }
 
@@ -233,11 +247,13 @@ public class GetPosSocket extends WebSocketAdapter {
      *
      * @return
      */
-    public static GridConversionPoint getMaxGridConversionPoint() {
+    @Override
+    public GridConversionPoint getMaxGridConversionPoint() {
         return CONVERSION.getMax();
     }
 
-    public static void broadcastPosition(Vbs3Protos.Position pos) {
+    @Override
+    public void broadcastPosition(Vbs3Protos.Position pos) {
         BROADCASTER.submit(pos);
     }
 

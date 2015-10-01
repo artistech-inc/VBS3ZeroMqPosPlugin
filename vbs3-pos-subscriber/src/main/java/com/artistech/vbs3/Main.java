@@ -20,6 +20,7 @@ import com.artistech.geo.GridConversionPoint;
 import com.artistech.utils.ArgumentOutOfRangeException;
 import com.artistech.utils.logging.SingleLineFormatter;
 import java.util.ArrayList;
+import java.util.ServiceLoader;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +53,7 @@ public class Main {
         options.addOption("w", "min-lon", true, "Min Longitude value. (DEFAULT -w -180.0)");
         options.addOption("e", "max-lat", true, "Max Latitude value.  (DEFAULT -e 90.0)");
         options.addOption("r", "max-lon", true, "Max Longitude value. (DEFAULT -r 180.0)");
-        options.addOption("c", "do-grid-conversion", false, "Do Grid Conversion. (DEFAULT OFF)");
+//        options.addOption("c", "do-grid-conversion", false, "Do Grid Conversion. (DEFAULT OFF)");
         options.addOption("h", "help", false, "Show this message.");
         HelpFormatter formatter = new HelpFormatter();
         String[] zeroMqServers;
@@ -61,7 +62,7 @@ public class Main {
         Double min_lon = -180.0;
         Double max_lat = 90.0;
         Double max_lon = 180.0;
-        boolean do_grid_conversion = false;
+//        boolean do_grid_conversion = false;
 
         try {
             CommandLineParser parser = new org.apache.commons.cli.BasicParser();
@@ -72,9 +73,9 @@ public class Main {
             if (cmd.hasOption("j") || cmd.hasOption("jetty-port")) {
                 jettyPort = Integer.parseInt(cmd.getOptionValue("j"));
             }
-            if (cmd.hasOption("c") || cmd.hasOption("do-grid-conversion")) {
-                do_grid_conversion = true;
-            }
+//            if (cmd.hasOption("c") || cmd.hasOption("do-grid-conversion")) {
+//                do_grid_conversion = true;
+//            }
             if (cmd.hasOption("q") || cmd.hasOption("min-lat")) {
                 min_lat = Double.parseDouble(cmd.getOptionValue("q"));
             }
@@ -110,26 +111,32 @@ public class Main {
         int counter = 1;
         final ArrayList<Thread> threads = new ArrayList<>();
 
-        //initialize LAT/LON for grid conversion...
-        try {
-            GridConversionPoint maxGridConversionPoint = GetPosSocket.getMaxGridConversionPoint();
-            Coordinate c = new Coordinate(max_lon, max_lat);
-            maxGridConversionPoint.setCoordinate(c);
-            LOGGER.log(Level.INFO, "MAX COORDINATE:  {0}", GetPosSocket.getMaxGridConversionPoint().getCoordinate());
-        } catch (ArgumentOutOfRangeException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            GridConversionPoint minGridConversionPoint = GetPosSocket.getMinGridConversionPoint();
-            Coordinate c = new Coordinate(min_lon, min_lat);
-            minGridConversionPoint.setCoordinate(c);
-            LOGGER.log(Level.INFO, "MIN COORDINATE:  {0}", GetPosSocket.getMinGridConversionPoint().getCoordinate());
-        } catch (ArgumentOutOfRangeException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        final ServiceLoader<PositionBroadcaster> broadcasters = ServiceLoader.load(PositionBroadcaster.class);
+        for (PositionBroadcaster b : broadcasters) {
+            b.initialize();
+            LOGGER.log(Level.INFO, "BROADCASTER:  {0}", b.getClass().getName());
 
-        GetPosSocket.setDoGridConversion(do_grid_conversion);
-        LOGGER.log(Level.INFO, "PERFORMING POINT CONVERSION:  {0}", GetPosSocket.getDoGridConversion());
+            //initialize LAT/LON for grid conversion...
+            try {
+                GridConversionPoint maxGridConversionPoint = b.getMaxGridConversionPoint();
+                Coordinate c = new Coordinate(max_lon, max_lat);
+                maxGridConversionPoint.setCoordinate(c);
+                LOGGER.log(Level.INFO, "MAX COORDINATE:  {0}", b.getMaxGridConversionPoint().getCoordinate());
+            } catch (ArgumentOutOfRangeException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                GridConversionPoint minGridConversionPoint = b.getMinGridConversionPoint();
+                Coordinate c = new Coordinate(min_lon, min_lat);
+                minGridConversionPoint.setCoordinate(c);
+                LOGGER.log(Level.INFO, "MIN COORDINATE:  {0}", b.getMinGridConversionPoint().getCoordinate());
+            } catch (ArgumentOutOfRangeException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+//            b.setDoGridConversion(do_grid_conversion);
+            LOGGER.log(Level.INFO, "PERFORMING POINT CONVERSION:  {0}", b.getDoGridConversion());
+        }
 
         for (String zeroMqServer : zeroMqServers) {
             // Connect our subscriber socket
@@ -151,10 +158,10 @@ public class Main {
                         byte[] recv = subscriber.recv();
                         if (recv.length > 0) {
                             try {
-                                Vbs3Protos.Position message = Vbs3Protos.Position.parseFrom(recv);
-                                GetPosSocket.broadcastPosition(message);
+                                for (PositionBroadcaster b : broadcasters) {
+                                    b.broadcastPosition(Vbs3Protos.Position.parseFrom(recv));
+                                }
                                 success = true;
-                                LOGGER.log(Level.FINEST, message.toString());
                             } catch (Exception ex) {
                                 success = false;
                                 LOGGER.log(Level.SEVERE, null, ex);
