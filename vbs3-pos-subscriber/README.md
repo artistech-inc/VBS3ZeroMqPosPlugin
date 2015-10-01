@@ -26,15 +26,27 @@ The default for OS X and Winows is to use jeromq intead of jzmq for ZeroMQ.
 ##Compile
 1. git clone https://github.com/artistech-inc/VBS3ZeroMqPosPlugin.git
 2. cd VBS3ZeroMqPosPlugin
-3. git checkout v1.0
-4. cd vbs3-pos-subscriber
-5. mvn clean package
+3. cd vbs3-pos-subscriber
+4. mvn clean package
 
 ##Run
-By default, the JETTY_PORT_VALUE is 8888 unless otherwise specified on the command line. At least one VBS3 ZeroMQ publisher must be specified.
+By default, the JETTY_PORT_VALUE is 8888 unless otherwise specified on the command line. At least one VBS3 ZeroMQ publisher must be specified.  New to version 1.1 is the ability to convert from x/y coordinates to lon/lat.  To do this, a max/min value for each lon/lat must be provided on the command line.  If none is provided, the entire world is assumed using -180 to 180 and -90 to 90 for lon/lat respectfully.
 ```shell
-java -jar target/vbs3-pos-subscriber-1.0.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-j JETTY_PORT_VALUE]
+java -jar target/vbs3-pos-subscriber-1.1.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-j JETTY_PORT_VALUE]
 ```
-##Viewing
+###To Specify Min/Max Lon/Lat
+The command line arguments q, w, e, r are used.
+ 1. -q &lt;min_latitude_value&gt;
+ 2. -w &lt;min_longitude_value&gt;
+ 3. -e &lt;max_latitude_value&gt;
+ 4. -r &lt;max_longitude_value&gt;
+
+##Viewing in Web-Browser
  1. Using the latest versions of Firefox and Google Chrome, view: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3_map.jsp
  2. Click "Start Receiving Data"
+
+###Viewing in [sdt3d] (http://downloads.pf.itd.nrl.navy.mil/docs/sdt/sdt.html)
+ 1. In a Web-Browser, download the KML file from: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3.kml
+ 2. Start sdt3d
+ 3. File -> KML -> Load KML File
+ 4. Open the downloaded file from #1
