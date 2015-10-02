@@ -45,8 +45,19 @@ The command line arguments q, w, e, r are used.
  1. Using the latest versions of Firefox and Google Chrome, view: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3_map.jsp
  2. Click "Start Receiving Data"
 
-###Viewing in [sdt3d] (http://downloads.pf.itd.nrl.navy.mil/docs/sdt/sdt.html)
+###Viewing in [sdt3d] (http://downloads.pf.itd.nrl.navy.mil/docs/sdt/sdt.html) using KML
  1. In a Web-Browser, download the KML file from: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3.kml
  2. Start sdt3d
  3. File -> KML -> Load KML File
  4. Open the downloaded file from #1
+
+###Viewing in [sdt3d] (http://downloads.pf.itd.nrl.navy.mil/docs/sdt/sdt.html) using UDP
+By default, vbs3-pos-subscriber uses multicast address 228.5.6.7 and port 5000, these values can be change on the command line if desired.
+```shell
+java -jar target/vbs3-pos-subscriber-1.1.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-p UDP_PORT] [-i UDP_ADDRESS]
+```
+ 1. In a Web-Browser, download the KML file from: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3.kml
+ 2. Start sdt3d
+ 3. File -> Listen to UDP Port...
+ 4. Specify UDP_PORT/UDP_ADDRESS (ex: 228.5.6.7/5000)
+

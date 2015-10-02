@@ -135,7 +135,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
         }
     }
 
-    private static final Logger LOGGER = Logger.getLogger(GetPosSocket.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UdpBroadcaster.class.getName());
 
     public static int UDP_PORT = 5000;
     public static String UDP_IP_ADDRESS = "228.5.6.7";
@@ -228,6 +228,9 @@ public class UdpBroadcaster implements PositionBroadcaster {
         } catch (IOException ex) {
             Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        LOGGER.log(Level.INFO, "UDP_IP_ADDRESS: {0}", UDP_IP_ADDRESS);
+        LOGGER.log(Level.INFO, "UDP_PORT:       {0}", UDP_PORT);
 
         BROADCASTER = new UdpBroadcaster.BroadcasterThread();
         BROADCASTER.setDaemon(true);
