@@ -56,8 +56,7 @@ By default, vbs3-pos-subscriber uses multicast address 228.5.6.7 and port 5000, 
 ```shell
 java -jar target/vbs3-pos-subscriber-1.1.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-p UDP_PORT] [-i UDP_ADDRESS]
 ```
- 1. In a Web-Browser, download the KML file from: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3.kml
- 2. Start sdt3d
- 3. File -> Listen to UDP Port...
- 4. Specify UDP_PORT/UDP_ADDRESS (ex: 228.5.6.7/5000)
+ 1. Start sdt3d
+ 2. File -> Listen to UDP Port...
+ 3. Specify UDP_PORT/UDP_ADDRESS (ex: 228.5.6.7/5000)
 
