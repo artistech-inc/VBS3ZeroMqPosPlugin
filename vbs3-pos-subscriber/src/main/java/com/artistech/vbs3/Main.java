@@ -19,6 +19,7 @@ import com.artistech.geo.Coordinate;
 import com.artistech.geo.GridConversionPoint;
 import com.artistech.utils.ArgumentOutOfRangeException;
 import com.artistech.utils.logging.SingleLineFormatter;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.util.logging.Handler;
@@ -46,6 +47,7 @@ public class Main {
             h.setFormatter(new SingleLineFormatter());
         }
 
+        //TODO: possibly make it so each component can push it's options to this menu.
         Options options = new Options();
         options.addOption("j", "jetty-port", true, "Jetty port to serve on. (DEFAULT -j 8888)");
         options.addOption("z", "zeromq-port", true, "ZeroMQ Server:Port to subscribe to. (-z localhost:5565)");
@@ -53,6 +55,8 @@ public class Main {
         options.addOption("w", "min-lon", true, "Min Longitude value. (DEFAULT -w -180.0)");
         options.addOption("e", "max-lat", true, "Max Latitude value.  (DEFAULT -e 90.0)");
         options.addOption("r", "max-lon", true, "Max Longitude value. (DEFAULT -r 180.0)");
+        options.addOption("p", "udp-port", true, "UDP Port for Broadcasting. (DEFAULT 5000)");
+        options.addOption("i", "udp-ip", true, "UDP Server Address. (DEFAULT 228.5.6.7)");
 //        options.addOption("c", "do-grid-conversion", false, "Do Grid Conversion. (DEFAULT OFF)");
         options.addOption("h", "help", false, "Show this message.");
         HelpFormatter formatter = new HelpFormatter();
@@ -73,6 +77,34 @@ public class Main {
             if (cmd.hasOption("j") || cmd.hasOption("jetty-port")) {
                 jettyPort = Integer.parseInt(cmd.getOptionValue("j"));
             }
+            Field ip_field = null;
+            Field port_field = null;
+            Class<?> forName = null;
+            try {
+                //set UDP options...
+                forName = Class.forName("com.artistech.vbs3.UdpBroadcaster");
+                ip_field = forName.getField("UDP_IP_ADDRESS");
+                port_field = forName.getField("UDP_PORT");
+            } catch (ClassNotFoundException | NoSuchFieldException | SecurityException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (ip_field != null && (cmd.hasOption("i") || cmd.hasOption("udp-ip"))) {
+                //UdpBroadcaster.UDP_IP_ADDRESS = cmd.getOptionValue("i");
+                try {
+                    ip_field.set(forName, cmd.getOptionValue("i"));
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (port_field != null && (cmd.hasOption("p") || cmd.hasOption("udp-port"))) {
+//                UdpBroadcaster.UDP_PORT = Integer.parseInt(cmd.getOptionValue("p"));
+                try {
+                    port_field.set(forName, Integer.parseInt(cmd.getOptionValue("p")));
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
 //            if (cmd.hasOption("c") || cmd.hasOption("do-grid-conversion")) {
 //                do_grid_conversion = true;
 //            }
