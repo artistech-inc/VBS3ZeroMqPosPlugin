@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.artistech.vbs3;
+package com.artistech.vbs3.web;
 
 /**
  *
@@ -30,6 +30,6 @@ public class GetPosServlet extends WebSocketServlet
     @Override
     public void configure(WebSocketServletFactory factory)
     {
-        factory.register(GetPosSocket.class);
+        factory.register(GetPosSocket.Adapter.class);
     }
 }

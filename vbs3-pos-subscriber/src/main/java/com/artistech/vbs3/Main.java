@@ -82,7 +82,7 @@ public class Main {
             Class<?> forName = null;
             try {
                 //set UDP options...
-                forName = Class.forName("com.artistech.vbs3.UdpBroadcaster");
+                forName = Class.forName("com.artistech.vbs3.net.UdpBroadcaster");
                 ip_field = forName.getField("UDP_IP_ADDRESS");
                 port_field = forName.getField("UDP_PORT");
             } catch (ClassNotFoundException | NoSuchFieldException | SecurityException ex) {

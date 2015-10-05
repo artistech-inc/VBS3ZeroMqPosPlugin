@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.artistech.kml;
+package com.artistech.vbs3.kml;
 
-import com.artistech.vbs3.Vbs3Protos;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author matta
  */
 @SuppressWarnings("serial")
-@WebServlet(name = "Vbs3Pos", urlPatterns = {"/vbs3Pos/*"})
-public class Vbs3Pos extends HttpServlet {
+@WebServlet(name = "vbs3kml", urlPatterns = {"/vbs3.kml"})
+public class KmlServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,23 +42,26 @@ public class Vbs3Pos extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Collection<Vbs3Protos.Position> positions = KmlBroadcaster.getPositions();
-
         response.setContentType("application/vnd.google-earth.kml+xml");
         try (PrintWriter out = response.getWriter()) {
+            String url = request.getRequestURL().toString();
+            String servletPath = request.getServletPath();
+            String new_url = url.replace(servletPath, "") + "/vbs3Pos";
+            /* TODO output your page here. You may use following sample code. */
             out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            out.println("<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">");
-            out.println("<Document>");
-            for (Vbs3Protos.Position pos : positions) {
-                String name = pos.getId().replaceAll("\"", "");
-                out.println("<Placemark>");
-                out.println("<name>Player: " + name + "</name>");
-                out.println("<Point><coordinates>" + pos.getX() + "," + pos.getY() + "</coordinates></Point>");
-                out.println("</Placemark>");
-            }
-            out.println("</Document>");
+            out.println("<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">");
+            out.println("<NetworkLink>");
+            out.println("    <name>VBS3 Entity Tracker</name>");
+            out.println("    <description>Tracks entities from VBS3.</description>");
+            out.println("    <Link>");
+            out.println("        <href>" + new_url + "</href>");
+            out.println("        <refreshMode>onInterval</refreshMode>");
+            out.println("        <refreshInterval>1</refreshInterval>");
+            out.println("        <viewRefreshMode>onStop</viewRefreshMode>");
+            out.println("        <viewRefreshTime>0</viewRefreshTime>");
+            out.println("    </Link>");
+            out.println("</NetworkLink>");
             out.println("</kml>");
-            out.flush();
         }
     }
 
@@ -102,4 +103,6 @@ public class Vbs3Pos extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }
+

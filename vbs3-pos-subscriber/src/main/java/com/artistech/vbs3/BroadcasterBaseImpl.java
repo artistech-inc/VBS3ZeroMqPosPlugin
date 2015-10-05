@@ -21,11 +21,6 @@ import com.artistech.geo.GridConversionPoint;
 import com.artistech.math.PointF;
 import com.artistech.utils.HaltMonitor;
 import com.artistech.utils.Mailbox;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -35,12 +30,12 @@ import java.util.logging.Logger;
  *
  * @author matta
  */
-public class UdpBroadcaster implements PositionBroadcaster {
+public abstract class BroadcasterBaseImpl implements PositionBroadcaster {
 
-    public class BroadcasterThread extends Thread {
+    public abstract class BroadcasterThread extends Thread {
 
-        private final HaltMonitor monitor;
-        private final Mailbox<Vbs3Protos.Position> messages;
+        protected final HaltMonitor monitor;
+        protected final Mailbox<Vbs3Protos.Position> messages;
 
         /**
          * Constructor
@@ -54,12 +49,12 @@ public class UdpBroadcaster implements PositionBroadcaster {
          * Thread function.
          */
         @Override
-        public void run() {
+        public final void run() {
             while (!monitor.isHalted()) {
                 ArrayList<Vbs3Protos.Position> msgs = messages.getMessages();
                 if (msgs != null && !msgs.isEmpty()) {
                     for (Vbs3Protos.Position pos : msgs) {
-                        broadcastPosition(pos);
+                        broadcastPosition(initPosition(pos));
                     }
                 } else {
                     halt();
@@ -70,7 +65,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
         /**
          * Halt the thread.
          */
-        public void halt() {
+        public final void halt() {
             monitor.halt();
         }
 
@@ -79,7 +74,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
          *
          * @param pos
          */
-        public void submit(Vbs3Protos.Position pos) {
+        public final void submit(Vbs3Protos.Position pos) {
             messages.addMessage(pos);
         }
 
@@ -88,7 +83,15 @@ public class UdpBroadcaster implements PositionBroadcaster {
          *
          * @param pos
          */
-        private void broadcastPosition(Vbs3Protos.Position pos) {
+        protected abstract void broadcastPosition(Vbs3Protos.Position pos);
+
+        /**
+         * Pre-process the position object if necessary.
+         *
+         * @param pos
+         * @return
+         */
+        protected Vbs3Protos.Position initPosition(Vbs3Protos.Position pos) {
             if (!_conversionPointInitialized) {
                 //initialize the MAX point only once.
                 //max point is 2x the center point.
@@ -104,7 +107,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
                 LOGGER.log(Level.INFO, "MIN POINT: {0}", CONVERSION.getMin().getPoint().toString());
             }
 
-            if (DO_GRID_CONVERSION.get()) {
+            if (getDoGridConversion()) {
                 //do grid conversion on pos
                 LOGGER.log(Level.FINEST, "X {0}, Y: {1}", new Object[]{pos.getX(), pos.getY()});
 
@@ -118,37 +121,20 @@ public class UdpBroadcaster implements PositionBroadcaster {
                 LOGGER.log(Level.FINEST, "LON: {0}, LAT: {1}", new Object[]{pos.getX(), pos.getY()});
             }
 
-            String name = "Player_" + pos.getId().replaceAll("\"", "").replaceAll(" ", "_");
-
-            //send the data to all listeners
-            //the data to be sent is not this, but is a string I think...
-            try {
-                String msg = "node " + name + " position " + pos.getX() + "," + pos.getY() + NEW_LINE;
-                DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(), group, UDP_PORT);
-                socket.send(hi);
-//                msg = "node " + name + " orientation " + pos.getDir() + NEW_LINE;
-//                hi = new DatagramPacket(msg.getBytes(), msg.length(), group, port);
-//                socket.send(hi);
-            } catch (IOException ex) {
-                Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            return pos;
         }
     }
 
-    private static final Logger LOGGER = Logger.getLogger(UdpBroadcaster.class.getName());
-
-    public static int UDP_PORT = 5000;
-    public static String UDP_IP_ADDRESS = "228.5.6.7";
-
-    private BroadcasterThread BROADCASTER;
+    private static final Logger LOGGER = Logger.getLogger(BroadcasterBaseImpl.class.getName());
     private final GridConversion CONVERSION;
     private boolean _conversionPointInitialized;
-    private final AtomicBoolean DO_GRID_CONVERSION;
-    private InetAddress group;
-    private MulticastSocket socket;
-    private static final String NEW_LINE = System.getProperty("line.separator");
+    protected final AtomicBoolean DO_GRID_CONVERSION;
 
-    public UdpBroadcaster() {
+    /**
+     * Default Constructor
+     */
+    public BroadcasterBaseImpl() {
+        //initialize all necessary objects
         DO_GRID_CONVERSION = new AtomicBoolean(true);
         CONVERSION = new GridConversion();
         GridConversionPoint gcp = new GridConversionPoint();
@@ -168,7 +154,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
      * @return
      */
     @Override
-    public boolean getDoGridConversion() {
+    public final boolean getDoGridConversion() {
         return DO_GRID_CONVERSION.get();
     }
 
@@ -178,7 +164,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
      * @param value
      */
     @Override
-    public void setMinGridConversionPoint(GridConversionPoint value) {
+    public final void setMinGridConversionPoint(GridConversionPoint value) {
         CONVERSION.setMin(value);
     }
 
@@ -188,7 +174,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
      * @param value
      */
     @Override
-    public void setMaxGridConversionPoint(GridConversionPoint value) {
+    public final void setMaxGridConversionPoint(GridConversionPoint value) {
         CONVERSION.setMax(value);
     }
 
@@ -198,7 +184,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
      * @return
      */
     @Override
-    public GridConversionPoint getMinGridConversionPoint() {
+    public final GridConversionPoint getMinGridConversionPoint() {
         return CONVERSION.getMin();
     }
 
@@ -208,52 +194,7 @@ public class UdpBroadcaster implements PositionBroadcaster {
      * @return
      */
     @Override
-    public GridConversionPoint getMaxGridConversionPoint() {
+    public final GridConversionPoint getMaxGridConversionPoint() {
         return CONVERSION.getMax();
     }
-
-    @Override
-    public void broadcastPosition(Vbs3Protos.Position pos) {
-        BROADCASTER.submit(pos);
-    }
-
-    @Override
-    public void initialize() {
-        try {
-            group = InetAddress.getByName(UDP_IP_ADDRESS);
-            socket = new MulticastSocket(UDP_PORT);
-            socket.joinGroup(group);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        LOGGER.log(Level.INFO, "UDP_IP_ADDRESS: {0}", UDP_IP_ADDRESS);
-        LOGGER.log(Level.INFO, "UDP_PORT:       {0}", UDP_PORT);
-
-        BROADCASTER = new UdpBroadcaster.BroadcasterThread();
-        BROADCASTER.setDaemon(true);
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                BROADCASTER.halt();
-            }
-        }));
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    socket.leaveGroup(group);
-                    socket.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }));
-        BROADCASTER.start();
-    }
-
 }
