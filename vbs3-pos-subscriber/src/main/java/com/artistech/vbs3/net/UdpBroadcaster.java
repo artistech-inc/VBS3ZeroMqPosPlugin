@@ -47,6 +47,7 @@ public class UdpBroadcaster extends BroadcasterBaseImpl {
             try {
                 String msg = "node " + name + " position " + pos.getX() + "," + pos.getY() + NEW_LINE;
                 DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(), group, UDP_PORT);
+//                LOGGER.log(Level.FINEST, msg.trim());
                 socket.send(hi);
             } catch (IOException ex) {
                 Logger.getLogger(UdpBroadcaster.class.getName()).log(Level.SEVERE, null, ex);

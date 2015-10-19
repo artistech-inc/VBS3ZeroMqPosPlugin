@@ -140,6 +140,16 @@ public class Main {
         //create zeromq context
         ZMQ.Context context = ZMQ.context(1);
 
+        double max = Math.max(max_lat, min_lat);
+        double min = Math.min(max_lat, min_lat);
+        max_lat = max;
+        min_lat = min;
+
+        max = Math.max(max_lon, min_lon);
+        min = Math.min(max_lon, min_lon);
+        max_lon = max;
+        min_lon = min;
+        
         int counter = 1;
         final ArrayList<Thread> threads = new ArrayList<>();
 
