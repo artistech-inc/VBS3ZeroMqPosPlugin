@@ -16,6 +16,7 @@ sem_t sem;
 pthread_t thread;
 pthread_t listener_thread;
 bool running;
+bool thread2_dead;
 
 void *thread_func(void* arg)
 {
@@ -32,6 +33,7 @@ void *thread_func(void* arg)
 
 	//CANNOT CURRENTLY CLOSE W/O CRASH!
 	delete publisher;
+
 	//delete context;	// <-- causes crash if implemented
 
 	return NULL;
@@ -44,10 +46,14 @@ void *listener_thread_func(void* arg)
 	listener->bind("tcp://*:5552");
 
 	while(running) {
-        zmq::message_t request;
+		try {
+			zmq::message_t request;
 
-        //  Wait for next request from client
-        listener->recv (&request);
+			//  Wait for next request from client
+			listener->recv (&request);
+		} catch(std::exception err) {
+			running = false;
+		}
         //std::cout << "Received Hello" << std::endl;
 
         ////  Send reply back to client
@@ -56,10 +62,30 @@ void *listener_thread_func(void* arg)
         //socket.send (reply);
 	}
 
+	thread2_dead = true;
+	delete listener;
+
 	return NULL;
 }
 
 int main(int argc, char** argv) {
-	std::cout<<"hello"<<std::endl;
+	sem_init(&sem, 0, 0);
+	Sleep(1000);
+	running = true;
+	thread2_dead = false;
+	pthread_create(&thread, NULL, thread_func, NULL);
+	pthread_create(&listener_thread, NULL, listener_thread_func, NULL);
+	Sleep(1000);
+
+	sem_post(&sem);
+	Sleep(1000);
+	sem_destroy(&sem);
+
+	running = false;
+	delete listener_context;
+
+	while(!thread2_dead) {
+		Sleep(1000);
+	}
 	return 0;
 }
