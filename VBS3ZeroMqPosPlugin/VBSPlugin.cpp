@@ -31,9 +31,13 @@ typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int
 ExecuteCommandType ExecuteCommand = NULL;
 
 zmq::socket_t *publisher;
+zmq::socket_t *listener;
 zmq::context_t *context;
+zmq::context_t *listener_context;
 sem_t sem;
 pthread_t thread;
+pthread_t listener_thread;
+bool running;
 
 void *thread_func(void* arg)
 {
@@ -51,6 +55,28 @@ void *thread_func(void* arg)
 	//CANNOT CURRENTLY CLOSE W/O CRASH!
 	delete publisher;
 	//delete context;	// <-- causes crash if implemented
+
+	return NULL;
+}
+
+void *listener_thread_func(void* arg)
+{
+	listener_context = new zmq::context_t(1);
+	listener = new zmq::socket_t(*listener_context, ZMQ_REP);
+	listener->bind("tcp://*:5552");
+
+	while(running) {
+        zmq::message_t request;
+
+        //  Wait for next request from client
+        listener->recv (&request);
+        //std::cout << "Received Hello" << std::endl;
+
+        ////  Send reply back to client
+        //zmq::message_t reply (5);
+        //memcpy (reply.data (), "World", 5);
+        //socket.send (reply);
+	}
 
 	return NULL;
 }
@@ -138,9 +164,11 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
 			file.flush();
 #endif
+			running = true;
 			sem_init(&sem, 0, 0);
 			Sleep(1000);
 			pthread_create(&thread, NULL, thread_func, NULL);
+			pthread_create(&listener_thread, NULL, listener_thread_func, NULL);
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
@@ -148,9 +176,13 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
+			running = false;
 			sem_post(&sem);
 			Sleep(1000);
 			sem_destroy(&sem);
+
+			//TODO: be able to shut down the listener objects to kill the listener thread.
+
 			//OutputDebugString("Called DllMain with DLL_PROCESS_DETACH\n");
 		break;
 		case DLL_THREAD_ATTACH:

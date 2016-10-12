@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="VBS3ZeroMqPosPlugin"
-	ProjectGUID="{99011A0E-5493-4DD9-BC73-05F9206E5409}"
-	RootNamespace="VBS3ZeroMqPosPlugin"
+	Name="ConsoleTest"
+	ProjectGUID="{A51AB978-4885-4EBB-88F5-CB6FEDA89736}"
+	RootNamespace="ConsoleTest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -95,10 +95,11 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="C:\Bohemia Interactive\VBS3\plugins64\"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
 			CharacterSet="1"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -142,9 +143,10 @@
 				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib ws2_32.lib rpcrt4.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;;&quot;..\zeromq-4.0.4\lib-x64\&quot;"
-				ModuleDefinitionFile=".\VBSPlugin.def"
+				ModuleDefinitionFile=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
+				ImportLibrary=""
 				TargetMachine="17"
 			/>
 			<Tool
@@ -171,9 +173,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="C:\Bohemia Interactive\VBS3\plugins\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -197,11 +199,12 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;ZSOCK_NOCHECK;LIBCZMQ_STATIC"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;LIBCZMQ_STATIC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -222,6 +225,7 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -247,11 +251,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="C:\Bohemia Interactive\VBS3\plugins64\"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
+			ConfigurationType="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -267,19 +269,11 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;VBSPLUGIN_EXPORTS;WIN32_LEAN_AND_MEAN;ZSOCK_NOCHECK;LIBCZMQ_STATIC"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;LIBCZMQ_STATIC"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -293,13 +287,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
-				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;;&quot;..\zeromq-4.0.4\lib-x64\&quot;"
-				ModuleDefinitionFile=".\VBSPlugin.def"
-				GenerateDebugInformation="false"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -338,15 +326,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\stdafx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vbs3GetPos.pb.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\VBSPlugin.cpp"
+				RelativePath=".\main.cpp"
 				>
 			</File>
 		</Filter>
@@ -355,22 +335,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vbs3GetPos.pb.h"
-				>
-			</File>
-			<File
-				RelativePath=".\VBSPlugin.h"
-				>
-			</File>
 			<File
 				RelativePath=".\zmq.hpp"
 				>
@@ -382,14 +346,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\VBSPlugin.def"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
