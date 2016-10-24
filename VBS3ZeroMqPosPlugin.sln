@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VBS3ZeroMqPosPlugin", "VBS3
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcproj", "{A51AB978-4885-4EBB-88F5-CB6FEDA89736}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libzmq", "zeromq-4.1.5\builds\msvc\vs2008\libzmq\libzmq.vcproj", "{641C5F36-32EE-4323-B740-992B651CF9D6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -111,35 +109,6 @@ Global
 		{A51AB978-4885-4EBB-88F5-CB6FEDA89736}.WithOpenPGM|Win32.ActiveCfg = Release|Win32
 		{A51AB978-4885-4EBB-88F5-CB6FEDA89736}.WithOpenPGM|Win32.Build.0 = Release|Win32
 		{A51AB978-4885-4EBB-88F5-CB6FEDA89736}.WithOpenPGM|x64.ActiveCfg = Release|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Debug|Win32.Build.0 = Debug|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Debug|x64.ActiveCfg = Debug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Debug|x64.Build.0 = Debug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.DebugDLL|Win32.ActiveCfg = Debug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.DebugDLL|x64.ActiveCfg = Debug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.DebugDLL|x64.Build.0 = Debug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Release|Win32.ActiveCfg = Release|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Release|Win32.Build.0 = Release|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Release|x64.ActiveCfg = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.Release|x64.Build.0 = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.ReleaseDLL|Win32.ActiveCfg = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.ReleaseDLL|x64.ActiveCfg = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.ReleaseDLL|x64.Build.0 = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.RelWithDebInfo|Win32.ActiveCfg = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.RelWithDebInfo|x64.ActiveCfg = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.RelWithDebInfo|x64.Build.0 = Release|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticDebug|Win32.ActiveCfg = StaticDebug|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticDebug|Win32.Build.0 = StaticDebug|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticDebug|x64.ActiveCfg = StaticDebug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticDebug|x64.Build.0 = StaticDebug|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticRelease|Win32.ActiveCfg = StaticRelease|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticRelease|Win32.Build.0 = StaticRelease|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticRelease|x64.ActiveCfg = StaticRelease|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.StaticRelease|x64.Build.0 = StaticRelease|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.WithOpenPGM|Win32.ActiveCfg = WithOpenPGM|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.WithOpenPGM|Win32.Build.0 = WithOpenPGM|Win32
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.WithOpenPGM|x64.ActiveCfg = WithOpenPGM|x64
-		{641C5F36-32EE-4323-B740-992B651CF9D6}.WithOpenPGM|x64.Build.0 = WithOpenPGM|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

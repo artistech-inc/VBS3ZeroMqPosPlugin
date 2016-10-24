@@ -64,9 +64,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib libzmq.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;;&quot;..\zeromq-4.1.5\lib-x86&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -140,9 +140,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib libzmq.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;; &quot;..\zeromq-4.1.5\lib-x64&quot;"
 				ModuleDefinitionFile=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -218,9 +218,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib libzmq.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;;&quot;..\zeromq-4.1.5\lib-x86&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -286,8 +286,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pthreadVC2.lib"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;"
+				AdditionalDependencies="pthreadVC2.lib libzmq.lib"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;; &quot;..\zeromq-4.1.5\lib-x64&quot;"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -317,10 +317,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{3E283F37-A4ED-41B7-A3E6-A2D89D131A30}"
 			RelativePathToProject=".\protobuf-2.6.1\vsprojects\libprotobuf.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{641C5F36-32EE-4323-B740-992B651CF9D6}"
-			RelativePathToProject=".\zeromq-4.1.5\builds\msvc\vs2008\libzmq\libzmq.vcproj"
 		/>
 	</References>
 	<Files>
