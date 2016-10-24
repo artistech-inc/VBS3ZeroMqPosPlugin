@@ -31,52 +31,112 @@ typedef int (WINAPI * ExecuteCommandType)(const char *command, char *result, int
 ExecuteCommandType ExecuteCommand = NULL;
 
 zmq::socket_t *publisher;
-zmq::socket_t *listener;
 zmq::context_t *context;
-zmq::context_t *listener_context;
 sem_t sem;
 pthread_t thread;
 pthread_t listener_thread;
 bool running;
 
-void *thread_func(void* arg)
-{
-	//zsock_t *pub = zsock_new_pub ("tcp://*:5552");
-	context = new zmq::context_t(1);
-	publisher = new zmq::socket_t(*context, ZMQ_PUB);
-	publisher->bind("tcp://*:5551");
-
-	//zctx_t *ctx = zctx_new();
- //   void *pub = zsocket_new(ctx, ZMQ_SUB);
-	//zsocket_bind(pub, "tcp://*:5552");
-
-	sem_wait(&sem);
-
-	//CANNOT CURRENTLY CLOSE W/O CRASH!
-	delete publisher;
-	//delete context;	// <-- causes crash if implemented
-
-	return NULL;
-}
-
 void *listener_thread_func(void* arg)
 {
-	listener_context = new zmq::context_t(1);
-	listener = new zmq::socket_t(*listener_context, ZMQ_REP);
-	listener->bind("tcp://*:5552");
+	zmq::context_t listener_context(1);
+	zmq::socket_t listener(listener_context, ZMQ_REP);
+	listener.bind("tcp://*:5555");
+
+#if _DEBUG
+	ofstream file;
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "thread 2 start" << endl;
+	file.close();
+#endif
 
 	while(running) {
-        zmq::message_t request;
+		try {
+			zmq::message_t request;
 
-        //  Wait for next request from client
-        listener->recv (&request);
-        //std::cout << "Received Hello" << std::endl;
+			//  Wait for next request from client
+			listener.recv (&request);
+			//std::cout << request.data() << std::endl;
+		} catch(std::exception err) {
+			running = false;
+			//std::cerr << "Err: " << err.what() << std::endl;
+#if _DEBUG
+			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+			file << "thread 2 ex: " << err.what() << endl;
+			file.close();
+#endif
+		}
 
         ////  Send reply back to client
         //zmq::message_t reply (5);
         //memcpy (reply.data (), "World", 5);
         //socket.send (reply);
 	}
+
+#if _DEBUG
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "thread 2 complete" << endl;
+	file.close();
+#endif
+
+	return NULL;
+}
+
+void *thread_func(void* arg)
+{
+	running = true;
+	pthread_create(&listener_thread, NULL, listener_thread_func, NULL);
+
+	context = new zmq::context_t(1);
+	publisher = new zmq::socket_t(*context, ZMQ_PUB);
+	publisher->bind("tcp://*:5551");
+
+	sem_wait(&sem);
+
+#if _DEBUG
+	ofstream file;
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "message sending" << endl;
+	file.close();
+#endif
+	//shutdown the other thread.
+	running = false;
+	zmq::socket_t sock(*context, ZMQ_REQ);
+	zmq::message_t request(5);
+	memcpy (request.data (), "Hello", 5);
+	sock.connect("tcp://localhost:5555");
+	sock.send(request);
+
+#if _DEBUG
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "message sending" << endl;
+	file.close();
+#endif
+
+#if _DEBUG
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "message sent" << endl;
+	file.close();
+#endif
+
+	pthread_join(listener_thread, NULL);
+
+	//CANNOT CURRENTLY CLOSE W/O CRASH!
+	delete publisher;
+	//delete context;	// <-- causes crash if implemented
+#if _DEBUG
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "Publisher Stopped." << endl;
+	file.close();
+#endif
+
+	pthread_join(listener_thread, NULL);
+
+#if _DEBUG
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "thread joined" << endl;
+	file.close();
+#endif
 
 	return NULL;
 }
@@ -164,11 +224,9 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_ATTACH" << endl;
 			file.flush();
 #endif
-			running = true;
 			sem_init(&sem, 0, 0);
 			Sleep(1000);
 			pthread_create(&thread, NULL, thread_func, NULL);
-			pthread_create(&listener_thread, NULL, listener_thread_func, NULL);
 			//OutputDebugString("Called DllMain with DLL_PROCESS_ATTACH\n");
 		break;
 		case DLL_PROCESS_DETACH:
@@ -176,10 +234,11 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
-			running = false;
 			sem_post(&sem);
 			Sleep(1000);
 			sem_destroy(&sem);
+
+			pthread_join(thread, NULL);
 
 			//TODO: be able to shut down the listener objects to kill the listener thread.
 

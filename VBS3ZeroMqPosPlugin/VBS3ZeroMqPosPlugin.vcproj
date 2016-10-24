@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.1.5\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;LIBCZMQ_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,9 +64,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;;&quot;..\zeromq-4.0.4\lib-x86\&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -119,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.1.5\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;LIBCZMQ_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -139,9 +139,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib ws2_32.lib rpcrt4.lib"
+				AdditionalDependencies="pthreadVC2.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;;&quot;..\zeromq-4.0.4\lib-x64\&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;"
 				ModuleDefinitionFile=".\VBSPlugin.def"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -196,7 +196,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.1.5\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;ZSOCK_NOCHECK;LIBCZMQ_STATIC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -215,9 +215,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;;&quot;..\zeromq-4.0.4\lib-x86\&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x86&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -273,7 +273,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.0.4\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
+				AdditionalIncludeDirectories="&quot;..\protobuf-2.6.1\src&quot;;&quot;..\zeromq-4.1.5\include&quot;;&quot;..\czmq-3.0.2\include&quot;;&quot;..\pthreads-2.9.1\include&quot;;..\zwssock"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;VBSPLUGIN_EXPORTS;WIN32_LEAN_AND_MEAN;ZSOCK_NOCHECK;LIBCZMQ_STATIC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -292,9 +292,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libzmq-v90-mt-4_0_4.lib pthreadVC2.lib"
+				AdditionalDependencies="pthreadVC2.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;;&quot;..\zeromq-4.0.4\lib-x64\&quot;"
+				AdditionalLibraryDirectories="&quot;..\pthreads-2.9.1\lib\x64&quot;"
 				ModuleDefinitionFile=".\VBSPlugin.def"
 				GenerateDebugInformation="false"
 				SubSystem="1"
@@ -329,6 +329,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{3E283F37-A4ED-41B7-A3E6-A2D89D131A30}"
 			RelativePathToProject=".\protobuf-2.6.1\vsprojects\libprotobuf.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{641C5F36-32EE-4323-B740-992B651CF9D6}"
+			RelativePathToProject=".\zeromq-4.1.5\builds\msvc\vs2008\libzmq\libzmq.vcproj"
 		/>
 	</References>
 	<Files>
@@ -369,10 +373,6 @@
 			</File>
 			<File
 				RelativePath=".\VBSPlugin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\zmq.hpp"
 				>
 			</File>
 		</Filter>
