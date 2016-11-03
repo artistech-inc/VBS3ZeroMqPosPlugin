@@ -12,12 +12,6 @@
 #include <stdlib.h>
 #include "Vbs3GetPos.pb.h"
 
-//#include <czmq.h>
-//#include <zwssock.h>
-#if defined(CZMQ_EXPORT)
-#define HAVE_MODE_T
-#endif
-
 #include <pthread.h>
 #include <semaphore.h>
 
@@ -34,7 +28,6 @@ zmq::socket_t *publisher;
 zmq::context_t *context;
 sem_t sem;
 pthread_t thread;
-pthread_t listener_thread;
 bool running;
 
 void *listener_thread_func(void* arg)
@@ -52,25 +45,32 @@ void *listener_thread_func(void* arg)
 
 	while(running) {
 		try {
+#if _DEBUG
+			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+			file << "wait..." << endl;
+			file.close();
+#endif
 			zmq::message_t request;
 
 			//  Wait for next request from client
 			listener.recv (&request);
-			//std::cout << request.data() << std::endl;
+
+			zmq::message_t reply (5);
+			memcpy (reply.data (), "World", 5);
+			listener.send (reply);
+#if _DEBUG
+			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+			file << reply.data() << endl;
+			file.close();
+#endif
 		} catch(std::exception err) {
 			running = false;
-			//std::cerr << "Err: " << err.what() << std::endl;
 #if _DEBUG
 			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 			file << "thread 2 ex: " << err.what() << endl;
 			file.close();
 #endif
 		}
-
-        ////  Send reply back to client
-        //zmq::message_t reply (5);
-        //memcpy (reply.data (), "World", 5);
-        //socket.send (reply);
 	}
 
 #if _DEBUG
@@ -82,15 +82,40 @@ void *listener_thread_func(void* arg)
 	return NULL;
 }
 
+int send_hello()
+{
+    //  Prepare our context and socket
+    zmq::context_t context (1);
+    zmq::socket_t socket (context, ZMQ_REQ);
+
+    socket.connect ("tcp://localhost:5555");
+
+    //  Do 10 requests, waiting each time for a response
+    zmq::message_t request (5);
+    memcpy (request.data (), "Hello", 5);
+    socket.send (request);
+
+    //  Get the reply.
+    zmq::message_t reply;
+    socket.recv (&reply);
+    return 0;
+}
+
 void *thread_func(void* arg)
 {
 	running = true;
+	//pthread_create(&listener_thread, NULL, winsock_thread, NULL);
+	pthread_t listener_thread;
 	pthread_create(&listener_thread, NULL, listener_thread_func, NULL);
 
 	context = new zmq::context_t(1);
 	publisher = new zmq::socket_t(*context, ZMQ_PUB);
 	publisher->bind("tcp://*:5551");
 
+//	while(running) {
+//		Sleep(1000);
+//		send_hello();
+//	}
 	sem_wait(&sem);
 
 #if _DEBUG
@@ -99,27 +124,15 @@ void *thread_func(void* arg)
 	file << "message sending" << endl;
 	file.close();
 #endif
-	//shutdown the other thread.
-	running = false;
-	zmq::socket_t sock(*context, ZMQ_REQ);
-	zmq::message_t request(5);
-	memcpy (request.data (), "Hello", 5);
-	sock.connect("tcp://localhost:5555");
-	sock.send(request);
 
-#if _DEBUG
-	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
-	file << "message sending" << endl;
-	file.close();
-#endif
+	running = false;
+	send_hello();
 
 #if _DEBUG
 	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 	file << "message sent" << endl;
 	file.close();
 #endif
-
-	pthread_join(listener_thread, NULL);
 
 	//CANNOT CURRENTLY CLOSE W/O CRASH!
 	delete publisher;
@@ -234,6 +247,7 @@ BOOL WINAPI DllMain(HINSTANCE hDll, DWORD fdwReason, LPVOID lpvReserved)
 			file << "Called DllMain with DLL_PROCESS_DETACH" << endl;
 			file.flush();
 #endif
+			running = false;
 			sem_post(&sem);
 			Sleep(1000);
 			sem_destroy(&sem);
