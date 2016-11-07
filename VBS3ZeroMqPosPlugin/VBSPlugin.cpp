@@ -55,13 +55,28 @@ void *listener_thread_func(void* arg)
 			//  Wait for next request from client
 			listener.recv (&request);
 
+			VBS3::Command command;
+			//std::string msg_str(static_cast<char*>(request.data()), request.size());
+			command.ParseFromArray(request.data(), request.size());
+
+			ExecuteCommand(command.cmd().c_str(), NULL, 0);
+
+			//char *pos = new char[255];
+			//VBS3::Position posBuffer;
+			//ExecuteCommand("getPos player", pos, 255);
+			//posBuffer.set_x(atof(strtok(pos, "[],")));
+			//posBuffer.set_y(atof(strtok(NULL, "[],")));
+			//posBuffer.set_z(atof(strtok(NULL, "[],")));
+			//posBuffer.set_deltat(deltaT);
+
+
 			zmq::message_t reply (5);
 			memcpy (reply.data (), "World", 5);
 			listener.send (reply);
 #if _DEBUG
-			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
-			file << reply.data() << endl;
-			file.close();
+//			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+//			file << reply.data() << endl;
+//			file.close();
 #endif
 		} catch(std::exception err) {
 			running = false;
@@ -126,7 +141,7 @@ void *thread_func(void* arg)
 #endif
 
 	running = false;
-	send_hello();
+	//send_hello();
 
 #if _DEBUG
 	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);

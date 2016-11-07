@@ -42,3 +42,4 @@
 *.suo
 /Vbs3PosSubscriber/target/
 /vbs3-pos-subscriber/target/
+/vbs3-command-pusher/target/
