@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VBS3 - Map Test (D3JS)</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" 
+              type="image/png" 
+              href="favicon.png" />
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <script type="text/javascript" src="./js/d3-3.5.6-min.js"></script>
+        <script type="text/javascript" src="./js/queue-1.0.7.js"></script>
+        <script type="text/javascript" src="./js/topojson-1.6.19.js"></script>
+
+        <script type="text/javascript" src="./js/Long-2.2.5-min.js"></script>
+        <script type="text/javascript" src="./js/ByteBufferAB-4.0.0-min.js"></script>
+        <script type="text/javascript" src="./js/ProtoBuf-4.0.0-min.js"></script>
+    </head>
+    <body>
+        <div id="map">
+            <style>
+                .g-graphic {
+                    position: relative;
+                }
+
+                #g-play-button {
+                    position: absolute;
+                    top: 15px;
+                    left: 10px;
+                    background: #004276;
+                    padding-right: 26px;
+                    border-radius: 2px;
+                    border: none;
+                    color: white;
+                    margin: 0;
+                    padding: 0 12px;
+                    width: 68px;
+                    cursor: pointer;
+                    height: 30px;
+                    font: 13px sans-serif;
+                }
+
+                #g-play-button:hover {
+                    background-color: #064d84;
+                }
+
+                #g-play-button:active {
+                    background-color: #002657;
+                }
+
+                .g-graphic svg {
+                    border-top: solid 1px #ccc;
+                    font-family: Arial;
+                }
+
+                .g-background {
+                    fill: #e0e9ef;
+                }
+
+                .g-land {
+                    fill: white;
+                }
+
+                .g-course {
+                    fill: none;
+                    stroke: #333;
+                }
+
+                .g-course-crossed {
+                    stroke-dasharray: 2,3;
+                }
+
+                .g-course-points {
+                    fill: #fff;
+                    stroke: #000;
+                    stroke-width: 1.5px;
+                }
+
+                .g-course-labels {
+                    font: bold 11px sans-serif;
+                    text-anchor: middle;
+                    text-transform: capitalize;
+                }
+
+                .g-shoreline {
+                    fill: none;
+                    stroke: none;
+                    stroke-width: 1px;
+                    stroke-linejoin: round;
+                }
+
+                .g-trail,
+                .g-track {
+                    fill: none;
+                    stroke: #000;
+                    stroke-linejoin: round;
+                    stroke-linecap: round;
+                }
+
+                .g-track {
+                    stroke-opacity: .2;
+                }
+
+                .g-trail {
+                    stroke-width: 1.5px;
+                }
+
+                .g-boat circle {
+                    stroke: #000;
+                    stroke-opacity: .1;
+                    stroke-width: 3px;
+                }
+
+                .g-trail-usa,
+                .g-track-usa {
+                    stroke: #B43030;
+                }
+
+                .g-trail-nzl,
+                .g-track-nzl {
+                    stroke: #405695;
+                }
+
+                .g-boat-usa {
+                    fill: #B43030;
+                }
+
+                .g-boat-nzl {
+                    fill: #405695;
+                }
+
+                .g-axis .tick-special.tick-usa {
+                    fill: #B43030;
+                }
+
+                .g-axis .tick-special.tick-nzl {
+                    fill: #405695;
+                }
+
+                .g-boat text {
+                    text-anchor: middle;
+                    fill: white;
+                    stroke: none;
+                    font-family: Arial;
+                    font-size: 9px;
+                }
+
+                .g-axis {
+                    font: 10px sans-serif;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    user-select: none;
+                    fill: #777;
+                }
+
+                .g-axis .domain {
+                    fill: none;
+                    stroke: #fff;
+                    stroke-width: 8px;
+                    stroke-linecap: round;
+                }
+
+                .g-axis .tick line {
+                    stroke: #aaa;
+                    shape-rendering: crispEdges;
+                }
+
+                .g-axis .tick-special {
+                    font-weight: bold;
+                    fill: black;
+                }
+
+                .g-axis .g-halo {
+                    fill: none;
+                    stroke: #ccc;
+                    stroke-width: 10px;
+                    stroke-linecap: round;
+                }
+
+                .g-slider .background {
+                    cursor: ew-resize !important;
+                }
+
+                .g-slider .g-handle {
+                    fill: #fff;
+                    stroke: #000;
+                    stroke-width: 1.0px;
+                    pointer-events: none;
+                }
+
+                .g-city {
+                    font-family: Arial;
+                    font-size: 11px;
+                    fill: #aaa;
+                }
+
+                .g-island {
+                    font-family: Arial;
+                    font-size: 10px;
+                    fill: #000;
+                    fill-opacity: 0.3;
+                }
+
+                .g-wind text {
+                    text-anchor: middle;
+                    fill: #999;
+                }
+
+                .g-compass circle{
+                    fill: white;
+                    fill-opacity: 0.5;
+                    stroke: none;
+                    stroke-opacity: 0.2;
+                }
+
+                .g-compass line {
+                    stroke: grey;
+                }
+
+            </style>
+            <div class="g-graphic">
+                <button id="g-play-button">Pause</button>
+            </div>
+            <script>(function () {
+
+                    var width = 970,
+                            height = 500,
+                            brushHeight = 60;
+
+                    var moving,
+                            minValue,
+                            maxValue,
+                            currentValue,
+                            targetValue,
+                            trailLength = 30,
+                            alpha = .25;
+
+                    var formatMinute = d3.format("+.0f");
+
+                    var x = d3.scale.linear()
+                            .range([110, width - 40])
+                            .clamp(true);
+
+                    var xTicks = {
+                        "0": "Start",
+                        "1404": "USA",
+                        "1448": "NZL"
+                    };
+
+                    var windFormat = d3.format(".1f");
+
+                    var xAxis = d3.svg.axis()
+                            .scale(x)
+                            .orient("bottom")
+                            .tickFormat(function (t) {
+                                return xTicks[t] || formatMinute(t / 60) + " min.";
+                            })
+                            .tickSize(12, 0)
+                            .tickPadding(0);
+
+                    var brush = d3.svg.brush()
+                            .x(x)
+                            .extent([0, 0])
+                            .on("brush", brushed);
+
+                    var projection = d3.geo.mercator()
+                            .center([-122.429, 37.816])
+                            .scale(700000)
+                            .translate([width / 2, height / 2 + 30])
+                            .clipExtent([[0, 0], [width, height + 1]])
+                            .precision(0);
+
+                    var path = d3.geo.path()
+                            .projection(projection)
+                            .pointRadius(3.5);
+
+                    var playButton = d3.select("#g-play-button");
+
+                    var svg = d3.select(".g-graphic").append("svg")
+                            .attr("width", width)
+                            .attr("height", height);
+
+                    svg.append("rect")
+                            .attr("class", "g-background")
+                            .attr("width", width)
+                            .attr("height", height + 1);
+
+                    var slider,
+                            handle,
+                            track,
+                            trail,
+                            boat,
+                            wind,
+                            gate,
+                            compass;
+
+                    queue()
+                            .defer(d3.json, "./data/topo.json")
+                            .defer(d3.tsv, "./data/usa.tsv", type)
+                            .defer(d3.tsv, "./data/nzl.tsv", type)
+                            .await(ready);
+
+                    function ready(error, topo, usa, nzl) {
+                        var course = topojson.feature(topo, topo.objects.course);
+
+                        indexOffset = -usa[0][2]; // offset from time -> index
+
+                        var boats = [
+                            {type: "LineString", id: "usa", coordinates: usa},
+                            {type: "LineString", id: "nzl", coordinates: nzl}
+                        ];
+
+                        minValue = -indexOffset + trailLength;
+                        maxValue = currentValue = targetValue = usa.length - indexOffset - 1;
+
+                        x.domain([minValue, maxValue]);
+                        xAxis.tickValues(d3.range(0, targetValue, 60 * 5).concat(-180, d3.keys(xTicks)));
+
+                        svg.append("path")
+                                .datum(topojson.mesh(topo, topo.objects.shoreline))
+                                .attr("class", "g-shoreline")
+                                .attr("d", path);
+
+                        svg.append("path")
+                                .datum(topojson.feature(topo, topo.objects.shoreline))
+                                .attr("class", "g-land")
+                                .attr("d", path);
+
+                        gate = svg.append("g")
+                                .attr("class", "g-course")
+                                .selectAll("path")
+                                .data(course.features.filter(function (d) {
+                                    return d.geometry.type === "LineString";
+                                }))
+                                .enter().append("path")
+                                .attr("class", function (d) {
+                                    return "g-course-" + d.id;
+                                })
+                                .attr("d", path);
+
+                        svg.append("path")
+                                .datum({type: "MultiPoint", coordinates: d3.merge(course.features.map(function (d) {
+                                        return d.geometry.type === "LineString" ? d.geometry.coordinates : [d.geometry.coordinates];
+                                    }))})
+                                .attr("class", "g-course-points")
+                                .attr("d", path);
+
+                        svg.append("g")
+                                .attr("class", "g-course-labels")
+                                .selectAll("text")
+                                .data(topojson.feature(topo, topo.objects.labels).features)
+                                .enter().append("text")
+                                .attr("transform", function (d) {
+                                    return "translate(" + projection(d.geometry.coordinates) + ")";
+                                })
+                                .attr("dy", ".35em")
+                                .text(function (d) {
+                                    return d.id;
+                                });
+
+                        var gX = svg.append("g")
+                                .attr("class", "g-x g-axis")
+                                .attr("transform", "translate(0," + brushHeight / 2 + ")")
+                                .call(xAxis);
+
+                        gX.select(".domain")
+                                .select(function () {
+                                    return this.parentNode.insertBefore(this.cloneNode(true), this);
+                                })
+                                .attr("class", "g-halo");
+
+                        var tick = gX.selectAll(".tick")
+                                .each(function () {
+                                    this.parentNode.appendChild(this);
+                                });
+
+                        tick.select("line")
+                                .attr("y1", -8)
+                                .attr("y2", 8);
+
+                        tick.filter(function (d) {
+                            return d in xTicks;
+                        }).attr("class", function (d) {
+                            return "tick tick-special tick-" + xTicks[d].toLowerCase();
+                        });
+
+                        slider = svg.append("g")
+                                .attr("class", "g-slider")
+                                .call(brush);
+
+                        slider.selectAll(".extent,.resize")
+                                .remove();
+
+                        slider.select(".background")
+                                .attr("height", brushHeight);
+
+                        handle = slider.append("circle")
+                                .attr("class", "g-handle")
+                                .attr("transform", "translate(0," + brushHeight / 2 + ")")
+                                .attr("r", 8);
+
+                        track = svg.selectAll(".g-track")
+                                .data(boats)
+                                .enter().append("path")
+                                .attr("class", function (d) {
+                                    return "g-track g-track-" + d.id;
+                                });
+
+                        trail = svg.selectAll(".g-trail")
+                                .data(boats)
+                                .enter().append("path")
+                                .attr("class", function (d) {
+                                    return "g-trail g-trail-" + d.id;
+                                });
+
+                        boat = svg.selectAll(".g-boat")
+                                .data(boats)
+                                .enter().append("g")
+                                .attr("class", function (d) {
+                                    return "g-boat g-boat-" + d.id;
+                                })
+
+                        boat.append("circle").attr("r", 7);
+
+                        boat.append("text")
+                                .text(function (d) {
+                                    return d.id.substr(0, 2);
+                                })
+                                .attr("dy", "0.3em");
+
+                        d3.select(window)
+                                .on("keydown", keydowned);
+
+                        wind = svg.append("g")
+                                .datum(usa)
+                                .attr("class", "g-wind")
+                                .attr("transform", "translate(900,130)");
+
+                        wind.append("text")
+                                .attr("dy", -18)
+                                .text("Wind");
+
+                        wind.append("text")
+                                .attr("class", "g-speed")
+                                .attr("dy", 22)
+                                .text("");
+
+                        compass = wind.append("g")
+                                .attr("class", "g-compass")
+
+                        compass.append("circle")
+                                .attr("r", 10);
+
+                        compass.append("line")
+                                .attr("x1", 0)
+                                .attr("x2", 0)
+                                .attr("y1", 10)
+                                .attr("y2", -10);
+
+                        compass.append("line")
+                                .attr("x1", 0)
+                                .attr("x2", -4)
+                                .attr("y1", -10)
+                                .attr("y2", -6);
+
+                        compass.append("line")
+                                .attr("x1", 0)
+                                .attr("x2", 4)
+                                .attr("y1", -10)
+                                .attr("y2", -6);
+
+                        svg.append("text")
+                                .attr("x", width / 2)
+                                .attr("y", height - 20)
+                                .attr("class", "g-city")
+                                .text("San Francisco");
+
+                        svg.append("text")
+                                .attr("x", 530)
+                                .attr("y", 120)
+                                .attr("class", "g-island")
+                                .text("Alcatraz Island");
+
+                        playButton
+                                .on("click", paused)
+                                .each(paused);
+                    }
+
+                    function paused() {
+                        if (slider.node().__transition__) {
+                            slider.interrupt();
+                            this.textContent = "Play";
+                        } else {
+                            if (currentValue === maxValue)
+                                slider
+                                        .call(brush.extent([currentValue = minValue, currentValue]))
+                                        .call(brush.event)
+                                        .call(brushBackground);
+
+                            targetValue = maxValue;
+
+                            slider.transition()
+                                    .duration((targetValue - currentValue) / (targetValue - minValue) * 20000)
+                                    .ease("linear")
+                                    .call(brush.extent([targetValue, targetValue]))
+                                    .call(brush.event)
+                                    .call(brushBackground);
+
+                            this.textContent = "Pause";
+                        }
+                    }
+
+                    function keydowned() {
+                        if (d3.event.metaKey || d3.event.altKey)
+                            return;
+                        switch (d3.event.keyCode) {
+                            case 37:
+                                targetValue = Math.max(x.domain()[0], currentValue - trailLength);
+                                break;
+                            case 39:
+                                targetValue = Math.min(x.domain()[1], currentValue + trailLength);
+                                break;
+                            default:
+                                return;
+                        }
+                        playButton.text("Play");
+                        slider.interrupt();
+                        move();
+                        d3.event.preventDefault();
+                    }
+
+                    function brushed() {
+                        if (d3.event.sourceEvent) { // not a programmatic event
+                            if (d3.event.sourceEvent.target.parentNode === this) { // clicked on the brush
+                                playButton.text("Play");
+                                targetValue = x.invert(d3.mouse(this)[0]);
+                                move();
+                            }
+                        } else {
+                            currentValue = brush.extent()[0];
+                            handle.attr("cx", x(currentValue));
+                            var i = Math.round(currentValue) + indexOffset;
+                            gate.classed("g-course-crossed", function (d) {
+                                return currentValue >= d.properties.time;
+                            });
+                            boat.attr("transform", function (d) {
+                                return "translate(" + projection(d.coordinates[i]) + ")";
+                            });
+                            track.attr("d", function (d) {
+                                return path({type: "LineString", coordinates: d.coordinates.slice(0, i + 1)});
+                            });
+                            trail.attr("d", function (d) {
+                                return path({type: "LineString", coordinates: d.coordinates.slice(Math.max(0, i - trailLength), i + 1)});
+                            });
+                            wind.select(".g-speed").text(function (d) {
+                                return windFormat(d[i][3]) + " knots";
+                            });
+                            compass.attr("transform", function (d) {
+                                return "rotate(" + (180 + d[i][4]) + ")";
+                            });
+                        }
+                    }
+
+                    function brushBackground() {
+                        slider.select(".background")
+                                .attr("x", -40)
+                                .attr("width", width + 40);
+                    }
+
+                    function move() {
+                        var copyValue = currentValue; // detect interrupt
+                        if (moving)
+                            return false;
+                        moving = true;
+
+                        d3.timer(function () {
+                            if (copyValue !== currentValue)
+                                return !(moving = false);
+
+                            copyValue = currentValue = Math.abs(currentValue - targetValue) < 1e-3
+                                    ? targetValue
+                                    : targetValue * alpha + currentValue * (1 - alpha);
+
+                            slider
+                                    .call(brush.extent([currentValue, currentValue]))
+                                    .call(brush.event)
+                                    .call(brushBackground);
+
+                            return !(moving = currentValue !== targetValue);
+                        });
+                    }
+
+                    function type(d) {
+                        return [+d.x, +d.y, +d.t, +d.ws, +d.wd];
+                    }
+
+                })()</script>
+        </div>
+    </body>
+</html>

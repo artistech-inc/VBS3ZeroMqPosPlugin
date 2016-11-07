@@ -3,10 +3,6 @@ package VBS3;
 option java_package = "com.artistech.vbs3";
 option java_outer_classname = "Vbs3Protos";
 
-message Command {
-    required string cmd = 1;
-}
-
 message Position {
     required float x = 1;
     required float y = 2;

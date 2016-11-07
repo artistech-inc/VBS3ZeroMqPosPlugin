@@ -20,6 +20,9 @@ namespace VBS3 {
 
 namespace {
 
+const ::google::protobuf::Descriptor* Command_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Command_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Position_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Position_reflection_ = NULL;
@@ -33,7 +36,22 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "Vbs3GetPos.proto");
   GOOGLE_CHECK(file != NULL);
-  Position_descriptor_ = file->message_type(0);
+  Command_descriptor_ = file->message_type(0);
+  static const int Command_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, cmd_),
+  };
+  Command_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Command_descriptor_,
+      Command::default_instance_,
+      Command_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Command));
+  Position_descriptor_ = file->message_type(1);
   static const int Position_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, y_),
@@ -68,12 +86,16 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Command_descriptor_, &Command::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Position_descriptor_, &Position::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_Vbs3GetPos_2eproto() {
+  delete Command::default_instance_;
+  delete Command_reflection_;
   delete Position::default_instance_;
   delete Position_reflection_;
 }
@@ -85,14 +107,17 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020Vbs3GetPos.proto\022\004VBS3\"\200\001\n\010Position\022\t\n"
-    "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT"
-    "\030\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014world"
-    "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002B \n\022c"
-    "om.artistech.vbs3B\nVbs3Protos", 189);
+    "\n\020Vbs3GetPos.proto\022\004VBS3\"\026\n\007Command\022\013\n\003c"
+    "md\030\001 \002(\t\"\200\001\n\010Position\022\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 "
+    "\002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT\030\004 \001(\002\022\n\n\002id\030\005 \001"
+    "(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014worldCenterX\030\007 \002(\002\022\024\n"
+    "\014worldCenterY\030\010 \002(\002B \n\022com.artistech.vbs"
+    "3B\nVbs3Protos", 213);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
+  Command::default_instance_ = new Command();
   Position::default_instance_ = new Position();
+  Command::default_instance_->InitAsDefaultInstance();
   Position::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_Vbs3GetPos_2eproto);
 }
@@ -103,6 +128,250 @@ struct StaticDescriptorInitializer_Vbs3GetPos_2eproto {
     protobuf_AddDesc_Vbs3GetPos_2eproto();
   }
 } static_descriptor_initializer_Vbs3GetPos_2eproto_;
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int Command::kCmdFieldNumber;
+#endif  // !_MSC_VER
+
+Command::Command()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:VBS3.Command)
+}
+
+void Command::InitAsDefaultInstance() {
+}
+
+Command::Command(const Command& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:VBS3.Command)
+}
+
+void Command::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Command::~Command() {
+  // @@protoc_insertion_point(destructor:VBS3.Command)
+  SharedDtor();
+}
+
+void Command::SharedDtor() {
+  if (cmd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete cmd_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void Command::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Command::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Command_descriptor_;
+}
+
+const Command& Command::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_Vbs3GetPos_2eproto();
+  return *default_instance_;
+}
+
+Command* Command::default_instance_ = NULL;
+
+Command* Command::New() const {
+  return new Command;
+}
+
+void Command::Clear() {
+  if (has_cmd()) {
+    if (cmd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      cmd_->clear();
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Command::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:VBS3.Command)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string cmd = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_cmd()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->cmd().data(), this->cmd().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "cmd");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:VBS3.Command)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:VBS3.Command)
+  return false;
+#undef DO_
+}
+
+void Command::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:VBS3.Command)
+  // required string cmd = 1;
+  if (has_cmd()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->cmd().data(), this->cmd().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "cmd");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->cmd(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:VBS3.Command)
+}
+
+::google::protobuf::uint8* Command::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:VBS3.Command)
+  // required string cmd = 1;
+  if (has_cmd()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->cmd().data(), this->cmd().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "cmd");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->cmd(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:VBS3.Command)
+  return target;
+}
+
+int Command::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string cmd = 1;
+    if (has_cmd()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->cmd());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Command::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Command* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Command*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Command::MergeFrom(const Command& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_cmd()) {
+      set_cmd(from.cmd());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Command::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Command::CopyFrom(const Command& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Command::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void Command::Swap(Command* other) {
+  if (other != this) {
+    std::swap(cmd_, other->cmd_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Command::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Command_descriptor_;
+  metadata.reflection = Command_reflection_;
+  return metadata;
+}
+
 
 // ===================================================================
 

@@ -33,9 +33,94 @@ void  protobuf_AddDesc_Vbs3GetPos_2eproto();
 void protobuf_AssignDesc_Vbs3GetPos_2eproto();
 void protobuf_ShutdownFile_Vbs3GetPos_2eproto();
 
+class Command;
 class Position;
 
 // ===================================================================
+
+class Command : public ::google::protobuf::Message {
+ public:
+  Command();
+  virtual ~Command();
+
+  Command(const Command& from);
+
+  inline Command& operator=(const Command& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Command& default_instance();
+
+  void Swap(Command* other);
+
+  // implements Message ----------------------------------------------
+
+  Command* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Command& from);
+  void MergeFrom(const Command& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string cmd = 1;
+  inline bool has_cmd() const;
+  inline void clear_cmd();
+  static const int kCmdFieldNumber = 1;
+  inline const ::std::string& cmd() const;
+  inline void set_cmd(const ::std::string& value);
+  inline void set_cmd(const char* value);
+  inline void set_cmd(const char* value, size_t size);
+  inline ::std::string* mutable_cmd();
+  inline ::std::string* release_cmd();
+  inline void set_allocated_cmd(::std::string* cmd);
+
+  // @@protoc_insertion_point(class_scope:VBS3.Command)
+ private:
+  inline void set_has_cmd();
+  inline void clear_has_cmd();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* cmd_;
+  friend void  protobuf_AddDesc_Vbs3GetPos_2eproto();
+  friend void protobuf_AssignDesc_Vbs3GetPos_2eproto();
+  friend void protobuf_ShutdownFile_Vbs3GetPos_2eproto();
+
+  void InitAsDefaultInstance();
+  static Command* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class Position : public ::google::protobuf::Message {
  public:
@@ -193,6 +278,86 @@ class Position : public ::google::protobuf::Message {
 
 
 // ===================================================================
+
+// Command
+
+// required string cmd = 1;
+inline bool Command::has_cmd() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Command::set_has_cmd() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Command::clear_has_cmd() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Command::clear_cmd() {
+  if (cmd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    cmd_->clear();
+  }
+  clear_has_cmd();
+}
+inline const ::std::string& Command::cmd() const {
+  // @@protoc_insertion_point(field_get:VBS3.Command.cmd)
+  return *cmd_;
+}
+inline void Command::set_cmd(const ::std::string& value) {
+  set_has_cmd();
+  if (cmd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    cmd_ = new ::std::string;
+  }
+  cmd_->assign(value);
+  // @@protoc_insertion_point(field_set:VBS3.Command.cmd)
+}
+inline void Command::set_cmd(const char* value) {
+  set_has_cmd();
+  if (cmd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    cmd_ = new ::std::string;
+  }
+  cmd_->assign(value);
+  // @@protoc_insertion_point(field_set_char:VBS3.Command.cmd)
+}
+inline void Command::set_cmd(const char* value, size_t size) {
+  set_has_cmd();
+  if (cmd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    cmd_ = new ::std::string;
+  }
+  cmd_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:VBS3.Command.cmd)
+}
+inline ::std::string* Command::mutable_cmd() {
+  set_has_cmd();
+  if (cmd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    cmd_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:VBS3.Command.cmd)
+  return cmd_;
+}
+inline ::std::string* Command::release_cmd() {
+  clear_has_cmd();
+  if (cmd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = cmd_;
+    cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Command::set_allocated_cmd(::std::string* cmd) {
+  if (cmd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete cmd_;
+  }
+  if (cmd) {
+    set_has_cmd();
+    cmd_ = cmd;
+  } else {
+    clear_has_cmd();
+    cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:VBS3.Command.cmd)
+}
+
+// -------------------------------------------------------------------
 
 // Position
 
