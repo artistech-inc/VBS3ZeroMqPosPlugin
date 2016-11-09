@@ -56,23 +56,21 @@ void *listener_thread_func(void* arg)
 			listener.recv (&request);
 
 			VBS3::Command command;
-			//std::string msg_str(static_cast<char*>(request.data()), request.size());
 			command.ParseFromArray(request.data(), request.size());
 
-			ExecuteCommand(command.cmd().c_str(), NULL, 0);
+			char *pos = new char[255];
+			ExecuteCommand(command.cmd().c_str(), pos, 255);
+			VBS3::Command cmdBuffer;
+			cmdBuffer.set_cmd(pos);
 
-			//char *pos = new char[255];
-			//VBS3::Position posBuffer;
-			//ExecuteCommand("getPos player", pos, 255);
-			//posBuffer.set_x(atof(strtok(pos, "[],")));
-			//posBuffer.set_y(atof(strtok(NULL, "[],")));
-			//posBuffer.set_z(atof(strtok(NULL, "[],")));
-			//posBuffer.set_deltat(deltaT);
+			int size = cmdBuffer.ByteSize();
+			void *data = malloc(size);
+			cmdBuffer.SerializeToArray(data, size);
+			listener.send(data, size);
 
+			delete[] pos;
+			free(data);
 
-			zmq::message_t reply (5);
-			memcpy (reply.data (), "World", 5);
-			listener.send (reply);
 #if _DEBUG
 //			file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 //			file << reply.data() << endl;
