@@ -200,8 +200,11 @@ public class Main {
                         byte[] recv = subscriber.recv();
                         if (recv.length > 0) {
                             try {
+                                Vbs3Protos.Position pos = Vbs3Protos.Position.parseFrom(recv);
+                                System.out.println("X " + pos.getX());
+                                System.out.println("Y " + pos.getY());
                                 for (PositionBroadcaster b : broadcasters) {
-                                    b.broadcastPosition(Vbs3Protos.Position.parseFrom(recv));
+                                    b.broadcastPosition(pos);
                                 }
                                 success = true;
                             } catch (Exception ex) {

@@ -12,4 +12,6 @@ message Position {
     required float dir = 6;
     required float worldCenterX = 7;
     required float worldCenterY = 8;
+    optional string lat = 9;
+    optional string lon = 10;
 }
