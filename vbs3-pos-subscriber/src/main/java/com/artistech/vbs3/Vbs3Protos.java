@@ -88,6 +88,34 @@ public final class Vbs3Protos {
      * <code>required float worldCenterY = 8;</code>
      */
     float getWorldCenterY();
+
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    boolean hasLat();
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    java.lang.String getLat();
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getLatBytes();
+
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    boolean hasLon();
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    java.lang.String getLon();
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getLonBytes();
   }
   /**
    * Protobuf type {@code VBS3.Position}
@@ -180,6 +208,18 @@ public final class Vbs3Protos {
             case 69: {
               bitField0_ |= 0x00000080;
               worldCenterY_ = input.readFloat();
+              break;
+            }
+            case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000100;
+              lat_ = bs;
+              break;
+            }
+            case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000200;
+              lon_ = bs;
               break;
             }
           }
@@ -369,6 +409,90 @@ public final class Vbs3Protos {
       return worldCenterY_;
     }
 
+    public static final int LAT_FIELD_NUMBER = 9;
+    private java.lang.Object lat_;
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    public boolean hasLat() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    public java.lang.String getLat() {
+      java.lang.Object ref = lat_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          lat_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string lat = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getLatBytes() {
+      java.lang.Object ref = lat_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lat_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LON_FIELD_NUMBER = 10;
+    private java.lang.Object lon_;
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    public boolean hasLon() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    public java.lang.String getLon() {
+      java.lang.Object ref = lon_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          lon_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string lon = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getLonBytes() {
+      java.lang.Object ref = lon_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lon_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       x_ = 0F;
       y_ = 0F;
@@ -378,6 +502,8 @@ public final class Vbs3Protos {
       dir_ = 0F;
       worldCenterX_ = 0F;
       worldCenterY_ = 0F;
+      lat_ = "";
+      lon_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -440,6 +566,12 @@ public final class Vbs3Protos {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeFloat(8, worldCenterY_);
       }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(9, getLatBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeBytes(10, getLonBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -480,6 +612,14 @@ public final class Vbs3Protos {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(8, worldCenterY_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, getLatBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getLonBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -614,6 +754,10 @@ public final class Vbs3Protos {
         bitField0_ = (bitField0_ & ~0x00000040);
         worldCenterY_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000080);
+        lat_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
+        lon_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -674,6 +818,14 @@ public final class Vbs3Protos {
           to_bitField0_ |= 0x00000080;
         }
         result.worldCenterY_ = worldCenterY_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.lat_ = lat_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.lon_ = lon_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -715,6 +867,16 @@ public final class Vbs3Protos {
         }
         if (other.hasWorldCenterY()) {
           setWorldCenterY(other.getWorldCenterY());
+        }
+        if (other.hasLat()) {
+          bitField0_ |= 0x00000100;
+          lat_ = other.lat_;
+          onChanged();
+        }
+        if (other.hasLon()) {
+          bitField0_ |= 0x00000200;
+          lon_ = other.lon_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1067,6 +1229,158 @@ public final class Vbs3Protos {
         return this;
       }
 
+      private java.lang.Object lat_ = "";
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public boolean hasLat() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public java.lang.String getLat() {
+        java.lang.Object ref = lat_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lat_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getLatBytes() {
+        java.lang.Object ref = lat_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lat_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public Builder setLat(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        lat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public Builder clearLat() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        lat_ = getDefaultInstance().getLat();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string lat = 9;</code>
+       */
+      public Builder setLatBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        lat_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lon_ = "";
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public boolean hasLon() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public java.lang.String getLon() {
+        java.lang.Object ref = lon_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lon_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getLonBytes() {
+        java.lang.Object ref = lon_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lon_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public Builder setLon(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        lon_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public Builder clearLon() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        lon_ = getDefaultInstance().getLon();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string lon = 10;</code>
+       */
+      public Builder setLonBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        lon_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:VBS3.Position)
     }
 
@@ -1092,11 +1406,12 @@ public final class Vbs3Protos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020Vbs3GetPos.proto\022\004VBS3\"\200\001\n\010Position\022\t\n" +
+      "\n\020Vbs3GetPos.proto\022\004VBS3\"\232\001\n\010Position\022\t\n" +
       "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT" +
       "\030\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014world" +
-      "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002B \n\022c" +
-      "om.artistech.vbs3B\nVbs3Protos"
+      "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002\022\013\n\003l" +
+      "at\030\t \001(\t\022\013\n\003lon\030\n \001(\tB \n\022com.artistech.v" +
+      "bs3B\nVbs3Protos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1115,7 +1430,7 @@ public final class Vbs3Protos {
     internal_static_VBS3_Position_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_VBS3_Position_descriptor,
-        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", "Dir", "WorldCenterX", "WorldCenterY", });
+        new java.lang.String[] { "X", "Y", "Z", "DeltaT", "Id", "Dir", "WorldCenterX", "WorldCenterY", "Lat", "Lon", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
