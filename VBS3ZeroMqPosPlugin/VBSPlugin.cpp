@@ -96,8 +96,8 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 	posBuffer.set_id(pos);
 	string postocoord = "posToCoord [[" + string(x) + "," + string(y) + "], 'LL']";
 	ExecuteCommand(postocoord.c_str(), pos, 255);
-//	posBuffer.set_lat(strtok(pos, "[],")));
-//	posBuffer.set_lon(strtok(NULL, "[],")));
+	posBuffer.set_lat(strtok(pos, "[],"));
+	posBuffer.set_lon(strtok(NULL, "[],"));
 
 	delete [] pos;
 
