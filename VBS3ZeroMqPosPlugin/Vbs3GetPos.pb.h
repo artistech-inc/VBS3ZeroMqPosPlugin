@@ -151,6 +151,30 @@ class Position : public ::google::protobuf::Message {
   inline float worldcentery() const;
   inline void set_worldcentery(float value);
 
+  // optional string lat = 9;
+  inline bool has_lat() const;
+  inline void clear_lat();
+  static const int kLatFieldNumber = 9;
+  inline const ::std::string& lat() const;
+  inline void set_lat(const ::std::string& value);
+  inline void set_lat(const char* value);
+  inline void set_lat(const char* value, size_t size);
+  inline ::std::string* mutable_lat();
+  inline ::std::string* release_lat();
+  inline void set_allocated_lat(::std::string* lat);
+
+  // optional string lon = 10;
+  inline bool has_lon() const;
+  inline void clear_lon();
+  static const int kLonFieldNumber = 10;
+  inline const ::std::string& lon() const;
+  inline void set_lon(const ::std::string& value);
+  inline void set_lon(const char* value);
+  inline void set_lon(const char* value, size_t size);
+  inline ::std::string* mutable_lon();
+  inline ::std::string* release_lon();
+  inline void set_allocated_lon(::std::string* lon);
+
   // @@protoc_insertion_point(class_scope:VBS3.Position)
  private:
   inline void set_has_x();
@@ -169,6 +193,10 @@ class Position : public ::google::protobuf::Message {
   inline void clear_has_worldcenterx();
   inline void set_has_worldcentery();
   inline void clear_has_worldcentery();
+  inline void set_has_lat();
+  inline void clear_has_lat();
+  inline void set_has_lon();
+  inline void clear_has_lon();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -181,6 +209,8 @@ class Position : public ::google::protobuf::Message {
   ::std::string* id_;
   float dir_;
   float worldcenterx_;
+  ::std::string* lat_;
+  ::std::string* lon_;
   float worldcentery_;
   friend void  protobuf_AddDesc_Vbs3GetPos_2eproto();
   friend void protobuf_AssignDesc_Vbs3GetPos_2eproto();
@@ -438,6 +468,158 @@ inline void Position::set_worldcentery(float value) {
   set_has_worldcentery();
   worldcentery_ = value;
   // @@protoc_insertion_point(field_set:VBS3.Position.worldCenterY)
+}
+
+// optional string lat = 9;
+inline bool Position::has_lat() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void Position::set_has_lat() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void Position::clear_has_lat() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void Position::clear_lat() {
+  if (lat_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lat_->clear();
+  }
+  clear_has_lat();
+}
+inline const ::std::string& Position::lat() const {
+  // @@protoc_insertion_point(field_get:VBS3.Position.lat)
+  return *lat_;
+}
+inline void Position::set_lat(const ::std::string& value) {
+  set_has_lat();
+  if (lat_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lat_ = new ::std::string;
+  }
+  lat_->assign(value);
+  // @@protoc_insertion_point(field_set:VBS3.Position.lat)
+}
+inline void Position::set_lat(const char* value) {
+  set_has_lat();
+  if (lat_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lat_ = new ::std::string;
+  }
+  lat_->assign(value);
+  // @@protoc_insertion_point(field_set_char:VBS3.Position.lat)
+}
+inline void Position::set_lat(const char* value, size_t size) {
+  set_has_lat();
+  if (lat_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lat_ = new ::std::string;
+  }
+  lat_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:VBS3.Position.lat)
+}
+inline ::std::string* Position::mutable_lat() {
+  set_has_lat();
+  if (lat_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lat_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:VBS3.Position.lat)
+  return lat_;
+}
+inline ::std::string* Position::release_lat() {
+  clear_has_lat();
+  if (lat_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = lat_;
+    lat_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Position::set_allocated_lat(::std::string* lat) {
+  if (lat_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete lat_;
+  }
+  if (lat) {
+    set_has_lat();
+    lat_ = lat;
+  } else {
+    clear_has_lat();
+    lat_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:VBS3.Position.lat)
+}
+
+// optional string lon = 10;
+inline bool Position::has_lon() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Position::set_has_lon() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Position::clear_has_lon() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Position::clear_lon() {
+  if (lon_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lon_->clear();
+  }
+  clear_has_lon();
+}
+inline const ::std::string& Position::lon() const {
+  // @@protoc_insertion_point(field_get:VBS3.Position.lon)
+  return *lon_;
+}
+inline void Position::set_lon(const ::std::string& value) {
+  set_has_lon();
+  if (lon_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lon_ = new ::std::string;
+  }
+  lon_->assign(value);
+  // @@protoc_insertion_point(field_set:VBS3.Position.lon)
+}
+inline void Position::set_lon(const char* value) {
+  set_has_lon();
+  if (lon_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lon_ = new ::std::string;
+  }
+  lon_->assign(value);
+  // @@protoc_insertion_point(field_set_char:VBS3.Position.lon)
+}
+inline void Position::set_lon(const char* value, size_t size) {
+  set_has_lon();
+  if (lon_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lon_ = new ::std::string;
+  }
+  lon_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:VBS3.Position.lon)
+}
+inline ::std::string* Position::mutable_lon() {
+  set_has_lon();
+  if (lon_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    lon_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:VBS3.Position.lon)
+  return lon_;
+}
+inline ::std::string* Position::release_lon() {
+  clear_has_lon();
+  if (lon_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = lon_;
+    lon_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Position::set_allocated_lon(::std::string* lon) {
+  if (lon_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete lon_;
+  }
+  if (lon) {
+    set_has_lon();
+    lon_ = lon;
+  } else {
+    clear_has_lon();
+    lon_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:VBS3.Position.lon)
 }
 
 
