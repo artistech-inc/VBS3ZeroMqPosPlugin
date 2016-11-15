@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #endif
+#include <sstream>
 
 #include <cstring>
 #include <stdlib.h>
@@ -73,8 +74,10 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 
 	VBS3::Position posBuffer;
     ExecuteCommand("getPos player", pos, 255);
-	posBuffer.set_x(atof(strtok(pos, "[],")));
-	posBuffer.set_y(atof(strtok(NULL, "[],")));
+	char* x = strtok(pos, "[],");
+	char* y = strtok(NULL, "[],");
+	posBuffer.set_x(atof(x));
+	posBuffer.set_y(atof(y));
 	posBuffer.set_z(atof(strtok(NULL, "[],")));
 	posBuffer.set_deltat(deltaT);
 
@@ -93,6 +96,25 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 	ExecuteCommand("getPlayerUID player", pos, 255);
 	posBuffer.set_id(pos);
 
+	ostringstream xbuffer;
+	xbuffer << posBuffer.x();
+	string xstr = xbuffer.str();
+
+	ostringstream ybuffer;
+	ybuffer << posBuffer.y();
+	string ystr = ybuffer.str();
+
+	string postocoord = "posToCoord [[" + xbuffer.str() + "," + ybuffer.str() + "], 'LL']";
+	ExecuteCommand(postocoord.c_str(), pos, 255);
+	posBuffer.set_lat(strtok(pos, "[],"));
+	posBuffer.set_lon(strtok(NULL, "[],"));
+#ifdef _DEBUG
+	ofstream file;
+	file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
+	file << "posToCoord: " << postocoord << endl;
+	file.close();
+#endif
+
 	delete [] pos;
 
 	if (posBuffer.x() > 0.0 ||
@@ -107,7 +129,7 @@ VBSPLUGIN_EXPORT void WINAPI OnSimulationStep(float deltaT)
 		free(data);
 
 #ifdef _DEBUG
-		ofstream file;
+//		ofstream file;
 		file.open("C:\\Users\\matta\\Desktop\\getPos.log", ofstream::out | ofstream::app);
 		file << "Protocol Buffer: " << endl << posBuffer.DebugString();
 		file.close();

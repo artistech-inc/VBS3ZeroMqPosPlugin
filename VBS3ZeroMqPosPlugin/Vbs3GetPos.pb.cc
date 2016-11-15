@@ -34,7 +34,7 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
       "Vbs3GetPos.proto");
   GOOGLE_CHECK(file != NULL);
   Position_descriptor_ = file->message_type(0);
-  static const int Position_offsets_[8] = {
+  static const int Position_offsets_[10] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, z_),
@@ -43,6 +43,8 @@ void protobuf_AssignDesc_Vbs3GetPos_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, dir_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, worldcenterx_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, worldcentery_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, lat_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Position, lon_),
   };
   Position_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -85,11 +87,12 @@ void protobuf_AddDesc_Vbs3GetPos_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020Vbs3GetPos.proto\022\004VBS3\"\200\001\n\010Position\022\t\n"
+    "\n\020Vbs3GetPos.proto\022\004VBS3\"\232\001\n\010Position\022\t\n"
     "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\022\016\n\006deltaT"
     "\030\004 \001(\002\022\n\n\002id\030\005 \001(\t\022\013\n\003dir\030\006 \002(\002\022\024\n\014world"
-    "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002B \n\022c"
-    "om.artistech.vbs3B\nVbs3Protos", 189);
+    "CenterX\030\007 \002(\002\022\024\n\014worldCenterY\030\010 \002(\002\022\013\n\003l"
+    "at\030\t \001(\t\022\013\n\003lon\030\n \001(\tB \n\022com.artistech.v"
+    "bs3B\nVbs3Protos", 215);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Vbs3GetPos.proto", &protobuf_RegisterTypes);
   Position::default_instance_ = new Position();
@@ -115,6 +118,8 @@ const int Position::kIdFieldNumber;
 const int Position::kDirFieldNumber;
 const int Position::kWorldCenterXFieldNumber;
 const int Position::kWorldCenterYFieldNumber;
+const int Position::kLatFieldNumber;
+const int Position::kLonFieldNumber;
 #endif  // !_MSC_VER
 
 Position::Position()
@@ -144,6 +149,8 @@ void Position::SharedCtor() {
   dir_ = 0;
   worldcenterx_ = 0;
   worldcentery_ = 0;
+  lat_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  lon_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -155,6 +162,12 @@ Position::~Position() {
 void Position::SharedDtor() {
   if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete id_;
+  }
+  if (lat_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete lat_;
+  }
+  if (lon_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete lon_;
   }
   if (this != default_instance_) {
   }
@@ -194,10 +207,23 @@ void Position::Clear() {
 
   if (_has_bits_[0 / 32] & 255) {
     ZR_(x_, deltat_);
-    ZR_(dir_, worldcentery_);
+    ZR_(dir_, worldcenterx_);
     if (has_id()) {
       if (id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         id_->clear();
+      }
+    }
+    worldcentery_ = 0;
+  }
+  if (_has_bits_[8 / 32] & 768) {
+    if (has_lat()) {
+      if (lat_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        lat_->clear();
+      }
+    }
+    if (has_lon()) {
+      if (lon_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        lon_->clear();
       }
     }
   }
@@ -336,6 +362,40 @@ bool Position::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(74)) goto parse_lat;
+        break;
+      }
+
+      // optional string lat = 9;
+      case 9: {
+        if (tag == 74) {
+         parse_lat:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_lat()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->lat().data(), this->lat().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "lat");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(82)) goto parse_lon;
+        break;
+      }
+
+      // optional string lon = 10;
+      case 10: {
+        if (tag == 82) {
+         parse_lon:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_lon()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->lon().data(), this->lon().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "lon");
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -410,6 +470,26 @@ void Position::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(8, this->worldcentery(), output);
   }
 
+  // optional string lat = 9;
+  if (has_lat()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->lat().data(), this->lat().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "lat");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      9, this->lat(), output);
+  }
+
+  // optional string lon = 10;
+  if (has_lon()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->lon().data(), this->lon().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "lon");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      10, this->lon(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -464,6 +544,28 @@ void Position::SerializeWithCachedSizes(
   // required float worldCenterY = 8;
   if (has_worldcentery()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(8, this->worldcentery(), target);
+  }
+
+  // optional string lat = 9;
+  if (has_lat()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->lat().data(), this->lat().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "lat");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        9, this->lat(), target);
+  }
+
+  // optional string lon = 10;
+  if (has_lon()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->lon().data(), this->lon().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "lon");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        10, this->lon(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -521,6 +623,22 @@ int Position::ByteSize() const {
     }
 
   }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional string lat = 9;
+    if (has_lat()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->lat());
+    }
+
+    // optional string lon = 10;
+    if (has_lon()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->lon());
+    }
+
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -572,6 +690,14 @@ void Position::MergeFrom(const Position& from) {
       set_worldcentery(from.worldcentery());
     }
   }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_lat()) {
+      set_lat(from.lat());
+    }
+    if (from.has_lon()) {
+      set_lon(from.lon());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -603,6 +729,8 @@ void Position::Swap(Position* other) {
     std::swap(dir_, other->dir_);
     std::swap(worldcenterx_, other->worldcenterx_);
     std::swap(worldcentery_, other->worldcentery_);
+    std::swap(lat_, other->lat_);
+    std::swap(lon_, other->lon_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
