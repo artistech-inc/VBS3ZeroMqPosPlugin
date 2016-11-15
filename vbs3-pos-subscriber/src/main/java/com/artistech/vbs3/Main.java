@@ -203,6 +203,8 @@ public class Main {
                                 Vbs3Protos.Position pos = Vbs3Protos.Position.parseFrom(recv);
                                 System.out.println("X " + pos.getX());
                                 System.out.println("Y " + pos.getY());
+                                System.out.println("Lat: " + pos.getLat());
+                                System.out.println("Lon: " + pos.getLon());
                                 for (PositionBroadcaster b : broadcasters) {
                                     b.broadcastPosition(pos);
                                 }
