@@ -15,9 +15,6 @@
  */
 package com.artistech.vbs3;
 
-import com.artistech.geo.Coordinate;
-import com.artistech.geo.GridConversionPoint;
-import com.artistech.utils.ArgumentOutOfRangeException;
 import com.artistech.utils.logging.SingleLineFormatter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -51,22 +48,11 @@ public class Main {
         Options options = new Options();
         options.addOption("j", "jetty-port", true, "Jetty port to serve on. (DEFAULT -j 8888)");
         options.addOption("z", "zeromq-port", true, "ZeroMQ Server:Port to subscribe to. (-z localhost:5565)");
-        options.addOption("q", "min-lat", true, "Min Latitude value.  (DEFAULT -q -90.0)");
-        options.addOption("w", "min-lon", true, "Min Longitude value. (DEFAULT -w -180.0)");
-        options.addOption("e", "max-lat", true, "Max Latitude value.  (DEFAULT -e 90.0)");
-        options.addOption("r", "max-lon", true, "Max Longitude value. (DEFAULT -r 180.0)");
         options.addOption("p", "udp-port", true, "UDP Port for Broadcasting. (DEFAULT 5000)");
         options.addOption("i", "udp-ip", true, "UDP Server Address. (DEFAULT 228.5.6.7)");
-//        options.addOption("c", "do-grid-conversion", false, "Do Grid Conversion. (DEFAULT OFF)");
         options.addOption("h", "help", false, "Show this message.");
         HelpFormatter formatter = new HelpFormatter();
         String[] zeroMqServers;
-
-        Double min_lat = -90.0;
-        Double min_lon = -180.0;
-        Double max_lat = 90.0;
-        Double max_lon = 180.0;
-//        boolean do_grid_conversion = false;
 
         try {
             CommandLineParser parser = new org.apache.commons.cli.BasicParser();
@@ -105,22 +91,6 @@ public class Main {
                 }
             }
             
-//            if (cmd.hasOption("c") || cmd.hasOption("do-grid-conversion")) {
-//                do_grid_conversion = true;
-//            }
-            if (cmd.hasOption("q") || cmd.hasOption("min-lat")) {
-                min_lat = Double.parseDouble(cmd.getOptionValue("q"));
-            }
-            if (cmd.hasOption("w") || cmd.hasOption("min-lon")) {
-                min_lon = Double.parseDouble(cmd.getOptionValue("w"));
-            }
-            if (cmd.hasOption("e") || cmd.hasOption("max-lat")) {
-                max_lat = Double.parseDouble(cmd.getOptionValue("e"));
-            }
-            if (cmd.hasOption("r") || cmd.hasOption("max-lon")) {
-                max_lon = Double.parseDouble(cmd.getOptionValue("r"));
-            }
-
             if (cmd.hasOption("help")) {
                 formatter.printHelp("tuio-mouse-driver", options);
                 return;
@@ -140,16 +110,6 @@ public class Main {
         //create zeromq context
         ZMQ.Context context = ZMQ.context(1);
 
-        double max = Math.max(max_lat, min_lat);
-        double min = Math.min(max_lat, min_lat);
-        max_lat = max;
-        min_lat = min;
-
-        max = Math.max(max_lon, min_lon);
-        min = Math.min(max_lon, min_lon);
-        max_lon = max;
-        min_lon = min;
-        
         int counter = 1;
         final ArrayList<Thread> threads = new ArrayList<>();
 
@@ -157,27 +117,6 @@ public class Main {
         for (PositionBroadcaster b : broadcasters) {
             b.initialize();
             LOGGER.log(Level.INFO, "BROADCASTER:  {0}", b.getClass().getName());
-
-            //initialize LAT/LON for grid conversion...
-            try {
-                GridConversionPoint maxGridConversionPoint = b.getMaxGridConversionPoint();
-                Coordinate c = new Coordinate(max_lon, max_lat);
-                maxGridConversionPoint.setCoordinate(c);
-                LOGGER.log(Level.INFO, "MAX COORDINATE:  {0}", b.getMaxGridConversionPoint().getCoordinate());
-            } catch (ArgumentOutOfRangeException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                GridConversionPoint minGridConversionPoint = b.getMinGridConversionPoint();
-                Coordinate c = new Coordinate(min_lon, min_lat);
-                minGridConversionPoint.setCoordinate(c);
-                LOGGER.log(Level.INFO, "MIN COORDINATE:  {0}", b.getMinGridConversionPoint().getCoordinate());
-            } catch (ArgumentOutOfRangeException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-//            b.setDoGridConversion(do_grid_conversion);
-            LOGGER.log(Level.INFO, "PERFORMING POINT CONVERSION:  {0}", b.getDoGridConversion());
         }
 
         for (String zeroMqServer : zeroMqServers) {
@@ -201,10 +140,10 @@ public class Main {
                         if (recv.length > 0) {
                             try {
                                 Vbs3Protos.Position pos = Vbs3Protos.Position.parseFrom(recv);
-                                System.out.println("X " + pos.getX());
-                                System.out.println("Y " + pos.getY());
-                                System.out.println("Lat: " + pos.getLat());
-                                System.out.println("Lon: " + pos.getLon());
+                                LOGGER.log(Level.FINEST, "X: {0}", pos.getX());
+                                LOGGER.log(Level.FINEST, "Y: {0}", pos.getY());
+                                LOGGER.log(Level.FINEST, "Lat: {0}", pos.getLat());
+                                LOGGER.log(Level.FINEST, "Lon: {0}", pos.getLon());
                                 for (PositionBroadcaster b : broadcasters) {
                                     b.broadcastPosition(pos);
                                 }
