@@ -67,7 +67,6 @@ public class UdpBroadcaster extends BroadcasterBaseImpl {
 
     public UdpBroadcaster() {
         super();
-        DO_GRID_CONVERSION.set(true);
     }
 
     @Override

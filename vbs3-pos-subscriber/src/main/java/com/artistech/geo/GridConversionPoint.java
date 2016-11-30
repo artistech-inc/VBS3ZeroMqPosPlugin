@@ -1,5 +1,17 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.artistech.geo;
 
@@ -9,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * A point matching a screen point and world coordinate.
  *
  * @author matta
  */
@@ -18,7 +31,7 @@ public class GridConversionPoint {
     private final PointF _point;
 
     /**
-     * 
+     * Constructor
      */
     public GridConversionPoint() {
         _coord = new Coordinate();
@@ -26,9 +39,10 @@ public class GridConversionPoint {
     }
 
     /**
-     * 
+     * Constructor.
+     *
      * @param coord
-     * @param point 
+     * @param point
      */
     public GridConversionPoint(Coordinate coord, PointF point) {
         _coord = coord;
@@ -36,16 +50,18 @@ public class GridConversionPoint {
     }
 
     /**
-     * 
-     * @return 
+     * Get the coordinate.
+     *
+     * @return
      */
     public Coordinate getCoordinate() {
         return _coord;
     }
 
     /**
-     * 
-     * @param value 
+     * Set the coordinate.
+     *
+     * @param value
      */
     public void setCoordinate(Coordinate value) {
         _coord.setAltitude(value.getAltitude());
@@ -54,16 +70,18 @@ public class GridConversionPoint {
     }
 
     /**
-     * 
-     * @return 
+     * Get the point.
+     *
+     * @return
      */
     public PointF getPoint() {
         return _point;
     }
 
     /**
-     * 
-     * @param value 
+     * Set the point.
+     *
+     * @param value
      */
     public void setPoint(PointF value) {
         _point.setX(value.getX());
@@ -71,8 +89,9 @@ public class GridConversionPoint {
     }
 
     /**
-     * 
-     * @return 
+     * Create a copy of this object.
+     *
+     * @return
      */
     public GridConversionPoint copy() {
         GridConversionPoint ret = new GridConversionPoint();
@@ -82,6 +101,8 @@ public class GridConversionPoint {
     }
 
     /**
+     * Perform conversion from world coordinates to screen coordinates.
+     *
      * @param min
      * @param max
      * @param pt
@@ -105,7 +126,7 @@ public class GridConversionPoint {
         x += min.getPoint().getX();
 //        System.out.println("x': " + x);
 
-        f = Math.abs(pt.getLatitude().getDegrees() - minCoord.getLatitude().getDegrees());
+        f = Math.abs(pt.getLatitude().getDegrees() - Math.max(minCoord.getLatitude().getDegrees(), maxCoord.getLatitude().getDegrees()));
 //        System.out.println("f: " + f);
         f1 = f / yDiff;
 //        System.out.println("f': " + f1);
@@ -121,7 +142,9 @@ public class GridConversionPoint {
     }
 
     /**
-     * This should work for all positive (>= 0) values of min/max
+     * Convert screen coordinate to world coordinate.
+     * 
+     * This should work for all positive (>= 0) values of min/max.
      *
      * @param min
      * @param max
@@ -147,7 +170,11 @@ public class GridConversionPoint {
         latDiff *= yScale;
         lonDiff *= xScale;
 
-        latDiff += minC.getLatitude().getDegrees();
+        //adapt for screen to world coordinates.
+        //macC.lat is -90
+        latDiff -= Math.max(minC.getLatitude().getDegrees(), maxC.getLatitude().getDegrees());
+        //flip latitude
+        latDiff *= -1.0;
         lonDiff += minC.getLongitude().getDegrees();
 
         Coordinate coord;

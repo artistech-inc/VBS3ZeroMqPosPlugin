@@ -48,7 +48,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Jetty {
 
     private static Server server = null;//new Server(PORT);
-    private static final Logger logger = Logger.getLogger(Jetty.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Jetty.class.getName());
     private static WebAppContext webapp;
     private static int _port;
     private static final String WEBROOT_INDEX = "/com/artistech/jetty/content/";
@@ -78,7 +78,7 @@ public class Jetty {
         try {
             addJettyServlet(x.newInstance(), suffix);
         } catch (InstantiationException | IllegalAccessException ex) {
-            logger.log(Level.WARNING, "Could Not Load: {0}", x.getName());
+            LOGGER.log(Level.WARNING, "Could Not Load: {0}", x.getName());
         }
     }
 
@@ -100,7 +100,7 @@ public class Jetty {
             Class<? extends HttpServlet> x = servelet.getClass();
             WebServlet annotation = x.getAnnotation(WebServlet.class);
             if (annotation != null) {
-                logger.log(Level.FINER, "Loading Servlet: {0}", x.getName());
+                LOGGER.log(Level.FINER, "Loading Servlet: {0}", x.getName());
                 ServletHolder mainHolder2 = new ServletHolder(servelet);
                 MultipartConfig mc = x.getAnnotation(MultipartConfig.class);
                 if (mc != null) {
@@ -109,7 +109,7 @@ public class Jetty {
                     mainHolder2.getRegistration().setMultipartConfig(new MultipartConfigElement("data/tmp", 1048576, 1048576, 262144));
                 }
                 for (String y : annotation.urlPatterns()) {
-                    logger.log(Level.FINER, "Loading URL: {0}", y + suffix);
+                    LOGGER.log(Level.FINER, "Loading URL: {0}", y + suffix);
                     webapp.addServlet(mainHolder2, y + suffix);
                 }
             }
@@ -229,7 +229,7 @@ public class Jetty {
             ServiceLoader<ServletContextListener> listeners = ServiceLoader.load(ServletContextListener.class);
 
             for (ServletContextListener x : listeners) {
-                logger.log(Level.INFO, "Loading Listener: {0}", x.getClass().getName());
+                LOGGER.log(Level.INFO, "Loading Listener: {0}", x.getClass().getName());
                 webapp.addEventListener(x);
             }
 

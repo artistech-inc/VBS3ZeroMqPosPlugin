@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ public class KmlBroadcaster extends BroadcasterBaseImpl {
 
     public KmlBroadcaster() {
         super();
-        DO_GRID_CONVERSION.set(true);
     }
 
     static {

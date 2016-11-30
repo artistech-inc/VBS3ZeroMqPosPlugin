@@ -1,16 +1,30 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.artistech.geo;
 
 import com.artistech.math.AngleMeasure;
 import com.artistech.math.AngleUnit;
 import com.artistech.utils.ArgumentOutOfRangeException;
+import com.artistech.utils.Random;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * Coordinate Data.
+ *
+ * Latitude, Longitude, and Altitude
  *
  * @author matta
  */
@@ -27,10 +41,10 @@ public class Coordinate implements Serializable {
     private DistanceMeasure _alt;
 
     /**
-     * 
+     *
      * @param lon
      * @param lat
-     * @throws ArgumentOutOfRangeException 
+     * @throws ArgumentOutOfRangeException
      */
     public Coordinate(double lon, double lat) throws ArgumentOutOfRangeException {
         _lat = new Latitude(lat);
@@ -39,39 +53,31 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * 
+     *
      */
     public Coordinate() {
-        try {
-            _readonly = false;
-            _lat = new Latitude(0);
-            _lon = new Longitude(0);
-        } catch (ArgumentOutOfRangeException ex) {
-            Logger.getLogger(Coordinate.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        _readonly = false;
+        _lat = new Latitude(0);
+        _lon = new Longitude(0);
     }
 
     /**
-     * 
+     *
      * @param lon
      * @param lat
-     * @param readonly 
+     * @param readonly
      */
     protected Coordinate(double lon, double lat, boolean readonly) {
-        try {
-            _readonly = readonly;
-            _lat = new Latitude(lat);
-            _lon = new Longitude(lon);
-        } catch (ArgumentOutOfRangeException aoore) {
-
-        }
+        _readonly = readonly;
+        _lat = new Latitude(lat);
+        _lon = new Longitude(lon);
     }
 
     /**
-     * 
+     *
      * @param lon
      * @param lat
-     * @param readonly 
+     * @param readonly
      */
     protected Coordinate(Longitude lon, Latitude lat, boolean readonly) {
         _lon = lon;
@@ -80,25 +86,25 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param lon
-     * @param lat 
+     * @param lat
      */
     public Coordinate(Longitude lon, Latitude lat) {
         this(lon, lat, false);
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Longitude getLongitude() {
         return _lon;
     }
 
     /**
-     * 
-     * @param value 
+     *
+     * @param value
      */
     public void setLongitude(Longitude value) {
         if (!_readonly) {
@@ -107,8 +113,8 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * 
-     * @param value 
+     *
+     * @param value
      */
     public void setLatitude(Latitude value) {
         if (!_readonly) {
@@ -117,24 +123,24 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Latitude getLatitude() {
         return _lat;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public DistanceMeasure getAltitude() {
         return _alt;
     }
 
     /**
-     * 
-     * @param value 
+     *
+     * @param value
      */
     public void setAltitude(DistanceMeasure value) {
         if (!_readonly) {
@@ -144,10 +150,11 @@ public class Coordinate implements Serializable {
 
     /**
      * http://stackoverflow.com/questions/389211/geospatial-coordinates-and-distance-in-kilometers
+     *
      * @param coord1
      * @param coord2
      * @param unit
-     * @return 
+     * @return
      */
     public static DistanceMeasure distance(Coordinate coord1, Coordinate coord2, DistanceUnit unit) {
         double theta = coord1.getLongitude().getDegrees() - coord2.getLongitude().getDegrees();
@@ -165,9 +172,10 @@ public class Coordinate implements Serializable {
 
     /**
      * Calculate the distance to the given coordinate
+     *
      * @param coord
      * @param unit
-     * @return 
+     * @return
      */
     public DistanceMeasure distance(Coordinate coord, DistanceUnit unit) {
         return distance(this, coord, unit);
@@ -176,9 +184,10 @@ public class Coordinate implements Serializable {
     /**
      * Get the distance between longitude lines at a given latitude
      * http://answers.google.com/answers/threadview?id=577262
+     *
      * @param lat
      * @param unit
-     * @return 
+     * @return
      */
     public static DistanceMeasure distanceBetweenLongitude(Latitude lat, DistanceUnit unit) {
         double dist = (Math.PI / 180.0) * DistanceMeasure.RADIUS_OF_EARTH.getDistance() * Math.cos(lat.getDegrees());
@@ -194,6 +203,7 @@ public class Coordinate implements Serializable {
 
     /**
      * Get the distance between latitude lines
+     *
      * @param unit
      * @return This value is constant, only the value of the unit varies
      */
@@ -210,10 +220,10 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * Get a random bearing.
-     * Bearing is clockwise with 0 being north.
+     * Get a random bearing. Bearing is clockwise with 0 being north.
+     *
      * @param unit
-     * @return 
+     * @return
      */
     public static AngleMeasure randomBearing(AngleUnit unit) {
         return AngleMeasure.getRandomAngle(unit);
@@ -222,63 +232,50 @@ public class Coordinate implements Serializable {
     /**
      * Bearing is clockwise with 0 being north.
      * http://www.movable-type.co.uk/scripts/latlong.html
+     *
      * @param distance
      * @param bearing
-     * @return 
+     * @return
      */
     public Coordinate add(DistanceMeasure distance, AngleMeasure bearing) {
         double d = distance.toMiles().getDistance();
         double R = DistanceMeasure.RADIUS_OF_EARTH.toMiles().getDistance();
         double lat2 = Math.asin(Math.sin(this.getLatitude().getRadians()) * Math.cos(d / R)
                 + Math.cos(this.getLatitude().getRadians()) * Math.sin(d / R) * Math.cos(bearing.toRadians().getAngle()));
-        double lon2 = this.getLongitude().getRadians() + Math.atan2(Math.sin(bearing.toRadians().getAngle()) * Math.sin(d / R) * Math.cos(this.getLatitude().getRadians()),
-                Math.cos(d / R) - Math.sin(this.getLatitude().getRadians()) * Math.sin(lat2));
+        double lon2 = this.getLongitude().getRadians() +
+                Math.atan2(Math.sin(bearing.toRadians().getAngle()) * Math.sin(d / R) * Math.cos(this.getLatitude().getRadians()),
+                            Math.cos(d / R) - Math.sin(this.getLatitude().getRadians()) * Math.sin(lat2));
         AngleMeasure lat2_angle = new AngleMeasure(lat2, AngleUnit.RADIANS);
         AngleMeasure lon2_angle = new AngleMeasure(lon2, AngleUnit.RADIANS);
-        try {
-            return new Coordinate(new Longitude(lon2_angle.toDegrees().getAngle()), new Latitude(lat2_angle.toDegrees().getAngle()));
-        } catch (ArgumentOutOfRangeException ex) {
-            Logger.getLogger(Coordinate.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        return new Coordinate(new Longitude(lon2_angle.toDegrees().getAngle()), new Latitude(lat2_angle.toDegrees().getAngle()));
     }
 
     /**
-     * 
+     *
      * @param min
      * @param max
-     * @return 
+     * @return
      */
     public static Coordinate getRandomCoordinate(Coordinate min, Coordinate max) {
-        try {
-            int degree = com.artistech.utils.Random.nextInt(Math.min(min.getLatitude().getWholeDegree(), max.getLatitude().getWholeDegree()), Math.max(min.getLatitude().getWholeDegree(), max.getLatitude().getWholeDegree()));
-            double minutes = com.artistech.utils.Random.nextDouble();
+        double diff = Math.max(min.getLatitude().getDegrees(), max.getLatitude().getDegrees()) - Math.min(min.getLatitude().getDegrees(), max.getLatitude().getDegrees());
+        double factor = Random.nextDouble();
+        double latdeg = Math.min(min.getLatitude().getDegrees(), max.getLatitude().getDegrees()) + (diff * factor);
 
-            if (degree == min.getLatitude().getWholeDegree() || degree == max.getLatitude().getWholeDegree()) {
-                minutes = 0.0;
-            }
-            Latitude lat = new Latitude(degree, minutes);
+        diff = Math.max(min.getLongitude().getDegrees(), max.getLongitude().getDegrees()) - Math.min(min.getLongitude().getDegrees(), max.getLongitude().getDegrees());
+        factor = Random.nextDouble();
+        double londeg = Math.min(min.getLongitude().getDegrees(), max.getLongitude().getDegrees()) + (diff * factor);
 
-            degree = com.artistech.utils.Random.nextInt(Math.min(min.getLongitude().getWholeDegree(), max.getLongitude().getWholeDegree()), Math.max(min.getLongitude().getWholeDegree(), max.getLongitude().getWholeDegree()));
-            //degree = _rand.Next(min.Lon.WholeDegree, max.Lon.WholeDegree);
-            minutes = com.artistech.utils.Random.nextDouble();
-            if (degree == min.getLongitude().getWholeDegree() || degree == max.getLongitude().getWholeDegree()) {
-                minutes = 0.0;
-            }
-            Longitude lon = new Longitude(degree, minutes);
+        Latitude lat = new Latitude(latdeg);
+        Longitude lon = new Longitude(londeg);
 
-            return new Coordinate(lon, lat);
-        } catch (ArgumentOutOfRangeException ex) {
-            Logger.getLogger(Coordinate.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return new Coordinate(lon, lat);
     }
 
     /**
-     * 
+     *
      * @param center
      * @param max_radius
-     * @return 
+     * @return
      */
     public static Coordinate getRandomCoordinate(Coordinate center, DistanceMeasure max_radius) {
         AngleMeasure angle = getRandomBearing(AngleUnit.DEGREES);
@@ -288,20 +285,40 @@ public class Coordinate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param unit
-     * @return 
+     * @return
      */
     public static AngleMeasure getRandomBearing(AngleUnit unit) {
         return AngleMeasure.getRandomAngle(unit);
     }
 
     /**
-     * 
+     * http://www.movable-type.co.uk/scripts/latlong.html
+     * @param pt1
+     * @param pt2
      * @return 
+     */
+    public static AngleMeasure calculateBearing(Coordinate pt1, Coordinate pt2) {
+       double deltaLamda = pt2.getLongitude().getRadians() - pt1.getLongitude().getRadians();
+       double y = Math.sin(deltaLamda) * Math.cos(pt2.getLatitude().getRadians());
+       double x = (Math.cos(pt1.getLatitude().getRadians()) * Math.sin(pt2.getLatitude().getRadians())) -
+                    (Math.sin(pt1.getLatitude().getRadians()) * Math.cos(pt2.getLatitude().getRadians()) * Math.cos(deltaLamda));
+       double brng = Math.atan2(y, x);
+       AngleMeasure am = new AngleMeasure(brng, AngleUnit.RADIANS);
+//    var y = Math.sin(λ2-λ1) * Math.cos(φ2);
+//    var x = Math.cos(φ1)*Math.sin(φ2) -
+//            Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
+//    var brng = Math.atan2(y, x).toDegrees();
+        return am.toDegrees();
+    }
+
+    /**
+     *
+     * @return
      */
     @Override
     public String toString() {
-        return "Lat: " + getLatitude().getDegrees()+ ",Lon: " + getLongitude().getDegrees();
+        return "Lat: " + getLatitude().getDegrees() + ",Lon: " + getLongitude().getDegrees();
     }
 }
