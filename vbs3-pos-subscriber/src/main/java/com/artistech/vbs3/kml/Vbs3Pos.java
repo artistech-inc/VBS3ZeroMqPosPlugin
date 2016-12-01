@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,10 +52,19 @@ public class Vbs3Pos extends HttpServlet {
             out.println("<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">");
             out.println("<Document>");
             for (Vbs3Protos.Position pos : positions) {
+                String[] lat = pos.getLat().replaceAll("\"", "").split(" ");
+                String[] lon = pos.getLon().replaceAll("\"", "").split(" ");
+                Double latd = Double.parseDouble(lat[0]);
+                //South is negative
+                latd = lat[1].toLowerCase().equals("n") ? latd : latd * -1.0;
+                //East is negative
+                Double lond = Double.parseDouble(lon[0]);
+                lond = lon[1].toLowerCase().equals("w") ? lond : lond * -1.0;
+
                 String name = pos.getId().replaceAll("\"", "");
                 out.println("<Placemark>");
                 out.println("<name>Player: " + name + "</name>");
-                out.println("<Point><coordinates>" + pos.getX() + "," + pos.getY() + "</coordinates></Point>");
+                out.println("<Point><coordinates>" +lond + "," + latd + "</coordinates></Point>");
                 out.println("</Placemark>");
             }
             out.println("</Document>");

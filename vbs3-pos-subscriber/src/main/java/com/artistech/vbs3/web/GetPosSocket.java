@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,6 @@ public class GetPosSocket extends BroadcasterBaseImpl {
      */
     public GetPosSocket() {
         super();
-        DO_GRID_CONVERSION.set(false);
     }
 
     @Override

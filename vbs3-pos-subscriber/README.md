@@ -30,16 +30,11 @@ The default for OS X and Winows is to use jeromq intead of jzmq for ZeroMQ.
 4. mvn clean package
 
 ##Run
-By default, the JETTY_PORT_VALUE is 8888 unless otherwise specified on the command line. At least one VBS3 ZeroMQ publisher must be specified.  New to version 1.1 is the ability to convert from x/y coordinates to lon/lat.  To do this, a max/min value for each lon/lat must be provided on the command line.  If none is provided, the entire world is assumed using -180 to 180 and -90 to 90 for lon/lat respectfully.
+By default, the JETTY_PORT_VALUE is 8888 unless otherwise specified on the command line. At least one VBS3 ZeroMQ publisher must be specified.
+
 ```shell
-java -jar target/vbs3-pos-subscriber-1.1.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-j JETTY_PORT_VALUE]
+java -jar target/vbs3-pos-subscriber-1.2.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-j JETTY_PORT_VALUE]
 ```
-###To Specify Min/Max Lon/Lat
-The command line arguments q, w, e, r are used.
- 1. -q &lt;min_latitude_value&gt;
- 2. -w &lt;min_longitude_value&gt;
- 3. -e &lt;max_latitude_value&gt;
- 4. -r &lt;max_longitude_value&gt;
 
 ##Viewing in Web-Browser
  1. Using the latest versions of Firefox and Google Chrome, view: http://vbs3-pos-subscriber_IP:JETTY_PORT_VALUE/vbs3_map.jsp
@@ -54,9 +49,8 @@ The command line arguments q, w, e, r are used.
 ###Viewing in [sdt3d] (http://downloads.pf.itd.nrl.navy.mil/docs/sdt/sdt.html) using UDP
 By default, vbs3-pos-subscriber uses multicast address 228.5.6.7 and port 5000, these values can be change on the command line if desired.
 ```shell
-java -jar target/vbs3-pos-subscriber-1.1.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-p UDP_PORT] [-i UDP_ADDRESS]
+java -jar target/vbs3-pos-subscriber-1.2.jar -z VBS3ZeroMqPosPlugin_SERVER_1:5551 -z VBS3ZeroMqPosPlugin_SERVER_2:5551 [-p UDP_PORT] [-i UDP_ADDRESS]
 ```
  1. Start sdt3d
  2. File -> Listen to UDP Port...
  3. Specify UDP_PORT/UDP_ADDRESS (ex: 228.5.6.7/5000)
-

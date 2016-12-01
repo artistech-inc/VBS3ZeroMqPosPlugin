@@ -1,11 +1,24 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.artistech.geo;
 
 import java.io.Serializable;
 
 /**
+ * Class for representing distance.
  *
  * @author matta
  */
@@ -14,70 +27,75 @@ public class DistanceMeasure implements Serializable {
     public static final double KM_TO_MILES = 1.609344;
     public static final double MILES_TO_NAUTICAL = 0.868976;
     public static final double NAUTICAL_TO_MILES = 1.0 / MILES_TO_NAUTICAL;
-    
+
     public static final DistanceMeasure RADIUS_OF_EARTH = new DistanceMeasure(3963.1676, DistanceUnit.MILE, true);
 
     private double _distance;
     private DistanceUnit _unit;
-    private final boolean _readonly;
+    private final boolean READ_ONLY;
 
     /**
-     * 
+     *
      * @param distance
      * @param unit
-     * @param readonly 
+     * @param readonly
      */
     private DistanceMeasure(double distance, DistanceUnit unit, boolean readonly) {
         _distance = distance;
         _unit = unit;
-        _readonly = readonly;
+        READ_ONLY = readonly;
     }
-
+    
     /**
-     * 
+     * Constructor
      */
     public DistanceMeasure() {
-        _readonly = false;
+        READ_ONLY = false;
         _unit = DistanceUnit.UNSPECIFIED;
         _distance = 0;
     }
 
     /**
-     * 
+     * Constructor.
+     *
      * @param distance
-     * @param unit 
+     * @param unit
      */
     public DistanceMeasure(double distance, DistanceUnit unit) {
         this(distance, unit, false);
     }
 
     /**
-     * 
-     * @return 
+     * Get the distance.
+     *
+     * @return
      */
     public double getDistance() {
         return _distance;
     }
 
     /**
-     * 
-     * @param value 
+     * Set the distance.
+     *
+     * @param value
      */
     public void setDistance(double value) {
         _distance = value;
     }
 
     /**
-     * 
-     * @return 
+     * Get the unit of measure.
+     *
+     * @return
      */
     public DistanceUnit getUnit() {
         return _unit;
     }
 
     /**
-     * 
-     * @param value 
+     * Set the unit of measure.
+     *
+     * @param value
      */
     public void setUnit(DistanceUnit value) {
         if (_unit == DistanceUnit.UNSPECIFIED) {
@@ -86,8 +104,9 @@ public class DistanceMeasure implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     * Convert the current distance to miles.
+     *
+     * @return
      */
     public DistanceMeasure toMiles() {
         double distance = _distance;
@@ -105,8 +124,9 @@ public class DistanceMeasure implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     * Convert the current distance to kilometers.
+     *
+     * @return
      */
     public DistanceMeasure toKilometers() {
         double distance = _distance;
@@ -125,8 +145,9 @@ public class DistanceMeasure implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     * Convert the current distance to nautical miles.
+     *
+     * @return
      */
     public DistanceMeasure toNauticalMiles() {
         double distance = _distance;
@@ -143,4 +164,8 @@ public class DistanceMeasure implements Serializable {
         }
         return new DistanceMeasure(distance, DistanceUnit.NAUTICAL_MILE);
     }
+
+//    public static void main(String[] args) {
+//        System.out.println(1.0 / MILES_TO_NAUTICAL);
+//    }
 }

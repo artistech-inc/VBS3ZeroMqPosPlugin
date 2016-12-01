@@ -12,22 +12,41 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
-package com.artistech.geo;
+ */
+package com.artistech.utils;
 
 /**
- * Cardinal Points.
+ * Interface for build info.
  *
  * @author matta
  */
-public enum CardinalPoints {
+public interface IBuildInfo {
 
-    N,
-    E,
-    S,
-    W,
-    NE,
-    NW,
-    SE,
-    SW
+    String getBuild();
+
+    String getBuilder();
+
+    String getBuildtime();
+
+    String getSvn();
+
+    String getVersion();
+
+    void setBuild(String value);
+
+    void setBuilder(String value);
+
+    void setBuildtime(String value);
+
+    void setSvn(String value);
+
+    void setVersion(String value);
+    
+    String getApplicationName();
+    
+    void setApplicationName(String value);
+    
+    String getCompany();
+    
+    void setCompany(String value);
 }

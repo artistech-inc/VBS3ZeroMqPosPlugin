@@ -1,5 +1,17 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.artistech.utils;
 
@@ -19,21 +31,35 @@ public class Mailbox<T> {
 
     private final java.util.ArrayList<T> m_msgs;
     private boolean m_halt;
-    private final static Logger log;
+    private final static Logger LOGGER;
 
+    /**
+     * Static Constructor.
+     */
     static {
-        log = Logger.getLogger(Mailbox.class.getName());
+        LOGGER = Logger.getLogger(Mailbox.class.getName());
     }
 
+    /**
+     * Constructor.
+     */
     public Mailbox() {
         m_msgs = new ArrayList<>();
         m_halt = false;
     }
-    
+
+    /**
+     * Get the size.
+     *
+     * @return
+     */
     public synchronized int size() {
         return m_msgs.size();
     }
 
+    /**
+     * Halt the mailbox.
+     */
     public synchronized void halt() {
         if (!m_halt) {
             m_halt = true;
@@ -55,7 +81,10 @@ public class Mailbox<T> {
     }
 
     /**
-     * Receive an AIMessage from the queue.
+     * Receive a message from the queue.
+     *
+     * This is a blocking call and will wait until the mailbox is halted or a
+     * message is available.
      *
      * @return
      */
@@ -67,7 +96,7 @@ public class Mailbox<T> {
             try {
                 wait();
             } catch (InterruptedException e) {
-                log.log(Level.SEVERE, null, e);
+                LOGGER.log(Level.SEVERE, null, e);
                 continue;
             }
             if (m_halt) {
@@ -78,6 +107,14 @@ public class Mailbox<T> {
         return ret;
     }
 
+    /**
+     * Get all messages in the mailbox.
+     *
+     * This is a blocking call and will wait until the mailbox is halted or a
+     * message is available.
+     *
+     * @return
+     */
     public synchronized ArrayList<T> getMessages() {
         if (m_halt) {
             return null;
@@ -86,7 +123,7 @@ public class Mailbox<T> {
             try {
                 wait();
             } catch (InterruptedException e) {
-                log.log(Level.SEVERE, null, e);
+                LOGGER.log(Level.SEVERE, null, e);
                 continue;
             }
             if (m_halt) {
@@ -97,7 +134,12 @@ public class Mailbox<T> {
         m_msgs.clear();
         return ret;
     }
-    
+
+    /**
+     * Check to see if the mailbox is halted.
+     *
+     * @return
+     */
     public boolean isHalted() {
         return m_halt;
     }

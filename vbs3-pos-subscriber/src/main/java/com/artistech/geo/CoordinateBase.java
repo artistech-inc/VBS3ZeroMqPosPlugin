@@ -1,5 +1,17 @@
 /*
- * Copyright 2015 ArtisTech, Inc.
+ * Copyright 2015-2016 ArtisTech, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.artistech.geo;
 
@@ -9,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 
 /**
+ * Base class for a Coordinate point.
  *
  * @author matta
  */
@@ -16,25 +29,24 @@ public abstract class CoordinateBase implements Serializable {
 
     protected int _degree;
     protected double _minutes;
+    protected int factor = 1;
 
     /**
-     * 
-     * @param degrees 
+     *
+     * @param degrees
      */
     public CoordinateBase(double degrees) {
-        int factor = degrees < 0 ? -1 : 1;
-        _degree = (int) Math.floor(Math.abs(degrees)) * factor;
-        _minutes = Math.abs(degrees) - Math.abs(_degree);
+        setDegrees(degrees);
     }
 
     /**
-     * 
+     *
      * @param degree
      * @param minutes
-     * @throws ArgumentOutOfRangeException 
+     * @throws ArgumentOutOfRangeException
      */
     public CoordinateBase(int degree, double minutes) throws ArgumentOutOfRangeException {
-        _degree = degree;
+        setDegrees(degree);
         if (minutes >= 1 || minutes < 0) {
             throw new ArgumentOutOfRangeException("minutes", "minutes cannot be greater than or equal to 1 or less than 0");
         }
@@ -42,17 +54,17 @@ public abstract class CoordinateBase implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @JsonIgnore
     public int getWholeDegree() {
-        return _degree;
+        return Math.abs(_degree) * factor;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @JsonIgnore
     public double getMinutes() {
@@ -60,27 +72,27 @@ public abstract class CoordinateBase implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public double getDegrees() {
-        double factor = _degree < 0 ? -1.0 : 1.0;
-        return factor * (Math.abs((double) _degree + (_minutes * factor)));
+    public final double getDegrees() {
+        double factor2 = (double) this.factor;
+        return factor2 * (Math.abs((double) _degree) + _minutes);
     }
 
     /**
-     * 
-     * @param value 
+     *
+     * @param value
      */
-    public void setDegrees(double value) {
-        double degrees = value;
-        _degree = (int) Math.floor(degrees);
-        _minutes = Math.abs(degrees) - Math.abs(_degree);
-   }
+    public final void setDegrees(double value) {
+        factor = value < 0 ? -1 : 1;
+        _degree = Math.abs((int) Math.floor(Math.abs(value)));
+        _minutes = Math.abs(value) - Math.abs(_degree);
+    }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @JsonIgnore
     public double getRadians() {
@@ -88,8 +100,8 @@ public abstract class CoordinateBase implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @JsonIgnore
     public abstract CardinalPoints getCardinalMark();
