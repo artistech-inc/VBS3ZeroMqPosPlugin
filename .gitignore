@@ -42,3 +42,10 @@
 *.suo
 /Vbs3PosSubscriber/target/
 /vbs3-pos-subscriber/target/
+
+.vs/
+*.filters
+Debug/
+Release/
+x64/
+x86/
